@@ -3828,6 +3828,19 @@ void ProtocolGame::parseMarketDetail(const InputMessagePtr& msg)
             continue;
         }
 
+        if (i == Otc::ITEM_DESC_CURRENTTIER) {
+            if (msg->peekU16() != 0x00) {
+                const auto& sentString = msg->getString();
+                const auto& sentString2 = msg->getString();
+                descriptions.try_emplace(i, sentString);
+                descriptions.try_emplace(i, sentString2);
+            } else {
+                msg->getU16();
+                msg->getU16();
+            }
+            continue;
+        }
+
         if (msg->peekU16() != 0x00) {
             const auto& sentString = msg->getString();
             descriptions.try_emplace(i, sentString);
