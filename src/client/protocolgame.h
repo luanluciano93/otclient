@@ -114,8 +114,8 @@ public:
     void sendAnswerModalDialog(uint32_t dialog, int button, int choice);
     void sendBrowseField(const Position& position);
     void sendSeekInContainer(int cid, int index);
-    void sendInspectionNormalObject(const Otc::InspectObjectTypes inspectionType,const Position& position);
-    void sendInspectionCyclopedia(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
+    void sendInspectionNormalObject(const Position& position);
+    void sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
     void sendBuyStoreOffer(int offerId, int productType, const std::string_view name);
     void sendRequestTransactionHistory(int page, int entriesPerPage);
     void sendRequestStoreOffers(const std::string_view categoryName, int serviceType);
