@@ -151,6 +151,12 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerDeleteInContainer:
                     parseContainerRemoveItem(msg);
                     break;
+                case Proto::GameServerTakeScreenshot:
+                    parseTakeScreenshot(msg);
+                    break;
+                case Proto::GameServerCyclopediaItemInspection:
+                    parseCyclopediaItemInspection(msg);
+                    break;
                 case Proto::GameServerSetInventory:
                     parseAddInventoryItem(msg);
                     break;
@@ -503,13 +509,11 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerSendRewardHistory:
                     parseRewardHistory(msg);
                     break;
-
                 case Proto::GameServerSendPreyFreeRerolls: // || Proto::GameServerSendBosstiaryEntryChanged
                     if (g_game.getFeature(Otc::GameBosstiary))
                         parseBosstiaryEntryChanged(msg);
                     else parsePreyFreeRerolls(msg);
                     break;
-
                 case Proto::GameServerSendPreyTimeLeft:
                     parsePreyTimeLeft(msg);
                     break;
@@ -550,9 +554,6 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                     break;
                 case Proto::GameServerBosstiaryCooldownTimer:
                     parseBosstiaryCooldownTimer(msg);
-                    break;
-                case Proto::GameServerTakeScreenshot:
-                    parseTakeScreenshot(msg);
                     break;
                 case Proto::GameServerAttchedEffect:
                     parseAttachedEffect(msg);
@@ -1204,6 +1205,29 @@ void ProtocolGame::parseContainerRemoveItem(const InputMessagePtr& msg)
     }
 
     g_game.processContainerRemoveItem(containerId, slot, lastItem);
+}
+
+void ProtocolGame::parseTakeScreenshot(const InputMessagePtr& msg) {
+    const uint8_t screenshotType = msg->getU8(); 
+    m_localPlayer->takeScreenshot(screenshotType);
+}
+
+void ProtocolGame::parseCyclopediaItemInspection(const InputMessagePtr& msg) {
+    msg->getU8(); // 0x00
+    msg->getU8(); // bool is cyclopedia
+    msg->getU32(); // creature ID (version 13.00)
+    msg->getU8(); // 0x01
+
+    msg->getString(); // item name
+    const auto& item = getItem(msg);
+
+    msg->getU8(); // 0x00
+
+    const uint8_t descriptionsSize = msg->getU8();
+    for (auto i = 0; i < descriptionsSize; ++i) {
+        msg->getString(); // description first
+        msg->getString(); // description second
+    }
 }
 
 void ProtocolGame::parseAddInventoryItem(const InputMessagePtr& msg)
@@ -4257,11 +4281,6 @@ void ProtocolGame::parseBosstiaryCooldownTimer(const InputMessagePtr& msg) {
 
 void ProtocolGame::parseBosstiaryEntryChanged(const InputMessagePtr& msg) {
     msg->getU32(); // bossId
-}
-
-void ProtocolGame::parseTakeScreenshot(const InputMessagePtr& msg) {
-    const uint8_t screenshotType = msg->getU8(); 
-    m_localPlayer->takeScreenshot(screenshotType);
 }
 
 void ProtocolGame::parseAttachedEffect(const InputMessagePtr& msg) {
