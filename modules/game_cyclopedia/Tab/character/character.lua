@@ -101,7 +101,9 @@ function showCharacter()
         UI.CharacterBase:setText(player:getName())
         UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocation()))
         UI.CharacterBase.Outfit:setOutfit(player:getOutfit())
+        UI.CharacterBase.Outfit:getCreature():setStaticWalking(1000)
         UI.InfoBase.outfitPanel.Sprite:setOutfit(player:getOutfit())
+        UI.InfoBase.outfitPanel.Sprite:getCreature():setStaticWalking(1000)
         UI.InfoBase.InspectLabel:setText(tr("You are inspecting") .. ": " .. player:getName())
 
         for i = InventorySlotFirst, InventorySlotPurse do
@@ -216,6 +218,7 @@ function Cyclopedia.reloadCharacterAppearances()
 
             widget.name:setText(data.name)
             widget.creature:setOutfit(data.outfit)
+            widget.creature:getCreature():setStaticWalking(1000)
         end
     end
 end

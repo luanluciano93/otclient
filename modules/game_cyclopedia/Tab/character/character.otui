@@ -16,7 +16,7 @@ UIWidget
     !text: tr('Player Name')
     change-cursor-image: true
     cursor: pointer
-    @onClick: Cyclopedia.selectCharacterPage()
+    @onClick: modules.game_cyclopedia.Cyclopedia.selectCharacterPage()
     Label
       id: InfoLabel
       anchors.horizontalCenter: parent.horizontalCenter
@@ -39,7 +39,7 @@ UIWidget
     anchors.top: CharacterBase.bottom
     anchors.bottom: parent.bottom
     margin-top: 10
-    margin-bottom: 10
+    margin-bottom: 30
     image-source: /game_cyclopedia/images/panel_dark
     image-border: 10
     width: 170
@@ -119,7 +119,7 @@ UIWidget
       size: 34 34
       icon-source: /game_cyclopedia/images/icon-playerdetails
       &state: 1
-      @onClick: Cyclopedia.characterButton(self)
+      @onClick: modules.game_cyclopedia.Cyclopedia.characterButton(self)
     Button
       id: WheelButton
       anchors.left: CharacterButton.right
@@ -986,7 +986,7 @@ UIWidget
         anchors.left: parent.left
         margin-left: 5
         margin-top: 10
-        @onClick: Cyclopedia.achievementFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.achievementFilter(self)
       RoundCheckBox
         id: locked
         width: 85
@@ -996,7 +996,7 @@ UIWidget
         anchors.top: all.bottom
         anchors.left: all.left
         margin-top: 5
-        @onClick: Cyclopedia.achievementFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.achievementFilter(self)
       RoundCheckBox
         id: accomplished
         width: 100
@@ -1007,14 +1007,14 @@ UIWidget
         anchors.left: locked.left
         margin-top: 5
         checked: true
-        @onClick: Cyclopedia.achievementFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.achievementFilter(self)
     ComboBox
       id: sort
       size: 145 20
       anchors.top: parent.top
       anchors.right: parent.right
       margin-top: -5
-      @onOptionChange: Cyclopedia.achievementSort(self:getCurrentOption().data)
+      @onOptionChange: modules.game_cyclopedia.Cyclopedia.achievementSort(self:getCurrentOption().data)
     Label
       !text: ('Sort')
       anchors.top: sort.top
@@ -1208,7 +1208,7 @@ UIWidget
         anchors.left: parent.left
         margin-left: 8
         margin-top: 8
-        @onCheckChange: Cyclopedia.characterItemsFilter(self)
+        @onCheckChange: modules.game_cyclopedia.Cyclopedia.characterItemsFilter(self)
       CheckBox
         id: depot
         width: 85
@@ -1218,7 +1218,7 @@ UIWidget
         anchors.top: inventory.top
         anchors.left: inventory.right
         margin-left: 10
-        @onCheckChange: Cyclopedia.characterItemsFilter(self)
+        @onCheckChange: modules.game_cyclopedia.Cyclopedia.characterItemsFilter(self)
       CheckBox
         id: stash
         width: 100
@@ -1228,7 +1228,7 @@ UIWidget
         anchors.top: depot.bottom
         anchors.left: depot.left
         margin-top: 8
-        @onCheckChange: Cyclopedia.characterItemsFilter(self)
+        @onCheckChange: modules.game_cyclopedia.Cyclopedia.characterItemsFilter(self)
       CheckBox
         id: inbox
         width: 100
@@ -1238,7 +1238,7 @@ UIWidget
         anchors.top: depot.top
         anchors.left: depot.right
         margin-left: 30
-        @onCheckChange: Cyclopedia.characterItemsFilter(self)
+        @onCheckChange: modules.game_cyclopedia.Cyclopedia.characterItemsFilter(self)
       CheckBox
         id: store
         width: 100
@@ -1248,7 +1248,7 @@ UIWidget
         anchors.top: inbox.bottom
         anchors.left: inbox.left
         margin-top: 8
-        @onCheckChange: Cyclopedia.characterItemsFilter(self)
+        @onCheckChange: modules.game_cyclopedia.Cyclopedia.characterItemsFilter(self)
       TextEdit
         id: SearchEdit
         size: 120 16
@@ -1260,7 +1260,7 @@ UIWidget
         padding-bottom: 0
         placeholder: Type to search
         placeholder-color: #6E706F
-        @onTextChange: Cyclopedia.characterItemsSearch(self:getText())
+        @onTextChange: modules.game_cyclopedia.Cyclopedia.characterItemsSearch(self:getText())
     UIWidget
       id: listFilter
       height: 20
@@ -1278,7 +1278,7 @@ UIWidget
         text-offset: 15 0
         anchors.centerIn: parent
         margin-right: 70
-        @onClick: Cyclopedia.characterItemListFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.characterItemListFilter(self)
       RoundCheckBox
         id: grid
         width: 100
@@ -1288,7 +1288,7 @@ UIWidget
         anchors.top: list.top
         anchors.left: list.right
         margin-left: 20
-        @onClick: Cyclopedia.characterItemListFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.characterItemListFilter(self)
   UIWidget
     id: CharacterAppearances
     anchors.top: CharacterBase.top
@@ -1314,7 +1314,7 @@ UIWidget
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         margin-left: 10
-        @onClick: Cyclopedia.characterAppearancesFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.characterAppearancesFilter(self)
       RoundCheckBox
         id: mounts
         width: 85
@@ -1323,7 +1323,7 @@ UIWidget
         text-offset: 15 0
         anchors.top: outfits.top
         anchors.left: outfits.right
-        @onClick: Cyclopedia.characterAppearancesFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.characterAppearancesFilter(self)
       RoundCheckBox
         id: familiars
         width: 85
@@ -1332,7 +1332,7 @@ UIWidget
         text-offset: 15 0
         anchors.top: mounts.top
         anchors.left: mounts.right
-        @onClick: Cyclopedia.characterAppearancesFilter(self)
+        @onClick: modules.game_cyclopedia.Cyclopedia.characterAppearancesFilter(self)
       ComboBox
         id: show
         size: 222 20
