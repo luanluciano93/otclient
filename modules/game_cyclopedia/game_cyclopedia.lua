@@ -129,13 +129,6 @@ function showHouse()
     test:setText("showHouse")
 end
 
-function showCharacter()
-
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showCharacter")
-end
 
 function showBossSlot()
     local test = g_ui.createWidget("Label", contentContainer)

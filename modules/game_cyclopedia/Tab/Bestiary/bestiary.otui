@@ -102,7 +102,7 @@ UIWidget
     UIWidget
       id: CreatureInfo
       anchors.fill: parent
-      image-source: /images/ui/minipanel
+      image-source: /images/ui/outfits/minipanel
       image-border: 20
       visible: false
       !text: tr('Creature Name')
@@ -166,7 +166,7 @@ UIWidget
         anchors.right: ProgressBorder2.left
         anchors.top: ProgressBorder1.top
         anchors.bottom: ProgressBorder1.bottom
-        image-source: /images/ui/minipanel
+        image-source: /images/ui/outfits/minipanel
         image-rect: 0 0 4 20
         image-clip: 5 40 4 20
         margin-right: 2
@@ -176,7 +176,7 @@ UIWidget
         anchors.right: ProgressBorder3.left
         anchors.top: ProgressBorder1.top
         anchors.bottom: ProgressBorder1.bottom
-        image-source: /images/ui/minipanel
+        image-source: /images/ui/outfits/minipanel
         image-rect: 0 0 4 20
         image-clip: 5 40 4 20
         margin-right: 2

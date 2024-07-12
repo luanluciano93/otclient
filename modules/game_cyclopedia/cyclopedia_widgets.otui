@@ -189,7 +189,7 @@ CharacterListItem < UIWidget
     anchors.left: separator.left
     margin-left: 5
 Achievement < UICheckBox
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 5
   color: #C0C0C0
   text-auto-resize: true
@@ -339,7 +339,7 @@ SkillCharacterPercentPanel < ProgressBar
   anchors.top: parent.top
   phantom: false
 SelectBossBossSlots < UICheckBox
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   text-offset: 0 3
   text-align: top
   image-border: 5
@@ -366,7 +366,7 @@ SelectBossBossSlots < UICheckBox
     image-source: images/boss/icon_bane
 SlotBossSlots < UIWidget
   size: 222 360
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 20
   color: #929292
   text-offset: 0 3
@@ -441,7 +441,7 @@ SlotBossSlots < UIWidget
       anchors.bottom: parent.bottom
       anchors.right: parent.right
       !text: tr('Select')
-      font: verdana-bold-8px-antialiased
+      //font: verdana-bold-8px-antialiased
       text-offset: 0 -1
       color: #C0C0C0
       enabled: false
@@ -513,7 +513,7 @@ SlotBossSlots < UIWidget
       anchors.left: ValueBackground.left
       margin-bottom: 25
       !text: tr('Remove')
-      font: verdana-bold-8px-antialiased
+      //font: verdana-bold-8px-antialiased
       text-offset: 0 -1
       color: #C0C0C0
 BossSlotProgress < UIWidget
@@ -628,7 +628,7 @@ BorderBox < UIWidget
   border-width-right: 1
   border-color-right: #747474
 SubPanel < UIWidget
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 3
   image-border-top: 22
   color: #929292
@@ -691,7 +691,7 @@ ItemBasicDetail < UIWidget
       color: #BDBDBD
 CharmItem < UICheckBox
   !text: tr('Title')
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 3
   image-border-top: 22
   color: #929292
@@ -807,7 +807,7 @@ CharacterCategoryItem < UIWidget
       margin-left: 10
       text-auto-resize: true
       !text: tr('General Stats')
-      font: verdana-bold-8px-antialiased
+      //font: verdana-bold-8px-antialiased
       color: #C0C0C0
       $checked:
         text-offset 10 10
@@ -823,7 +823,7 @@ CharacterCategoryItem < UIWidget
       image-source: images/icon-arrow7x7-down
       visible: false
 BestiaryCategory < UIWidget
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 20
   !text: tr('Name')
   text-align: top
@@ -858,7 +858,7 @@ BestiaryCategory < UIWidget
     !text: tr('Total: ') .. '00'
     color: #C2C2C2
 BosstiaryItem < UIWidget
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 20
   !text: tr('?')
   text-align: top
@@ -968,7 +968,7 @@ BosstiaryItem < UIWidget
     margin-bottom: 5
     size: 64 64
 BestiaryCreature < UIWidget
-  image-source: /images/ui/minipanel
+  image-source: /images/ui/outfits/minipanel
   image-border: 20
   Label
     id: Name
@@ -1083,3 +1083,92 @@ CharmCreatureName < UICheckBox
   @onClick: modules.game_cyclopedia.selectCreatureCharm(self, self:isChecked())
   $checked:
     background-color: #585858
+InventoryItem < Item
+HeadSlot < InventoryItem
+  id: slot1
+  image-source: /images/ui/character/helmet2
+  &position: {x=65535, y=1, z=0}
+
+BodySlot < InventoryItem
+  id: slot4
+  image-source: /images/ui/character/armor2
+  &position: {x=65535, y=4, z=0}
+
+LegSlot < InventoryItem
+  id: slot7
+  image-source: /images/ui/character/legs2
+  &position: {x=65535, y=7, z=0}
+
+FeetSlot < InventoryItem
+  id: slot8
+  image-source: /images/ui/character/boots2
+  &position: {x=65535, y=8, z=0}
+
+NeckSlot < InventoryItem
+  id: slot2
+  image-source: /images/ui/character/amulet2
+  &position: {x=65535, y=2, z=0}
+
+LeftSlot < InventoryItem
+  id: slot6
+  image-source: /images/ui/character/mainhand2
+  &position: {x=65535, y=6, z=0}
+
+FingerSlot < InventoryItem
+  id: slot9
+  image-source: /images/ui/character/ring2
+  &position: {x=65535, y=9, z=0}
+
+BackSlot < InventoryItem
+  id: slot3
+  image-source: /images/ui/character/primary_backpack
+  &position: {x=65535, y=3, z=0}
+
+RightSlot < InventoryItem
+  id: slot5
+  image-source: /images/ui/character/offhand2
+  &position: {x=65535, y=5, z=0}
+
+AmmoSlot < InventoryItem
+  id: slot10
+  image-source: /images/ui/character/ammo2
+  &position: {x=65535, y=10, z=0}
+
+BackSlot2 < InventoryItem
+  id: slot12
+  image-source: /images/ui/character/secondary_backpack
+  &position: {x=65535, y=12, z=0}
+
+BackSlot3 < InventoryItem
+  id: slot13
+  image-source: /images/ui/character/secondary_backpack
+  &position: {x=65535, y=13, z=0}
+
+BackSlot4 < InventoryItem
+  id: slot14
+  image-source: /images/ui/character/secondary_backpack
+  &position: {x=65535, y=14, z=0}
+
+BackSlot5 < InventoryItem
+  id: slot15
+  image-source: /images/ui/character/secondary_backpack
+  &position: {x=65535, y=15, z=0}
+
+ArtifactSlot < InventoryItem
+  id: slot16
+  image-source: /images/ui/character/artifact2
+  &position: {x=65535, y=16, z=0}
+
+RuneSlot < InventoryItem
+  id: slot18
+  image-source: /images/ui/character/rune2
+  &position: {x=65535, y=18, z=0}
+
+RoundCheckBox < CheckBox
+  image-source: /images/ui/checkbox_round
+  
+  $first:
+    margin-top: 2
+
+  $!first:
+    margin-top: 5

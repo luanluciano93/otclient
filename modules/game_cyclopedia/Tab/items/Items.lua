@@ -102,6 +102,7 @@ function showItems()
 end
 
 function onParseItemDetail(itemId, descriptions) -- GET INFO
+    print(itemId, descriptions)
     itemPanel.InfoBase.DetailsBase.List:destroyChildren()
     local internalData = g_things.getThingType(itemId, ThingCategoryItem)
     local classification = internalData:getClassification()
@@ -219,7 +220,7 @@ end
 
 function internalCreateItem(data)
     local player = g_game.getLocalPlayer()
-  --  local vocation = g_game.getRealVocation(player:getVocation()) or 1
+    --  local vocation = g_game.getRealVocation(player:getVocation()) or 1
     local vocation = player:getVocation()
     local level = player:getLevel()
     local classification = data:getClassification()
@@ -264,11 +265,16 @@ function internalCreateItem(data)
     item.Sprite:setItemId(data:getId())
     item.Name:setText(marketData.name)
 
-    --item.Value = data:getResultingValue()
+    -- NEED item:getResultingValue()
+    -- item.Value = data:getResultingValue()
     item.Value = 1
     item.Vocation = marketData.restrictVocation
 
---[[     local frame = g_game.getItemFrame(item.Value)
+    --[[    
+
+    --Need g_game.getItemFrame(item.Value)
+
+    local frame = g_game.getItemFrame(item.Value)
 
     if frame > 0 then
         item.Rarity:setImageSource("/images/ui/frames")
@@ -299,7 +305,10 @@ function internalCreateItem(data)
         itemPanel.InfoBase.ResultGoldBase.Value:setText(formatGold(item.Value))
         itemPanel.SelectedItem.Sprite:setItemId(data:getId())
 
---[[         if frame > 0 then
+        --[[    
+        --NEED g_game.getItemFrame(item.Value)     
+
+        if frame > 0 then
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("/images/ui/frames")
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageClip(torect(g_game.getRectFrame(frame)))
             itemPanel.SelectedItem.Rarity:setImageSource("/images/ui/frames")
@@ -313,7 +322,11 @@ function internalCreateItem(data)
         itemPanel.SelectedItem.Rarity:setImageSource("")
         widget:setBackgroundColor("#585858")
 
-     --[[    local buy, sell = formatSaleData(internalData:getNpcSaleData())
+        --[[    
+        --NEEED getNpcSaleData
+     
+     
+     local buy, sell = formatSaleData(internalData:getNpcSaleData())
         local sellColor = "#484848"
 
         for index, value in ipairs(sell) do
@@ -381,7 +394,7 @@ end
 
 function applyFilters()
 
---[[     local isSearching = itemPanel.SearchEdit:getText() ~= ""
+    --[[     local isSearching = itemPanel.SearchEdit:getText() ~= ""
 
     if not isSearching then
         local id = tonumber(ArrayCiclopedia.Items.selectedCategory:getId())
