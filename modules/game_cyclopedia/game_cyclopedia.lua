@@ -38,12 +38,10 @@ function controllerCyclopedia:onInit()
     bossSlot = buttonSelection:recursiveGetChildById('bossSlot')
 
     controllerCyclopedia:registerEvents(g_game, {
-		onGameStart = OnStart,
-		onGameEnd = OnEnd,
-		onParseItemDetail = onParseItemDetail,
-
+        onGameStart = OnStart,
+        onGameEnd = OnEnd,
     })
-    SelectWindow("items")
+
 end
 
 function controllerCyclopedia:onGameStart()
@@ -56,7 +54,6 @@ function controllerCyclopedia:onGameEnd()
 end
 
 function controllerCyclopedia:onTerminate()
-
 
 end
 
@@ -75,9 +72,10 @@ function show()
     controllerCyclopedia.ui:show()
     controllerCyclopedia.ui:raise()
     controllerCyclopedia.ui:focus()
+    SelectWindow("items")
 end
 
-
+-- LuaFormatter off
 function SelectWindow(type)
     local windowTypes = {
         items = {obj = items,func = showItems},
@@ -106,14 +104,7 @@ function SelectWindow(type)
         end
     end
 end
-
-
-function showBestiary()
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showBestiary")
-end
+-- LuaFormatter on
 
 function showCharms()
     local test = g_ui.createWidget("Label", contentContainer)

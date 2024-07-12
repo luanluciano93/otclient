@@ -448,3 +448,58 @@ function tdump(title, input)
     return dump_str
 end
 -- @}
+
+-- @delete this  DEV Cyclopedia
+function getWidgetProperties(widget)
+    return {
+        rect = widget:getRect() or nil,
+        style = widget:getStyle() or nil,
+        enabled = widget:isEnabled() or nil,
+        visible = widget:isVisible() or nil,
+        focusable = widget:isFocusable() or nil,
+        draggable = widget:isDraggable() or nil,
+        fixedSize = widget:isFixedSize() or nil,
+        clipping = widget:isClipping() or nil,
+        virtualOffset = widget:getVirtualOffset() or nil,
+        lastFocusReason = widget:getLastFocusReason() or nil,
+        autoFocusPolicy = widget:getAutoFocusPolicy() or nil,
+        autoRepeatDelay = widget:getAutoRepeatDelay() or nil,
+        styleName = widget:getStyleName() or nil,
+        lastClickPosition = widget:getLastClickPosition() or nil,
+        hoveredChild = widget:getHoveredChild() and widget:getHoveredChild():getId() or nil,
+        focusedChild = widget:getFocusedChild() and widget:getFocusedChild():getId() or nil,
+        childCount = widget:getChildCount() or nil
+    }
+end
+
+function getChildrenData(widget)
+    local data = {
+        id = widget:getId(),
+        className = widget:getClassName(),
+        properties = getWidgetProperties(widget),
+        children = {}
+    }
+
+    local children = widget:getChildren()
+    for _, child in ipairs(children) do
+        table.insert(data.children, getChildrenData(child))
+    end
+
+    return data
+end
+
+function exportWidgetDataToJson(widget, fileName)
+    local data = getChildrenData(widget)
+    local jsonString = json.encode(data, {
+        indent = true
+    })
+    local filePath = "/" .. fileName 
+    local file = io.open(filePath, "w")
+    if file then
+        file:write(jsonString)
+        file:close()
+        print("Exported successfully to " .. filePath)
+    else
+        print("Failed to open the file for writing")
+    end
+end
