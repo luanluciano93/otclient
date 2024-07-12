@@ -4,8 +4,30 @@ https://github.com/otland/forgottenserver/pull/4540/files
 https://github.com/otland/forgottenserver/pull/4461
 https://github.com/otland/forgottenserver/pull/4460
 https://github.com/otland/forgottenserver/pull/4456/files
-GET ]] local characterPanel = nil
+GET ]]
+
+local characterPanel = nil
 local UI = nil
+local function close(parent)
+    if table.empty(parent.subCategories) then
+        return
+    end
+
+    for subId, _ in ipairs(parent.subCategories) do
+        local subWidget = parent:getChildById(subId)
+
+        if subWidget then
+            subWidget:setVisible(false)
+        end
+    end
+
+    parent:setHeight(parent.closedSize)
+
+    parent.opened = false
+
+    parent.Button.Arrow:setVisible(true)
+end
+
 local function reset()
     characterPanel.InfoBase.inventoryPanel:setVisible(true)
     characterPanel.InfoBase.outfitPanel:setVisible(false)
@@ -160,25 +182,6 @@ Cyclopedia.InventorySlotStyles = {
     }
 }
 
-local function close(parent)
-    if table.empty(parent.subCategories) then
-        return
-    end
-
-    for subId, _ in ipairs(parent.subCategories) do
-        local subWidget = parent:getChildById(subId)
-
-        if subWidget then
-            subWidget:setVisible(false)
-        end
-    end
-
-    parent:setHeight(parent.closedSize)
-
-    parent.opened = false
-
-    parent.Button.Arrow:setVisible(true)
-end
 
 function Cyclopedia.characterAppearancesFilter(widget)
     local parent = widget:getParent()

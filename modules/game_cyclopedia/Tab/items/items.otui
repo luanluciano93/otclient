@@ -168,7 +168,7 @@ UIWidget
     anchors.top: SearchEdit.top
     margin-top: 2
     margin-right: 2
-    image-source: /mods/game_cyclopedia/images/button_clear_search
+    image-source: /game_cyclopedia/images/button_clear_search
     image-color: white
     opacity: 0.8
     @onClick: modules.game_cyclopedia.ItemSearch("", true)
@@ -353,7 +353,7 @@ UIWidget
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         margin-right: 4
-        image-source: /mods/game_cyclopedia/images/icon_gold
+        image-source: /game_cyclopedia/images/icon_gold
       Label
         id: Value
         anchors.right: Icon.left
@@ -402,7 +402,7 @@ UIWidget
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         margin-right: 4
-        image-source: /mods/game_cyclopedia/images/icon_gold
+        image-source: /game_cyclopedia/images/icon_gold
       Label
         id: Value
         anchors.right: Icon.left

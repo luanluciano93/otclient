@@ -40,7 +40,7 @@ UIWidget
     anchors.bottom: parent.bottom
     margin-top: 10
     margin-bottom: 10
-    image-source: /mods/game_cyclopedia/images/panel_dark
+    image-source: /game_cyclopedia/images/panel_dark
     image-border: 10
     width: 170
   BorderBox
@@ -126,7 +126,7 @@ UIWidget
       anchors.top: CharacterButton.top
       margin-left: 5
       size: 34 34
-      icon-source: /mods/game_cyclopedia/images/button_wheel
+      icon-source: /game_cyclopedia/images/button_wheel
     BorderBox
       id: DetailsBase
       anchors.top: inventoryPanel.bottom
@@ -916,7 +916,7 @@ UIWidget
         anchors.right: parent.right
         margin-right: 14
       UIWidget
-        image-source: /mods/game_cyclopedia/images/icon-achievement
+        image-source: /game_cyclopedia/images/icon-achievement
         anchors.top: gradeOne.top
         anchors.right: gradeOne.left
         margin-top: 2
@@ -929,7 +929,7 @@ UIWidget
         anchors.top: gradeOne.bottom
         anchors.right: gradeOne.right
       UIWidget
-        image-source: /mods/game_cyclopedia/images/icon-achievement
+        image-source: /game_cyclopedia/images/icon-achievement
         image-repeated: true
         width: 22
         anchors.top: gradeTwo.top
@@ -944,7 +944,7 @@ UIWidget
         anchors.top: gradeTwo.bottom
         anchors.right: gradeTwo.right
       UIWidget
-        image-source: /mods/game_cyclopedia/images/icon-achievement
+        image-source: /game_cyclopedia/images/icon-achievement
         image-repeated: true
         width: 33
         anchors.top: gradeThree.top
@@ -959,7 +959,7 @@ UIWidget
         anchors.top: gradeThree.bottom
         anchors.right: gradeThree.right
       UIWidget
-        image-source: /mods/game_cyclopedia/images/icon-achievement
+        image-source: /game_cyclopedia/images/icon-achievement
         image-repeated: true
         width: 44
         anchors.top: gradeFour.top

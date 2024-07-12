@@ -1,5 +1,5 @@
 HouseIcon < UIWidget
-  image-source: /mods/game_cyclopedia/images/house-owner-icon
+  image-source: /game_cyclopedia/images/house-owner-icon
   margin-left: 1
 HouseBidArea < UIWidget
   height: 100
@@ -22,7 +22,7 @@ HouseBidArea < UIWidget
     margin-top: 1
     margin-left: 5
   UIWidget
-    image-source: /mods/game_cyclopedia/images/icon_gold
+    image-source: /game_cyclopedia/images/icon_gold
     anchors.top: prev.top
     anchors.left: prev.right
     margin-top: 3
@@ -30,7 +30,7 @@ HouseBidArea < UIWidget
   UIWidget
     anchors.right: parent.right
     anchors.top: prev.top
-    image-source: /mods/game_cyclopedia/images/icon_info
+    image-source: /game_cyclopedia/images/icon_info
   Label
     id: information
     color: #C0C0C0
@@ -89,7 +89,7 @@ House < UICheckBox
     anchors.left: rent.right
     anchors.verticalCenter: rent.verticalCenter
     margin-left: 3
-    image-source: /mods/game_cyclopedia/images/icon_gold
+    image-source: /game_cyclopedia/images/icon_gold
   Panel
     id: icons
     height: 12
@@ -102,7 +102,7 @@ House < UICheckBox
       flow: true
   UIWidget
     id: description
-    image-source: /mods/game_cyclopedia/images/house-description
+    image-source: /game_cyclopedia/images/house-description
     anchors.top: sold.top
     anchors.left: sold.left
     visible: false
@@ -207,7 +207,7 @@ Achievement < UICheckBox
     anchors.horizontalCenter: parent.horizontalCenter
   UIWidget
     id: icon
-    image-source: /mods/game_cyclopedia/images/icon-achievement
+    image-source: /game_cyclopedia/images/icon-achievement
     image-repeated: true
     width: 22
     anchors.top: title.top
@@ -500,7 +500,7 @@ SlotBossSlots < UIWidget
       !text: ('0')
       text-align: center
     UIWidget
-      image-source: /mods/game_cyclopedia/images/icon_gold
+      image-source: /game_cyclopedia/images/icon_gold
       anchors.left: Value.right
       anchors.verticalCenter: Value.verticalCenter
       margin-left: 2
@@ -550,7 +550,7 @@ BossSlotProgress < UIWidget
   UIWidget
     id: fill
     anchors.fill: ProgressBack
-    image-source: /mods/game_cyclopedia/images/boss/fill
+    image-source: /game_cyclopedia/images/boss/fill
     margin-top: 1
     phantom: true
   UIWidget
@@ -738,13 +738,13 @@ CharmItem < UICheckBox
       anchors.left: Value.right
       anchors.verticalCenter: parent.verticalCenter
       margin-left: 2
-      image-source: /mods/game_cyclopedia/images/icon_charms
+      image-source: /game_cyclopedia/images/icon_charms
     UIWidget
       id: Gold
       anchors.left: Value.right
       anchors.verticalCenter: parent.verticalCenter
       margin-left: 2
-      image-source: /mods/game_cyclopedia/images/icon_gold
+      image-source: /game_cyclopedia/images/icon_gold
       visible: false
   BorderBox
     id: charmBase
@@ -903,7 +903,7 @@ BosstiaryItem < UIWidget
   UIWidget
     id: fill
     anchors.fill: ProgressBack
-    image-source: /mods/game_cyclopedia/images/bestiary/fill
+    image-source: /game_cyclopedia/images/bestiary/fill
     margin-top: 1
     phantom: true
   UIWidget
