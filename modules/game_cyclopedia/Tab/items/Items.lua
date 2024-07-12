@@ -294,7 +294,7 @@ function internalCreateItem(data)
             oldSelected:setBackgroundColor("#00000000")
         end
 
-        g_game.sendInspectionObject(3, itemId) -- SEND
+        g_game.inspectionObject(3, itemId) -- SEND
 
         if not lootValue:isVisible() then
             lootValue:setVisible(true)
