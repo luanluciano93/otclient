@@ -154,8 +154,8 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerTakeScreenshot:
                     parseTakeScreenshot(msg);
                     break;
-                case Proto::GameServerCyclopediaItemInspection:
-                    parseCyclopediaItemInspection(msg);
+                case Proto::GameServerCyclopediaItemDetail:
+                    parseCyclopediaItemDetail(msg);
                     break;
                 case Proto::GameServerSetInventory:
                     parseAddInventoryItem(msg);
@@ -1212,22 +1212,26 @@ void ProtocolGame::parseTakeScreenshot(const InputMessagePtr& msg) {
     m_localPlayer->takeScreenshot(screenshotType);
 }
 
-void ProtocolGame::parseCyclopediaItemInspection(const InputMessagePtr& msg) {
+void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg) {
     msg->getU8(); // 0x00
     msg->getU8(); // bool is cyclopedia
     msg->getU32(); // creature ID (version 13.00)
     msg->getU8(); // 0x01
 
-    msg->getString(); // item name
-    const auto& item = getItem(msg);
+    const auto& itemName = msg->getString();
+    const auto& itemInfo = getItem(msg);
 
     msg->getU8(); // 0x00
 
+    std::vector<std::pair<std::string, std::string>> descriptions;
+
     const uint8_t descriptionsSize = msg->getU8();
     for (auto i = 0; i < descriptionsSize; ++i) {
-        msg->getString(); // description first
-        msg->getString(); // description second
+        const auto firstDescription = msg->getString();
+        const auto secondDescription = msg->getString();
+        descriptions.emplace_back(firstDescription, secondDescription);
     }
+    g_game.onParseItemDetail(itemName, itemInfo, descriptions);
 }
 
 void ProtocolGame::parseAddInventoryItem(const InputMessagePtr& msg)
