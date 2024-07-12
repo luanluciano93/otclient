@@ -201,7 +201,7 @@ private:
     void parseContainerUpdateItem(const InputMessagePtr& msg);
     void parseContainerRemoveItem(const InputMessagePtr& msg);
     void parseTakeScreenshot(const InputMessagePtr& msg);
-    void parseCyclopediaItemInspection(const InputMessagePtr& msg);
+    void parseCyclopediaItemDetail(const InputMessagePtr& msg);
     void parseAddInventoryItem(const InputMessagePtr& msg);
     void parseRemoveInventoryItem(const InputMessagePtr& msg);
     void parseOpenNpcTrade(const InputMessagePtr& msg);
