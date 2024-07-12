@@ -288,7 +288,7 @@ function internalCreateItem(data)
             oldSelected:setBackgroundColor("#00000000")
         end
 
-        g_game.inspectObject(3, itemId) -- SEND
+        g_game.sendInspectionCyclopedia(3, itemId) -- SEND
 
         if not lootValue:isVisible() then
             lootValue:setVisible(true)
@@ -299,7 +299,7 @@ function internalCreateItem(data)
         itemPanel.InfoBase.ResultGoldBase.Value:setText(formatGold(item.Value))
         itemPanel.SelectedItem.Sprite:setItemId(data:getId())
 
-        if frame > 0 then
+--[[         if frame > 0 then
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("/images/ui/frames")
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageClip(torect(g_game.getRectFrame(frame)))
             itemPanel.SelectedItem.Rarity:setImageSource("/images/ui/frames")
@@ -307,11 +307,13 @@ function internalCreateItem(data)
         else
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("")
             itemPanel.SelectedItem.Rarity:setImageSource("")
-        end
+        end ]]
 
+        itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("")
+        itemPanel.SelectedItem.Rarity:setImageSource("")
         widget:setBackgroundColor("#585858")
 
-        local buy, sell = formatSaleData(internalData:getNpcSaleData())
+     --[[    local buy, sell = formatSaleData(internalData:getNpcSaleData())
         local sellColor = "#484848"
 
         for index, value in ipairs(sell) do
@@ -352,7 +354,7 @@ function internalCreateItem(data)
             end
 
             buyColor = buyColor == "#484848" and "#414141" or "#484848"
-        end
+        end ]]
 
         itemPanel.selectItem = widget
     end

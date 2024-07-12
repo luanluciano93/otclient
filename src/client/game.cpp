@@ -1726,3 +1726,11 @@ void Game::imbuementDurations(bool isOpen)
         return;
     m_protocolGame->sendImbuementDurations(isOpen);
 }
+
+void Game::sendInspectionCyclopedia(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendInspectionCyclopedia(inspectionType , itemId, itemCount);
+}
+

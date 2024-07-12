@@ -392,7 +392,9 @@ public:
                             const std::vector<std::tuple<uint8_t, std::string>>& categories,
                             uint16_t page, uint16_t totalPages,
                             const std::vector<std::tuple<uint32_t, std::string, std::string, uint8_t, std::string, uint16_t, uint8_t, uint64_t>>& highscores, uint32_t entriesTs);
-
+    // Cyclopedia related
+    void sendInspectionCyclopedia(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
+    // imbuement related
     void imbuementDurations(bool isOpen = false);
 
 protected:

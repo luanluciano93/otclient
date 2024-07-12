@@ -934,11 +934,11 @@ void ProtocolGame::sendSeekInContainer(int cid, int index)
     send(msg);
 }
 
-void ProtocolGame::sendInspectionNormalObject(const Position& position)
+void ProtocolGame::sendInspectionNormalObject(const Otc::InspectObjectTypes inspectionType ,const Position& position)
 {
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientInspectionObject);
-    msg->addU8(INSPECT_NORMALOBJECT);
+    msg->addU8(Otc::INSPECT_NORMALOBJECT);
     addPosition(msg, position);
     send(msg);
 }
