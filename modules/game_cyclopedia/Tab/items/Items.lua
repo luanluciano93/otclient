@@ -219,7 +219,8 @@ end
 
 function internalCreateItem(data)
     local player = g_game.getLocalPlayer()
-    local vocation = g_game.getRealVocation(player:getVocation())
+  --  local vocation = g_game.getRealVocation(player:getVocation()) or 1
+    local vocation = player:getVocation()
     local level = player:getLevel()
     local classification = data:getClassification()
     local marketData = data:getMarketData()
@@ -263,16 +264,17 @@ function internalCreateItem(data)
     item.Sprite:setItemId(data:getId())
     item.Name:setText(marketData.name)
 
-    item.Value = data:getResultingValue()
+    --item.Value = data:getResultingValue()
+    item.Value = 1
     item.Vocation = marketData.restrictVocation
 
-    local frame = g_game.getItemFrame(item.Value)
+--[[     local frame = g_game.getItemFrame(item.Value)
 
     if frame > 0 then
         item.Rarity:setImageSource("/images/ui/frames")
         item.Rarity:setImageClip(torect(g_game.getRectFrame(frame)))
     end
-
+ ]]
     function item.onClick(widget)
         itemPanel.InfoBase.SellBase.List:destroyChildren()
         itemPanel.InfoBase.BuyBase.List:destroyChildren()
@@ -377,7 +379,7 @@ end
 
 function applyFilters()
 
-    local isSearching = itemPanel.SearchEdit:getText() ~= ""
+--[[     local isSearching = itemPanel.SearchEdit:getText() ~= ""
 
     if not isSearching then
         local id = tonumber(ArrayCiclopedia.Items.selectedCategory:getId())
@@ -387,7 +389,7 @@ function applyFilters()
         end
     else
         ItemSearch(itemPanel.SearchEdit:getText(), false)
-    end
+    end ]]
 end
 
 function levelFilter(value)
