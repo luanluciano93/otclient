@@ -939,7 +939,7 @@ void ProtocolGame::sendInspectionNormalObject(const Position& position)
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientInspectionObject);
     msg->addU8(INSPECT_NORMALOBJECT);
-	addPosition(msg, position);
+    addPosition(msg, position);
     send(msg);
 }
 
