@@ -934,6 +934,27 @@ void ProtocolGame::sendSeekInContainer(int cid, int index)
     send(msg);
 }
 
+void ProtocolGame::sendInspectionNormalObject(const Position& position)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientInspectionObject);
+    msg->addU8(INSPECT_NORMALOBJECT);
+	addPosition(msg, position);
+    send(msg);
+}
+
+void ProtocolGame::sendInspectionCyclopedia(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientInspectionObject);
+    msg->addU8(inspectionType);
+    if (inspectionType == Otc::INSPECT_NPCTRADE || inspectionType == Otc::INSPECT_CYCLOPEDIA) { 
+        msg->addU16(itemId);
+        msg->addU8(itemCount);
+    }
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();
