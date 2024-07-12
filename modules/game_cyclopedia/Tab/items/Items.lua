@@ -89,25 +89,16 @@ function showItems()
 
         ItemCat.BaseColor = CategoryColor
 
-        ItemCat.onClick = selectCategoryOnClick
+        function ItemCat:onClick()
+            ResetItemCategorySelection(itemPanel.CategoryList)
+            self:setChecked(true)
+            self:setBackgroundColor("#585858")
+        end
         CategoryColor = CategoryColor == "#484848" and "#414141" or "#484848"
     end
-    connect(itemPanel.CategoryList, {
-        onChildFocusChange = function(self, focusedChild)
-            if focusedChild == nil then
-                return
-            end
-            selectCategoryOnClick(focusedChild)
-        end
-    })
+
     itemPanel.LootValue.NpcBuyCheck.onClick = onChangeLootValue
     itemPanel.LootValue.MarketCheck.onClick = onChangeLootValue
-end
-
-function selectCategoryOnClick(widget)
-    ResetItemCategorySelection(itemPanel.CategoryList)
-    widget:setChecked(true)
-    widget:setBackgroundColor("#585858")
 end
 
 function onParseItemDetail(itemId, descriptions) -- GET INFO
@@ -375,6 +366,7 @@ function onCategoryChange(widget)
         ArrayCiclopedia.Items.selectedCategory = widget
     end
 end
+
 function vocationFilter(value)
     itemPanel.ItemListBase.List:destroyChildren()
 
@@ -384,6 +376,7 @@ function vocationFilter(value)
 end
 
 function applyFilters()
+
     local isSearching = itemPanel.SearchEdit:getText() ~= ""
 
     if not isSearching then
@@ -505,4 +498,3 @@ g_game.inspectObject(3, itemId)
 Get:
 itemId, descriptions
 ]]
-

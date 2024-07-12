@@ -41,6 +41,8 @@ function controllerCyclopedia:onInit()
         onGameStart = OnStart,
         onGameEnd = OnEnd,
     })
+	g_ui.importStyle("cyclopedia_widgets")
+	g_ui.importStyle("cyclopedia_pages")
 
 end
 

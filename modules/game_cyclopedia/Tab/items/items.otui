@@ -1,21 +1,3 @@
-ItemCategory < Panel
-  height: 18
-  focusable: true
-  background: alpha
-
-  $focus:
-    background: #515151
-  
-  Label
-    id: name
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    margin-left: 3
-    margin-top: 2 
-
-
 
 UIWidget
   id: Cat1
