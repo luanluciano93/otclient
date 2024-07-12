@@ -1231,7 +1231,7 @@ void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg) {
         const auto secondDescription = msg->getString();
         descriptions.emplace_back(firstDescription, secondDescription);
     }
-  //  g_game.onParseItemDetail(itemName, itemInfo, descriptions);
+    g_game.processItemDetail(itemName, itemInfo, descriptions);
 }
 
 void ProtocolGame::parseAddInventoryItem(const InputMessagePtr& msg)
