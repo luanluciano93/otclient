@@ -1,4 +1,4 @@
-local contentContainer = nil
+contentContainer = nil
 local buttonSelection = nil
 local items = nil
 local bestiary = nil
@@ -37,11 +37,13 @@ function controllerCyclopedia:onInit()
     bosstiary = buttonSelection:recursiveGetChildById('bosstiary')
     bossSlot = buttonSelection:recursiveGetChildById('bossSlot')
 
-    --[[    note: 
-     if not g_game.getFeature(GameCyclopedia) then
-        return CyclopediaButton:hide()
-    end 
-]]
+    controllerCyclopedia:registerEvents(g_game, {
+		onGameStart = OnStart,
+		onGameEnd = OnEnd,
+		onParseItemDetail = onParseItemDetail,
+
+    })
+    SelectWindow("items")
 end
 
 function controllerCyclopedia:onGameStart()
@@ -54,16 +56,7 @@ function controllerCyclopedia:onGameEnd()
 end
 
 function controllerCyclopedia:onTerminate()
-    local widgets = {CyclopediaButton, contentContainer, buttonSelection, items, bestiary, charms, map, houses,
-                     character, bosstiary, bossSlot}
 
-    for i = 1, #widgets do
-        local widget = widgets[i]
-        if widget then
-            widget:destroy()
-            widgets[i] = nil
-        end
-    end
 
 end
 
@@ -114,12 +107,6 @@ function SelectWindow(type)
     end
 end
 
-function showItems()
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showItems")
-end
 
 function showBestiary()
     local test = g_ui.createWidget("Label", contentContainer)
