@@ -70,7 +70,7 @@ end
 function showItems()
 
     itemPanel = g_ui.loadUI("items", contentContainer)
-    exportWidgetDataToJson(itemPanel, "bestiaryPanel.json")
+    exportWidgetDataToJson(itemPanel, "itemPanel.json")
     loadItemsCategories()
     itemPanel:show()
 
@@ -89,17 +89,25 @@ function showItems()
 
         ItemCat.BaseColor = CategoryColor
 
-        function ItemCat:onClick()
-            ResetItemCategorySelection(itemPanel.CategoryList)
-            self:setChecked(true)
-            self:setBackgroundColor("#585858")
-        end
-
+        ItemCat.onClick = selectCategoryOnClick
         CategoryColor = CategoryColor == "#484848" and "#414141" or "#484848"
     end
-
+    connect(itemPanel.CategoryList, {
+        onChildFocusChange = function(self, focusedChild)
+            if focusedChild == nil then
+                return
+            end
+            selectCategoryOnClick(focusedChild)
+        end
+    })
     itemPanel.LootValue.NpcBuyCheck.onClick = onChangeLootValue
     itemPanel.LootValue.MarketCheck.onClick = onChangeLootValue
+end
+
+function selectCategoryOnClick(widget)
+    ResetItemCategorySelection(itemPanel.CategoryList)
+    widget:setChecked(true)
+    widget:setBackgroundColor("#585858")
 end
 
 function onParseItemDetail(itemId, descriptions) -- GET INFO
