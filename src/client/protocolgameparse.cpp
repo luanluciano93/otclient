@@ -488,6 +488,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerSendBestiaryEntryChanged:
                     parseBestiaryEntryChanged(msg);
                     break;
+                case Proto::GameServerCyclopediaCharacterInfo:
+                    parseCyclopediaCharacterInfo(msg);
+                    break;
                 case Proto::GameServerSendDailyRewardCollectionState:
                     parseDailyRewardCollectionState(msg);
                     break;
@@ -551,27 +554,21 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerTakeScreenshot:
                     parseTakeScreenshot(msg);
                     break;
-
                 case Proto::GameServerAttchedEffect:
                     parseAttachedEffect(msg);
                     break;
-
                 case Proto::GameServerDetachEffect:
                     parseDetachEffect(msg);
                     break;
-
                 case Proto::GameServerCreatureShader:
                     parseCreatureShader(msg);
                     break;
-
                 case Proto::GameServerMapShader:
                     parseMapShader(msg);
                     break;
-
                 case Proto::GameServerCreatureTyping:
                     parseCreatureTyping(msg);
                     break;
-
                 default:
                     throw Exception("unhandled opcode %d", opcode);
                     break;
@@ -3572,6 +3569,55 @@ void ProtocolGame::parseBestiaryEntryChanged(const InputMessagePtr& msg)
     msg->getU16(); // monster ID
 
     // TODO: implement bestiary entry changed usage
+}
+
+void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
+{
+    const auto type = static_cast<Otc::CyclopediaCharacterInfoType_t>(msg->getU8());
+    const uint8_t errorCode = msg->getU8();
+    if (errorCode > 0) {
+        return;
+    }
+
+    switch (type) {
+        case Otc::CYCLOPEDIA_CHARACTERINFO_BASEINFORMATION:
+        {
+            msg->getString(); // player name
+            msg->getString(); // player vocation name
+            msg->getU16(); // player level
+            getOutfit(msg, false);
+            msg->getU8(); // ???
+            msg->getString(); // current title name
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
+        {
+            msg->getU8(); // bool showAccountInformation = is received 0x01, will show IsOnline, IsPremium, character title, badges
+            msg->getU8(); // bool player online
+            msg->getU8(); // bool player premium (GOD has always 'Premium')
+            msg->getString(); // character loyalty title
+            const uint8_t badgesSize = msg->getU8();
+            for (auto i = 0; i < badgesSize; ++i) {
+                msg->getU32(); // badge id
+                msg->getString(); // badge name
+            }
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:
+        {
+            msg->getU8(); // current title
+            const uint8_t titlesSize = msg->getU8();
+            for (auto i = 0; i < titlesSize; ++i) {
+                msg->getString(); // title name
+                msg->getString(); // title description
+                msg->getU8(); // bool title permanent
+                msg->getU8(); // bool title unlocked
+            }
+            break;
+        }
+    }
+
+    // TODO: implement cyclopedia player info entry changed usage
 }
 
 void ProtocolGame::parseDailyRewardCollectionState(const InputMessagePtr& msg)
