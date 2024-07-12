@@ -744,4 +744,12 @@ namespace Otc
         CYCLOPEDIA_CHARACTERINFO_BADGES = 10,
         CYCLOPEDIA_CHARACTERINFO_TITLES = 11
     };
+
+    enum InspectObjectTypes : uint8_t
+    {
+        INSPECT_NORMALOBJECT = 0,
+        INSPECT_NPCTRADE = 1,
+        INSPECT_PLAYERTRADE = 2,
+        INSPECT_CYCLOPEDIA = 3
+    };
 }
