@@ -70,7 +70,7 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
-    @onCheckChange: Cyclopedia.levelFilter(self:isChecked())
+    @onCheckChange: modules.game_cyclopedia.levelFilter(self:isChecked())
   CheckBox
     id: VocationButton
     size: 47 20
@@ -81,7 +81,7 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
-    @onCheckChange: Cyclopedia.vocationFilter(self:isChecked())
+    @onCheckChange: modules.game_cyclopedia.vocationFilter(self:isChecked())
   CheckBox
     id: H1Button
     size: 47 20
@@ -92,7 +92,7 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
-    @onCheckChange: Cyclopedia.h1Filter(self:isChecked())
+    @onCheckChange: modules.game_cyclopedia.h1Filter(self:isChecked())
   CheckBox
     id: H2Button
     size: 47 20
@@ -103,14 +103,14 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
-    @onCheckChange: Cyclopedia.h2Filter(self:isChecked())
+    @onCheckChange: modules.game_cyclopedia.h2Filter(self:isChecked())
   ComboBox
     id: ItemFilter
     size: 77 20
     anchors.top: LevelButton.bottom
     anchors.left: parent.left
     margin-top: 6
-    @onOptionChange: Cyclopedia.classificationFilter(self:getCurrentOption().data)
+    @onOptionChange: modules.game_cyclopedia.classificationFilter(self:getCurrentOption().data)
   Label
     id: ItemsLabel
     anchors.top: ItemFilter.bottom
@@ -179,7 +179,7 @@ UIWidget
     height: 17
     placeholder: Type to search
     placeholder-color: #6E706F
-    @onTextChange: Cyclopedia.ItemSearch()
+    @onTextChange: modules.game_cyclopedia.ItemSearch()
   UIWidget
     id: SearchClearButton
     anchors.right: SearchEdit.right
@@ -189,7 +189,7 @@ UIWidget
     image-source: /mods/game_cyclopedia/images/button_clear_search
     image-color: white
     opacity: 0.8
-    @onClick: Cyclopedia.ItemSearch("", true)
+    @onClick: modules.game_cyclopedia.ItemSearch("", true)
     $hover:
       opacity: 1.0
       image-color: white
