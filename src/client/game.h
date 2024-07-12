@@ -396,8 +396,8 @@ public:
                             const std::vector<std::tuple<uint32_t, std::string, std::string, uint8_t, std::string, uint16_t, uint8_t, uint64_t>>& highscores, uint32_t entriesTs);
     
     // cyclopedia related
-    void sendInspectionNormalObject(const Position& position);
-    void sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
+    void inspectionNormalObject(const Position& position);
+    void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
 
     // imbuement related
     void imbuementDurations(bool isOpen = false);
