@@ -1437,7 +1437,7 @@ void Game::seekInContainer(int cid, int index)
     m_protocolGame->sendSeekInContainer(cid, index);
 }
 
-void Game::sendInspectionNormalObject(const Position& position)
+void Game::inspectionNormalObject(const Position& position)
 {
     if (!canPerformGameAction())
         return;
@@ -1445,7 +1445,7 @@ void Game::sendInspectionNormalObject(const Position& position)
     m_protocolGame->sendInspectionNormalObject(position);
 }
 
-void Game::sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
+void Game::inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
 {
     if (!canPerformGameAction())
         return;
