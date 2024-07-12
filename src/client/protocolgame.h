@@ -114,6 +114,8 @@ public:
     void sendAnswerModalDialog(uint32_t dialog, int button, int choice);
     void sendBrowseField(const Position& position);
     void sendSeekInContainer(int cid, int index);
+    void sendInspectionNormalObject(const Position& position);
+    void sendInspectionCyclopedia(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
     void sendBuyStoreOffer(int offerId, int productType, const std::string_view name);
     void sendRequestTransactionHistory(int page, int entriesPerPage);
     void sendRequestStoreOffers(const std::string_view categoryName, int serviceType);
@@ -198,6 +200,8 @@ private:
     void parseContainerAddItem(const InputMessagePtr& msg);
     void parseContainerUpdateItem(const InputMessagePtr& msg);
     void parseContainerRemoveItem(const InputMessagePtr& msg);
+    void parseTakeScreenshot(const InputMessagePtr& msg);
+    void parseCyclopediaItemInspection(const InputMessagePtr& msg);
     void parseAddInventoryItem(const InputMessagePtr& msg);
     void parseRemoveInventoryItem(const InputMessagePtr& msg);
     void parseOpenNpcTrade(const InputMessagePtr& msg);
@@ -287,6 +291,7 @@ private:
     void parseUpdateSupplyTracker(const InputMessagePtr& msg);
     void parseUpdateLootTracker(const InputMessagePtr& msg);
     void parseBestiaryEntryChanged(const InputMessagePtr& msg);
+    void parseCyclopediaCharacterInfo(const InputMessagePtr& msg);
     void parseDailyRewardCollectionState(const InputMessagePtr& msg);
     void parseOpenRewardWall(const InputMessagePtr& msg);
     void parseDailyReward(const InputMessagePtr& msg);
@@ -308,9 +313,7 @@ private:
     void parseBosstiarySlots(const InputMessagePtr& msg);
     void parseBosstiaryCooldownTimer(const InputMessagePtr& msg);
     void parseBosstiaryEntryChanged(const InputMessagePtr& msg);
-    void parseTakeScreenshot(const InputMessagePtr& msg);
     void parseHighscores(const InputMessagePtr& msg);
-
     void parseAttachedEffect(const InputMessagePtr& msg);
     void parseDetachEffect(const InputMessagePtr& msg);
     void parseCreatureShader(const InputMessagePtr& msg);
