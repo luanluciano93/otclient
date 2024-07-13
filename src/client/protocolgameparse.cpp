@@ -1218,8 +1218,8 @@ void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg) {
     msg->getU32(); // creature ID (version 13.00)
     msg->getU8(); // 0x01
 
-    const auto& itemName = msg->getString();
-    const auto& itemInfo = getItem(msg);
+    msg->getString(); // item name
+    const auto& item = getItem(msg);
 
     msg->getU8(); // 0x00
 
@@ -1231,7 +1231,8 @@ void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg) {
         const auto secondDescription = msg->getString();
         descriptions.emplace_back(firstDescription, secondDescription);
     }
-    g_game.processItemDetail(itemName, itemInfo, descriptions);
+
+    g_game.processItemDetail(item, descriptions);
 }
 
 void ProtocolGame::parseAddInventoryItem(const InputMessagePtr& msg)
