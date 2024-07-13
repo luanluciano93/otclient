@@ -156,6 +156,9 @@ protected:
                                    & buttonList, int enterButton, int escapeButton, const std::vector<std::tuple<int, std::string> >
                                    & choiceList, bool priority);
 
+    // cyclopedia
+    static void processItemDetail(const ItemPtr& item, const std::vector<std::pair<std::string, std::string>>& descriptions)
+
     friend class ProtocolGame;
     friend class Map;
 
