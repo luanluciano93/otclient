@@ -324,8 +324,9 @@ void Game::processContainerRemoveItem(int containerId, int slot, const ItemPtr& 
         container->onRemoveItem(slot, lastItem);
 }
 
-void Game::processItemDetail(const ItemPtr& item, const std::vector<std::pair<std::string, std::string>>& descriptions)
+void Game::processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions)
 {
+
     g_lua.callGlobalField("g_game", "onParseItemDetail", item->getId(), descriptions);
 }
 

@@ -157,7 +157,7 @@ protected:
                                    & choiceList, bool priority);
 
     // cyclopedia
-    static void processItemDetail(const ItemPtr& item, const std::vector<std::pair<std::string, std::string>>& descriptions)
+    static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
 
     friend class ProtocolGame;
     friend class Map;

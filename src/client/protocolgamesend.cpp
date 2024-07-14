@@ -946,7 +946,7 @@ void ProtocolGame::sendInspectionNormalObject(const Position& position)
 void ProtocolGame::sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
 {
     if (inspectionType != Otc::INSPECT_NPCTRADE && inspectionType != Otc::INSPECT_CYCLOPEDIA) {
-        return
+        return;
     }
 
     const auto& msg = std::make_shared<OutputMessage>();

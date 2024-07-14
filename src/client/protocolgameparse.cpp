@@ -1223,7 +1223,7 @@ void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg) {
 
     msg->getU8(); // 0x00
 
-    std::vector<std::pair<std::string, std::string>> descriptions;
+    std::vector<std::tuple<std::string, std::string>> descriptions;
 
     const uint8_t descriptionsSize = msg->getU8();
     for (auto i = 0; i < descriptionsSize; ++i) {
