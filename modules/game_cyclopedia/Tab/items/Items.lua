@@ -102,24 +102,22 @@ function showItems()
 end
 
 function onParseItemDetail(itemId, descriptions) -- GET INFO
-    print(itemId, descriptions)
     itemPanel.InfoBase.DetailsBase.List:destroyChildren()
     local internalData = g_things.getThingType(itemId, ThingCategoryItem)
     local classification = internalData:getClassification()
 
     for _, description in ipairs(descriptions) do
         local widget = g_ui.createWidget("UIWidget", itemPanel.InfoBase.DetailsBase.List)
-
-        for key, value in pairs(description) do
-            widget:setText(key .. ": " .. value)
-            widget:setColor("#C0C0C0")
-        end
-
+        local key = description[1]
+        local value = description[2]
+        widget:setText(key .. ": " .. value)
+        widget:setColor("#C0C0C0")
         widget:setTextWrap(true)
     end
+
     if classification > 0 then
         local widget = g_ui.createWidget("UIWidget", itemPanel.InfoBase.DetailsBase.List)
-        widget:setText("Classification" .. ": " .. classification)
+        widget:setText("Classification: " .. classification)
         widget:setColor("#C0C0C0")
     end
 end
