@@ -42,7 +42,7 @@ UIWidget
     margin-top: 10
     margin-bottom:30
     margin-left: 210
-  CheckBox
+  fakeCheckBox
     id: LevelButton
     size: 47 20
     anchors.left: parent.left
@@ -50,10 +50,10 @@ UIWidget
     margin-top: 40
     !text: tr("Level")
     //font: verdana-bold-8px-antialiased
-    text-offset: 0 -1
+    text-offset: 13 6
     color: #C0C0C0
     @onCheckChange: modules.game_cyclopedia.levelFilter(self:isChecked())
-  CheckBox
+  fakeCheckBox
     id: VocationButton
     size: 47 20
     anchors.left: LevelButton.right
@@ -61,29 +61,30 @@ UIWidget
     margin-left: 5
     !text: tr("Voc.")
     //font: verdana-bold-8px-antialiased
-    text-offset: 0 -1
+    text-offset: 13 6
     color: #C0C0C0
     @onCheckChange: modules.game_cyclopedia.vocationFilter(self:isChecked())
-  CheckBox
+  fakeCheckBox
     id: H1Button
     size: 47 20
     anchors.left: VocationButton.right
     anchors.top: LevelButton.top
     margin-left: 5
+    text-offset: 13 6
     !text: tr("1H")
     //font: verdana-bold-8px-antialiased
-    text-offset: 0 -1
     color: #C0C0C0
     @onCheckChange: modules.game_cyclopedia.h1Filter(self:isChecked())
-  CheckBox
+  fakeCheckBox
     id: H2Button
     size: 47 20
     anchors.left: H1Button.right
     anchors.top: LevelButton.top
     margin-left: 5
     !text: tr("2H")
+
     //font: verdana-bold-8px-antialiased
-    text-offset: 0 -1
+    text-offset: 13 6
     color: #C0C0C0
     @onCheckChange: modules.game_cyclopedia.h2Filter(self:isChecked())
   ComboBox
@@ -198,7 +199,7 @@ UIWidget
       anchors.top: LootValueLabel.bottom
       anchors.left: LootValueLabel.left
       margin-top: 4
-      image-source: /images/ui/checkbox_round
+
       text-offset: 15 0
       !text: tr('NPC Buy Value')
       width: 130
@@ -208,7 +209,7 @@ UIWidget
       anchors.top: NpcBuyCheck.bottom
       anchors.left: LootValueLabel.left
       margin-top: 4
-      image-source: /images/ui/checkbox_round
+
       text-offset: 15 0
       !text: tr('Market Average Value')
       width: 150
@@ -353,7 +354,7 @@ UIWidget
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         margin-right: 4
-        image-source: /game_cyclopedia/images/icon_gold
+        image-source: /game_cyclopedia/images/icon-goldcoin
       Label
         id: Value
         anchors.right: Icon.left
@@ -402,7 +403,7 @@ UIWidget
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         margin-right: 4
-        image-source: /game_cyclopedia/images/icon_gold
+        image-source: /game_cyclopedia/images/icon-goldcoin
       Label
         id: Value
         anchors.right: Icon.left
@@ -422,14 +423,14 @@ UIWidget
       id: TrackCheck
       anchors.left: SellBase.left
       anchors.bottom: parent.bottom
-      margin-bottom: 2
+      margin-bottom: 35
       !text: tr('Track drops of this item')
       text-auto-resize: true
   CheckBox
     id: SkipQuickLootCheck
     anchors.right: parent.right
     anchors.bottom: parent.bottom
-    margin-bottom: 2
+    margin-bottom: 35
     !text: tr('Skip when Quick Looting')
     visible: false
     text-auto-resize: true
