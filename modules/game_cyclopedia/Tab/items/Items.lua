@@ -392,17 +392,20 @@ end
 
 function applyFilters()
 
-    --[[     local isSearching = itemPanel.SearchEdit:getText() ~= ""
+    local isSearching = itemPanel.SearchEdit:getText() ~= ""
 
     if not isSearching then
         local id = tonumber(ArrayCiclopedia.Items.selectedCategory:getId())
+        if id then
 
-        for _, data in pairs(ItemList[id]) do
-            local item = internalCreateItem(data)
+            for _, data in pairs(ItemList[id]) do
+                local item = internalCreateItem(data)
+            end
         end
+
     else
         ItemSearch(itemPanel.SearchEdit:getText(), false)
-    end ]]
+    end
 end
 
 function levelFilter(value)
