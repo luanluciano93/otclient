@@ -391,17 +391,20 @@ function vocationFilter(value)
 end
 
 function applyFilters()
-
+local id = 0
     local isSearching = itemPanel.SearchEdit:getText() ~= ""
 
     if not isSearching then
-        local id = tonumber(ArrayCiclopedia.Items.selectedCategory:getId())
-        if id then
+        if ArrayCiclopedia.Items.selectedCategory then
+             id = tonumber(ArrayCiclopedia.Items.selectedCategory:getId())
+        end
+        
+
 
             for _, data in pairs(ItemList[id]) do
                 local item = internalCreateItem(data)
             end
-        end
+
 
     else
         ItemSearch(itemPanel.SearchEdit:getText(), false)

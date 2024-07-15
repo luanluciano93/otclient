@@ -162,7 +162,7 @@ UIWidget
     height: 17
     placeholder: Type to search
     placeholder-color: #6E706F
-    @onTextChange: modules.game_cyclopedia.ItemSearch()
+    @onTextChange: modules.game_cyclopedia.ItemSearch(self:getText())
   UIWidget
     id: SearchClearButton
     anchors.right: SearchEdit.right
