@@ -11,6 +11,7 @@ Module
     mapControllerCyclopedia:init()
     charmsControllerCyclopedia:init()
     houseControllerCyclopedia:init()
+    boss_slotControllerCyclopedia:init()
 
   @onUnload: |
     controllerCyclopedia:terminate()
@@ -20,3 +21,4 @@ Module
     mapControllerCyclopedia:terminate()
     charmsControllerCyclopedia:terminate()
     houseControllerCyclopedia:terminate()
+    boss_slotControllerCyclopedia:terminate()

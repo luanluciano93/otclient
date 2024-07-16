@@ -111,21 +111,3 @@ end
 -- LuaFormatter on
 
 
-
-
-
-
-function showBossSlot()
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showBossSlot")
-end
-
-function showBosstiary()
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showBosstiary")
-end
-
