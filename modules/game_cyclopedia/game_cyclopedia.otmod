@@ -10,6 +10,7 @@ Module
     characterControllerCyclopedia:init()
     mapControllerCyclopedia:init()
     charmsControllerCyclopedia:init()
+    houseControllerCyclopedia:init()
 
   @onUnload: |
     controllerCyclopedia:terminate()
@@ -18,3 +19,4 @@ Module
     characterControllerCyclopedia:terminate()
     mapControllerCyclopedia:terminate()
     charmsControllerCyclopedia:terminate()
+    houseControllerCyclopedia:terminate()
