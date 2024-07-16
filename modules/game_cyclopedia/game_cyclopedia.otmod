@@ -8,9 +8,11 @@ Module
     itemsControllerCyclopedia:init()
     bestiaryControllerCyclopedia:init()
     characterControllerCyclopedia:init()
+    mapControllerCyclopedia:init()
 
   @onUnload: |
     controllerCyclopedia:terminate()
     itemsControllerCyclopedia:terminate()
     bestiaryControllerCyclopedia:terminate()
     characterControllerCyclopedia:terminate()
+    mapControllerCyclopedia:init()

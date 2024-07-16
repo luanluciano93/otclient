@@ -69,7 +69,7 @@ local function open(parent)
     UI.openedCategory = parent
 end
 
-Cyclopedia = {}
+
 characterControllerCyclopedia = Controller:new()
 
 function characterControllerCyclopedia:onInit()

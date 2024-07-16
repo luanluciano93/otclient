@@ -12,17 +12,6 @@
 	return number
 end
 
-function ConvertLayer(Value)
-	if Value == 150 then
-		return 7
-	elseif Value == 300 then
-		return 15
-	elseif Value >= 1 and Value <= 300 then
-		return math.floor((Value - 1) / 20)
-	else
-		return 0
-	end
-end
 
 function calculateCombatValues(percent)
 	local values = {}
