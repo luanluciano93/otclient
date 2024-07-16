@@ -110,12 +110,7 @@ function SelectWindow(type)
 end
 -- LuaFormatter on
 
-function showCharms()
-    local test = g_ui.createWidget("Label", contentContainer)
-    test:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-    test:addAnchor(AnchorTop, 'parent', AnchorTop)
-    test:setText("showCharms")
-end
+
 
 
 function showHouse()
