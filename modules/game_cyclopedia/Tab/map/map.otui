@@ -194,7 +194,7 @@ UIWidget
             anchors.left: parent.left
             margin-top: 7
             margin-left: 7
-            image-source: /images/ui/outfit/checkbox_round
+            image-source: /images/ui/outfits/checkbox_round
             text-offset: 15 0
             !text: tr('Surface View')
             text-auto-resize: true
@@ -203,7 +203,7 @@ UIWidget
             anchors.top: SurfaceCheck.bottom
             anchors.left: SurfaceCheck.left
             margin-top: 7
-            image-source: /images/ui/outfit/checkbox_round
+            image-source: /images/ui/outfits/checkbox_round
             text-offset: 15 0
             !text: tr('Map View')
             text-auto-resize: true

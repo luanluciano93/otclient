@@ -312,7 +312,7 @@ CharacterElementReduction < UIWidget
   UIWidget
     id: icon
     size: 9 9
-    image-source: /images/ui/icons-skills
+    image-source: /images/icons/icons-skills
     image-clip: 63 0 9 9
     anchors.top: parent.top
     anchors.left: value.right
@@ -323,7 +323,7 @@ SkillCharacterIcon < UIWidget
   size: 9 9
   anchors.top: parent.top
   margin-top: 13
-  image-source: /images/ui/icons-skills
+  image-source: /images/icons/icons-skills
 CharacterSkillBase < UIWidget
   height: 20
   margin-left: 5
@@ -592,7 +592,7 @@ BossSlotProgress < UIWidget
     text-auto-resize: true
     !text: tr('0')
 ProgressBackground < UIWidget
-  image-source: /images/ui/1pixel-down-frame
+  image-source: /images/game/actionbar/1pixel-down-frame
   image-border: 5
   padding: 1
   UIWidget
@@ -771,7 +771,7 @@ MarkListItem < ButtonBox
   icon-offset: 3 3
 CharacterCategoryItem < UIWidget
   size: 150 22
-  image-source: /images/ui/1pixel-down-frame
+  image-source: /images/game/actionbar/1pixel-down-frame
   image-border: 5
   UIWidget
     id: Button
@@ -1165,7 +1165,7 @@ RuneSlot < InventoryItem
   &position: {x=65535, y=18, z=0}
 
 RoundCheckBox < CheckBox
-  image-source: /images/ui/checkbox_round
+  image-source: /images/ui/outfits/checkbox_round
   
   $first:
     margin-top: 2
