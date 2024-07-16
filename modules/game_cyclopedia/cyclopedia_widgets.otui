@@ -30,7 +30,7 @@ HouseBidArea < UIWidget
   UIWidget
     anchors.right: parent.right
     anchors.top: prev.top
-    image-source: /game_cyclopedia/images/icon_info
+    image-source: /images/icons/show_gui_help_grey
   Label
     id: information
     color: #C0C0C0

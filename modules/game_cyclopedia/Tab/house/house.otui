@@ -580,7 +580,7 @@ UIWidget
       !tooltip: tr('You will move out at the daily server save of the selected day.')
       anchors.right: parent.right
       anchors.verticalCenter: month.verticalCenter
-      image-source: /game_cyclopedia/images/icon_info
+      image-source: /images/icons/show_gui_help_grey
     Label
       !text: tr('All items you have left in the house will be automatically\nsent to your inbox.')
       text-auto-resize: true
@@ -774,7 +774,7 @@ UIWidget
       !tooltip: tr('You will move out at the daily server save of the selected day.')
       anchors.right: parent.right
       anchors.verticalCenter: month.verticalCenter
-      image-source: /game_cyclopedia/images/icon_info
+      image-source: /images/icons/show_gui_help_grey
     Label
       !text: tr('New Owner:')
       color: #909090
@@ -804,7 +804,7 @@ UIWidget
       !tooltip: tr('Note that the new owner has to accept the transfer.')
       anchors.right: parent.right
       anchors.verticalCenter: owner.verticalCenter
-      image-source: /game_cyclopedia/images/icon_info
+      image-source: /images/icons/show_gui_help_grey
     Label
       !text: tr('Transfer Price:')
       color: #909090

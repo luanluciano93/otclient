@@ -103,7 +103,7 @@ UIWidget
       anchors.right: StoreButton.left
       anchors.verticalCenter: StoreButton.verticalCenter
       margin-right: 5
-      image-source: /game_cyclopedia/images/icon_info
+      image-source: /images/icons/show_gui_help_grey
       !tooltip: ('You can assign 4 more Charms to creatures.\nBuy a "Charm Expansion" to assign your unlocked Charms to\ncreatures nearly unlimitedly and to get a 25% discount whenever\nyou are removing a Charm.')
     TextEdit
       id: SearchEdit
