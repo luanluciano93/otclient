@@ -402,6 +402,8 @@ public:
     void inspectionNormalObject(const Position& position);
     void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
     void requestBestiary();
+    void requestBestiaryOverview(const std::string& catName);
+    void requestBestiarySearch(uint16_t raceId);
 
     // imbuement related
     void imbuementDurations(bool isOpen = false);

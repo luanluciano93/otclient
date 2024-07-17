@@ -1755,3 +1755,17 @@ void Game::requestBestiary()
         return;
     m_protocolGame->sendRequestBestiary();
 }
+
+void Game::requestBestiaryOverview(const std::string& catName)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendRequestBestiaryOverview(catName);
+}
+
+void Game::requestBestiarySearch(uint16_t raceId)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendRequestBestiarySearch(raceId);
+}

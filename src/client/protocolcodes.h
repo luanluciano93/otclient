@@ -312,6 +312,8 @@ namespace Proto
         ClientRemoveVip = 221,
         ClientEditVip = 222,
         ClientRequestBestiary = 225,
+        ClientRequestBestiaryOverview = 226,
+        ClientRequestBestiarySearch = 227,
         ClientBugReport = 230,
         ClientRuleViolation = 231,
         ClientDebugReport = 232,

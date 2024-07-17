@@ -964,6 +964,23 @@ void ProtocolGame::sendRequestBestiary()
     send(msg);
 }
 
+void ProtocolGame::sendRequestBestiaryOverview(const std::string catName)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBestiaryOverview);
+    msg->addU8(0x02);
+    msg->addString(catName);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBestiarySearch(uint16_t raceId)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBestiarySearch);
+    msg->addU16(raceId);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();
