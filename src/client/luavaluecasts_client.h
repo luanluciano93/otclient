@@ -48,3 +48,5 @@ bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints);
 // imbuement
 int push_luavalue(const Imbuement& i);
 int push_luavalue(const ImbuementTrackerItem& i);
+// cyclopedia
+int push_luavalue(const BestiaryCategoryItem& item);

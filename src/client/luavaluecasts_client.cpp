@@ -267,6 +267,19 @@ int push_luavalue(const ImbuementTrackerItem& i)
     return 1;
 }
 
+int push_luavalue(const BestiaryCategoryItem& item) {
+    g_lua.createTable(0, 4);
+    g_lua.pushInteger(item.race);
+    g_lua.setField("race");
+    g_lua.pushString(item.bestClass);
+    g_lua.setField("bestClass");
+    g_lua.pushInteger(item.count);
+    g_lua.setField("count");
+    g_lua.pushInteger(item.unlockedCount);
+    g_lua.setField("unlockedCount");
+    return 1;
+}
+
 bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints)
 {
     if (!g_lua.isTable(index))

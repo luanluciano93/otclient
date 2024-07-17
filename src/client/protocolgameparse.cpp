@@ -491,6 +491,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerSendUpdateLootTracker:
                     parseUpdateLootTracker(msg);
                     break;
+                case Proto::GameServeroBestiaryGroups:
+                    parseBestiaryCharmsData(msg);
+                    break;
                 case Proto::GameServerSendBestiaryEntryChanged:
                     parseBestiaryEntryChanged(msg);
                     break;
@@ -4415,4 +4418,28 @@ void ProtocolGame::parseHighscores(const InputMessagePtr& msg)
     uint32_t entriesTs = msg->getU32(); // last update
 
     g_game.processHighscore(serverName, world, worldType, battlEye, vocations, categories, page, totalPages, highscores, entriesTs);
+}
+
+void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
+{
+
+    uint16_t bestiaryRaceLast = msg->getU16(); 
+
+    std::vector<BestiaryCategoryItem> bestiaryData;
+
+    for (uint16_t i = 1; i <= bestiaryRaceLast; ++i) {
+        std::string bestClass = msg->getString(); 
+        uint16_t count = msg->getU16(); 
+        uint16_t unlockedCount = msg->getU16();  
+
+        BestiaryCategoryItem item;
+        item.race = i;
+        item.bestClass = bestClass;
+        item.count = count;
+        item.unlockedCount = unlockedCount;
+
+        bestiaryData.emplace_back(item);
+    }
+
+    g_lua.callGlobalField("g_game", "onParseBestiaryGroups", bestiaryData);
 }
