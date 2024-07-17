@@ -1,7 +1,7 @@
 -- @docfuncs @{
 function print(...)
     local msg = ''
-    local args = {...}
+    local args = { ... }
     local appendSpace = #args > 1
     for i, v in ipairs(args) do
         msg = msg .. tostring(v)
@@ -70,7 +70,7 @@ function connect(object, arg1, arg2, arg3)
         if not object[signal] then
             object[signal] = slot
         elseif type(object[signal]) == 'function' then
-            object[signal] = {object[signal]}
+            object[signal] = { object[signal] }
         end
 
         if type(slot) ~= 'function' then
@@ -137,6 +137,7 @@ function newclass(name)
         end
         return instance
     end
+
     class.create = class.internalCreate
     class.__class = name
     class.getClassName = function()
@@ -158,6 +159,7 @@ function extends(base, name)
         end
         return instance
     end
+
     derived.create = derived.internalCreate
     derived.__class = name
     derived.getClassName = function()
@@ -447,59 +449,9 @@ function tdump(title, input)
 
     return dump_str
 end
+
 -- @}
 
--- @delete this  DEV Cyclopedia
-function getWidgetProperties(widget)
-    return {
-        rect = widget:getRect() or nil,
-        style = widget:getStyle() or nil,
-        enabled = widget:isEnabled() or nil,
-        visible = widget:isVisible() or nil,
-        focusable = widget:isFocusable() or nil,
-        draggable = widget:isDraggable() or nil,
-        fixedSize = widget:isFixedSize() or nil,
-        clipping = widget:isClipping() or nil,
-        virtualOffset = widget:getVirtualOffset() or nil,
-        lastFocusReason = widget:getLastFocusReason() or nil,
-        autoFocusPolicy = widget:getAutoFocusPolicy() or nil,
-        autoRepeatDelay = widget:getAutoRepeatDelay() or nil,
-        styleName = widget:getStyleName() or nil,
-        lastClickPosition = widget:getLastClickPosition() or nil,
-        hoveredChild = widget:getHoveredChild() and widget:getHoveredChild():getId() or nil,
-        focusedChild = widget:getFocusedChild() and widget:getFocusedChild():getId() or nil,
-        childCount = widget:getChildCount() or nil
-    }
-end
-
-function getChildrenData(widget)
-    local data = {
-        id = widget:getId(),
-        className = widget:getClassName(),
-        properties = getWidgetProperties(widget),
-        children = {}
-    }
-
-    local children = widget:getChildren()
-    for _, child in ipairs(children) do
-        table.insert(data.children, getChildrenData(child))
-    end
-
-    return data
-end
-
-function exportWidgetDataToJson(widget, fileName)
-    local data = getChildrenData(widget)
-    local jsonString = json.encode(data, {
-        indent = true
-    })
-    local filePath = "./mods/DEV-CYCLO_" .. fileName 
-    local file = io.open(filePath, "w")
-    if file then
-        file:write(jsonString)
-        file:close()
-        print("Exported successfully to " .. filePath)
-    else
-        print("Failed to open the file for writing")
-    end
+io.content = function(path)
+    return g_resources.readFileContents('/' .. path)
 end
