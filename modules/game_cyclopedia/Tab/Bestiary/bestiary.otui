@@ -12,7 +12,7 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
-    @onClick:  modules.game_cyclopedia.BestiarySearch(self:getText())
+    @onClick:  modules.game_cyclopedia.Cyclopedia.BestiarySearch(self:getText())
   TextEdit
     id: SearchEdit
     size: 130 17
@@ -25,7 +25,7 @@ UIWidget
     color: #C0C0C0
     padding-top: 1
     shader: Map - Party
-    @onTextChange: modules.game_cyclopedia.BestiarySearchText(self:getText())
+    @onTextChange: modules.game_cyclopedia.Cyclopedia.BestiarySearchText(self:getText())
   UIWidget
     id: PageValue
     anchors.horizontalCenter: parent.horizontalCenter
@@ -41,7 +41,7 @@ UIWidget
     anchors.left: PageValue.right
     anchors.bottom: PageValue.bottom
     icon-source: /game_cyclopedia/images/icon-right-arrow
-    @onClick: modules.game_cyclopedia.changeBestiaryPage(false, true)
+    @onClick: modules.game_cyclopedia.Cyclopedia.changeBestiaryPage(false, true)
     $pressed:
       icon-source: /game_cyclopedia/images/icon-right-arrow
     $disabled:
@@ -52,7 +52,7 @@ UIWidget
     anchors.right: PageValue.left
     anchors.bottom: PageValue.bottom
     icon-source: /game_cyclopedia/images/icon-left-arrow
-    @onClick: modules.game_cyclopedia.changeBestiaryPage(true, false)
+    @onClick: modules.game_cyclopedia.Cyclopedia.changeBestiaryPage(true, false)
     $pressed:
       icon-source: /game_cyclopedia/images/arrow_prev_pressed
     $disabled:
@@ -575,7 +575,7 @@ UIWidget
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       margin-right: 4
-      image-source: images/icon_gold
+      image-source: /game_cyclopedia/images/icon_gold
     Label
       id: Value
       anchors.right: Icon.left
@@ -598,7 +598,7 @@ UIWidget
       anchors.right: parent.right
       anchors.verticalCenter: parent.verticalCenter
       margin-right: 4
-      image-source: images/icon_charms
+      image-source: /game_cyclopedia/images/icon_charms
     Label
       id: Value
       anchors.right: Icon.left
