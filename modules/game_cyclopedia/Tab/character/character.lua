@@ -93,7 +93,6 @@ function showCharacter()
     characterPanel = g_ui.loadUI("character", contentContainer)
     UI = characterPanel
     characterPanel:show()
-    exportWidgetDataToJson(characterPanel, "characterPanel.json")
     UI.selectedOption = "InfoBase"
     if g_game.isOnline() then
         local player = g_game.getLocalPlayer()

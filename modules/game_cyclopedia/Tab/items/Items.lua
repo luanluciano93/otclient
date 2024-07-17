@@ -70,7 +70,6 @@ end
 function showItems()
 
     itemPanel = g_ui.loadUI("items", contentContainer)
-    exportWidgetDataToJson(itemPanel, "itemPanel.json")
     loadItemsCategories()
     itemPanel:show()
 

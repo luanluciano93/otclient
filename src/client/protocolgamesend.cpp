@@ -957,6 +957,13 @@ void ProtocolGame::sendInspectionObject(const Otc::InspectObjectTypes inspection
     send(msg);
 }
 
+void ProtocolGame::sendRequestBestiary()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBestiary);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();
@@ -1183,12 +1190,5 @@ void ProtocolGame::sendImbuementDurations(bool isOpen)
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientImbuementDurations);
     msg->addU8(isOpen ? 0x01 : 0x00);
-    send(msg);
-}
-
-void ProtocolGame::sendRequestBestiary()
-{
-    const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBestiary);
     send(msg);
 }
