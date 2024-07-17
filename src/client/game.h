@@ -401,6 +401,7 @@ public:
     // cyclopedia related
     void inspectionNormalObject(const Position& position);
     void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
+    void requestBestiary();
 
     // imbuement related
     void imbuementDurations(bool isOpen = false);

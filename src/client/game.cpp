@@ -1748,3 +1748,10 @@ void Game::imbuementDurations(bool isOpen)
         return;
     m_protocolGame->sendImbuementDurations(isOpen);
 }
+
+void Game::requestBestiary()
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendRequestBestiary();
+}

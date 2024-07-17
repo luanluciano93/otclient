@@ -1185,3 +1185,10 @@ void ProtocolGame::sendImbuementDurations(bool isOpen)
     msg->addU8(isOpen ? 0x01 : 0x00);
     send(msg);
 }
+
+void ProtocolGame::sendRequestBestiary()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBestiary);
+    send(msg);
+}
