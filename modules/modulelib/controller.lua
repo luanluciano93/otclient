@@ -4,10 +4,6 @@ local TypeEvent = {
 }
 
 local function onGameStart(self)
-    if self.dataUI ~= nil and self.dataUI.onGameStart then
-        self.ui = g_ui.loadUI('/' .. self.name .. '/' .. self.dataUI.name, self.dataUI.parent or g_ui.getRootWidget())
-    end
-
     if self.__onGameStart ~= nil then
         self.currentTypeEvent = TypeEvent.GAME_INIT
         addEvent(function()
@@ -46,21 +42,22 @@ local function onGameEnd(self)
         self.scheduledEvents[TypeEvent.GAME_INIT] = nil
     end
 
-    if self.dataUI ~= nil and self.dataUI.onGameStart then
+    if self.dataUI ~= nil and self.dataUI.onGameStart and self.ui then
         self.ui:destroy()
         self.ui = nil
     end
 end
 
 Controller = {
-    name = nil,
-    events = nil,
-    scheduledEvents = nil,
     ui = nil,
-    keyboardEvents = nil,
+    name = nil,
     attrs = nil,
     opcodes = nil,
-    keyboardAnchor = nil
+    events = nil,
+    htmlRoot = nil,
+    keyboardAnchor = nil,
+    scheduledEvents = nil,
+    keyboardEvents = nil
 }
 
 function Controller:new()
@@ -79,8 +76,8 @@ function Controller:new()
 end
 
 function Controller:init()
-    if self.dataUI ~= nil and not self.dataUI.onGameStart then
-        self.ui = g_ui.loadUI('/' .. self.name .. '/' .. self.dataUI.name, self.dataUI.parent or g_ui.getRootWidget())
+    if self.dataUI ~= nil then
+        self:loadUI()
     end
 
     if self.onInit then
@@ -118,17 +115,61 @@ function Controller:init()
     end
 end
 
+function Controller:loadHtml(path, parent)
+    local suffix = ".html"
+    if path:sub(- #suffix) ~= suffix then
+        path = path .. '.html'
+    end
+    self:setUI(path, parent)
+    self.htmlRoot = HtmlLoader('/' .. self.name .. '/' .. path, parent, self)
+    self.ui = self.htmlRoot.widget
+end
+
+function Controller:findElements(query)
+    return self.htmlRoot and self.htmlRoot:find(query:trim()) or {}
+end
+
+function Controller:findElement(query)
+    local els = self:findElements(query)
+    return #els > 0 and els[1] or nil
+end
+
+function Controller:findWidgets(query)
+    local els = self:findElements(query)
+
+    local widgets = {}
+    for _, el in pairs(els) do
+        if el.widget then
+            table.insert(widgets, el.widget)
+        end
+    end
+
+    return widgets
+end
+
+function Controller:findWidget(query)
+    local els = self:findWidgets(query)
+    return #els > 0 and els[1] or nil
+end
+
+function Controller:loadUI(name, parent)
+    if self.ui then
+        return
+    end
+
+    if not self.dataUI then
+        self:setUI(name, parent)
+    end
+
+    self.ui = g_ui.loadUI('/' .. self.name .. '/' .. self.dataUI.name, self.dataUI.parent or g_ui.getRootWidget())
+end
+
 function Controller:setKeyboardAnchor(widget)
     self.keyboardAnchor = widget
 end
 
-function Controller:setUI(name, parent, onGameStart)
-    if type(parent) == "boolean" then
-        onGameStart = parent
-        parent = nil
-    end
-
-    self.dataUI = { name = name, parent = parent, onGameStart = onGameStart or false }
+function Controller:setUI(name, parent)
+    self.dataUI = { name = name, parent = parent, onGameStart = self.currentTypeEvent == TypeEvent.GAME_INIT }
 end
 
 function Controller:terminate()
@@ -181,6 +222,7 @@ function Controller:terminate()
     self.keyboardEvents = nil
     self.keyboardAnchor = nil
     self.scheduledEvents = nil
+    self.htmlRoot = nil
 
     self.__onGameStart = nil
     self.__onGameEnd = nil
