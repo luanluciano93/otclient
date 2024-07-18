@@ -205,6 +205,28 @@ int push_luavalue(const UnjustifiedPoints& unjustifiedPoints)
     return 1;
 }
 
+bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints)
+{
+    if (!g_lua.isTable(index))
+        return false;
+
+    g_lua.getField("killsDay", index);
+    unjustifiedPoints.killsDay = g_lua.popInteger();
+    g_lua.getField("killsDayRemaining", index);
+    unjustifiedPoints.killsDayRemaining = g_lua.popInteger();
+    g_lua.getField("killsWeek", index);
+    unjustifiedPoints.killsWeek = g_lua.popInteger();
+    g_lua.getField("killsWeekRemaining", index);
+    unjustifiedPoints.killsWeekRemaining = g_lua.popInteger();
+    g_lua.getField("killsMonth", index);
+    unjustifiedPoints.killsMonth = g_lua.popInteger();
+    g_lua.getField("killsMonthRemaining", index);
+    unjustifiedPoints.killsMonthRemaining = g_lua.popInteger();
+    g_lua.getField("skullTime", index);
+    unjustifiedPoints.skullTime = g_lua.popInteger();
+    return true;
+}
+
 int push_luavalue(const Imbuement& i)
 {
     g_lua.createTable(0, 11);
@@ -267,37 +289,31 @@ int push_luavalue(const ImbuementTrackerItem& i)
     return 1;
 }
 
-int push_luavalue(const BestiaryCategoryItem& item) {
+int push_luavalue(const CyclopediaBestiaryRace& race) {
     g_lua.createTable(0, 4);
-    g_lua.pushInteger(item.race);
-    g_lua.setField("race");
-    g_lua.pushString(item.bestClass);
-    g_lua.setField("bestClass");
-    g_lua.pushInteger(item.count);
+    g_lua.pushInteger(race.id);
+    g_lua.setField("raceId");
+    g_lua.pushString(race.bestiaryClass);
+    g_lua.setField("bestiaryClass");
+    g_lua.pushInteger(race.count);
     g_lua.setField("count");
-    g_lua.pushInteger(item.unlockedCount);
-    g_lua.setField("unlockedCount");
+    g_lua.pushInteger(race.unlocked);
+    g_lua.setField("unlocked");
     return 1;
 }
 
-bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints)
+bool luavalue_cast(int index, CyclopediaBestiaryRace& race)
 {
     if (!g_lua.isTable(index))
         return false;
 
-    g_lua.getField("killsDay", index);
-    unjustifiedPoints.killsDay = g_lua.popInteger();
-    g_lua.getField("killsDayRemaining", index);
-    unjustifiedPoints.killsDayRemaining = g_lua.popInteger();
-    g_lua.getField("killsWeek", index);
-    unjustifiedPoints.killsWeek = g_lua.popInteger();
-    g_lua.getField("killsWeekRemaining", index);
-    unjustifiedPoints.killsWeekRemaining = g_lua.popInteger();
-    g_lua.getField("killsMonth", index);
-    unjustifiedPoints.killsMonth = g_lua.popInteger();
-    g_lua.getField("killsMonthRemaining", index);
-    unjustifiedPoints.killsMonthRemaining = g_lua.popInteger();
-    g_lua.getField("skullTime", index);
-    unjustifiedPoints.skullTime = g_lua.popInteger();
+    g_lua.getField("raceId", index);
+    race.id = g_lua.popInteger();
+    g_lua.getField("bestiaryClass", index);
+    data.bestiaryClass = g_lua.popString();
+    g_lua.getField("count", index);
+    race.count = g_lua.popInteger();
+    g_lua.getField("unlocked", index);
+    race.unlocked = g_lua.popInteger();
     return true;
 }
