@@ -3623,6 +3623,11 @@ void ProtocolGame::parseBestiaryEntryChanged(const InputMessagePtr& msg)
 void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
 {
     const auto type = static_cast<Otc::CyclopediaCharacterInfoType_t>(msg->getU8());
+
+	// 0: Send no error
+	// 1: No data available at the moment.
+	// 2: You are not allowed to see this character's data.
+	// 3: You are not allowed to inspect this character.
     const uint8_t errorCode = msg->getU8();
     if (errorCode > 0) {
         return;
@@ -3637,6 +3642,77 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             getOutfit(msg, false);
             msg->getU8(); // ???
             msg->getString(); // current title name
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_GENERALSTATS:
+        {
+            CyclopediaCharacterGeneralStats stats;
+
+            stats.experience = msg->getU64();
+            stats.level = msg->getU16();
+            stats.levelPercent = msg->getU8();
+            stats.baseExpGain = msg->getU16();
+            stats.lowLevelExpBonus = msg->getU16();
+            stats.XpBoostPercent = msg->getU16();
+            stats.staminaExpBonus = msg->getU16();
+            stats.XpBoostBonusRemainingTime = msg->getU16();
+            stats.canBuyXpBoost = msg->getU8();
+            stats.health = msg->getU32();
+            stats.maxHealth = msg->getU32();
+            stats.mana = msg->getU32();
+            stats.maxMana = msg->getU32();
+            stats.soul = msg->getU8();
+            stats.staminaMinutes = msg->getU16();
+            stats.regenerationCondition = msg->getU16();
+            stats.offlineTrainingTime = msg->getU16();
+            stats.speed = msg->getU16();
+            stats.baseSpeed = msg->getU16();
+            stats.capacity = msg->getU32();
+            stats.baseCapacity = msg->getU32();
+            stats.freeCapacity = msg->getU32();
+            stats.magicLevel = msg->getU16();
+            stats.baseMagicLevel = msg->getU16();
+            stats.loyaltyMagicLevel = msg->getU16();
+            stats.magicLevelPercent = msg->getU16();
+
+	        std::vector<std::vector<uint16_t>> skills;
+
+            for (int_fast32_t skill = Otc::Fist; skill <= Otc::ManaLeechAmount; ++skill) {
+                msg->getU8() // Hardcoded Skill Ids
+                const uint16_t skillLevel = msg->getU16();
+                const uint16_t baseSkill = msg->getU16();
+                msg->getU16(); // base + loyalty bonus(?)
+                const uint16_t skillPercent = msg->getU16() / 100;
+                skills.push_back({ skillLevel, skillPercent, baseSkill });
+            }
+
+            if (g_game.getFeature(Otc::GameAdditionalSkills)) {
+                for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
+                    if (!g_game.getFeature(Otc::GameLeechAmount)) {
+                        if (skill == Otc::LifeLeechAmount || skill == Otc::ManaLeechAmount) {
+                            continue;
+                        }
+                    }
+
+                    msg->getU8() // Hardcoded Skill Ids
+                    const uint16_t skillLevel = msg->getU16();
+                    const uint16_t baseSkill = msg->getU16();
+                    msg->getU16(); // base + loyalty bonus(?)
+                    const uint16_t skillPercent = msg->getU16() / 100;
+                    skills.push_back({ skillLevel, skillPercent, baseSkill });
+                }
+            }
+
+            std::vector<std::tuple<uint8_t, uint16_t>> combats;
+
+            const uint8_t combatCount = msg->getU8();
+            for (auto i = 0; i < combatCount; ++i) {
+                const uint8_t element = msg->getU8();
+                const uint16_t specializedMagicLevel = msg->getU16();
+                combats.emplace_back(element, specializedMagicLevel);
+            }
+
+            g_game.processCyclopediaCharacterGeneralStats(stats, skills, combats);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
