@@ -329,9 +329,14 @@ void Game::processItemDetail(const ItemPtr& item, const std::vector<std::tuple<s
     g_lua.callGlobalField("g_game", "onParseItemDetail", item->getId(), descriptions);
 }
 
-void Game::processBestiaryRaces(const CyclopediaBestiaryRace& bestiaryRaces)
+void Game::processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces)
 {
     g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryRaces);
+}
+
+void Game::processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, const std::vector<std::tuple<uint8_t, uint16_t>>& combats)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterGeneralStats", stats, skills, combats);
 }
 
 void Game::processInventoryChange(int slot, const ItemPtr& item)
