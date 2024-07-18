@@ -326,8 +326,12 @@ void Game::processContainerRemoveItem(int containerId, int slot, const ItemPtr& 
 
 void Game::processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions)
 {
-
     g_lua.callGlobalField("g_game", "onParseItemDetail", item->getId(), descriptions);
+}
+
+void Game::processBestiaryRaces(const CyclopediaBestiaryRace& bestiaryRaces)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryRaces);
 }
 
 void Game::processInventoryChange(int slot, const ItemPtr& item)
@@ -1702,6 +1706,7 @@ void Game::applyImbuement(uint8_t slot, uint32_t imbuementId, bool protectionCha
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendApplyImbuement(slot, imbuementId, protectionCharm);
 }
 
@@ -1709,6 +1714,7 @@ void Game::clearImbuement(uint8_t slot)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendClearImbuement(slot);
 }
 
@@ -1716,6 +1722,7 @@ void Game::closeImbuingWindow()
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendCloseImbuingWindow();
 }
 
@@ -1723,6 +1730,7 @@ void Game::stashWithdraw(uint16_t itemId, uint32_t count, uint8_t stackpos)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendStashWithdraw(itemId, count, stackpos);
 }
 
@@ -1730,6 +1738,7 @@ void Game::requestHighscore(uint8_t action, uint8_t category, uint32_t vocation,
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendHighscoreInfo(action, category, vocation, world, worldType, battlEye, page, totalPages);
 }
 
@@ -1746,6 +1755,7 @@ void Game::imbuementDurations(bool isOpen)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendImbuementDurations(isOpen);
 }
 
@@ -1753,6 +1763,7 @@ void Game::requestBestiary()
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendRequestBestiary();
 }
 
@@ -1760,6 +1771,7 @@ void Game::requestBestiaryOverview(const std::string& catName)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendRequestBestiaryOverview(catName);
 }
 
@@ -1767,5 +1779,6 @@ void Game::requestBestiarySearch(uint16_t raceId)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendRequestBestiarySearch(raceId);
 }
