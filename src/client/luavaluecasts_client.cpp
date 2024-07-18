@@ -310,7 +310,7 @@ bool luavalue_cast(int index, CyclopediaBestiaryRace& race)
     g_lua.getField("raceId", index);
     race.id = g_lua.popInteger();
     g_lua.getField("bestiaryClass", index);
-    data.bestiaryClass = g_lua.popString();
+    race.bestiaryClass = g_lua.popString();
     g_lua.getField("count", index);
     race.count = g_lua.popInteger();
     g_lua.getField("unlocked", index);
