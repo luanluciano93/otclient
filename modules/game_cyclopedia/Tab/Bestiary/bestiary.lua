@@ -18,12 +18,10 @@ bestiaryControllerCyclopedia = Controller:new()
 
 function bestiaryControllerCyclopedia:onInit()
     bestiaryControllerCyclopedia:registerEvents(g_game, {
-        onParseBestiaryGroups = Cyclopedia.LoadBestiaryCategories,
+        onParseBestiaryRaces = Cyclopedia.LoadBestiaryCategories,
         onParseBestiaryOverview = Cyclopedia.onParseBestiaryOverview,
         onParseBestiaryMonster = Cyclopedia.loadBestiarySelectedCreature
-
     })
-
 end
 
 function bestiaryControllerCyclopedia:onGameStart()
@@ -39,7 +37,6 @@ function bestiaryControllerCyclopedia:onTerminate()
 end
 
 function showBestiary()
-
     UI = g_ui.loadUI("bestiary", contentContainer)
     UI:show()
 
@@ -414,7 +411,6 @@ function Cyclopedia.loadBestiaryCreature(page, search)
 end
 
 function Cyclopedia.LoadBestiaryCategories(data)
-
     local maxCategoriesPerPage = 15
 
     Cyclopedia.Bestiary.Categories = {}
@@ -434,8 +430,8 @@ function Cyclopedia.LoadBestiaryCategories(data)
         end
 
         local category = {
-            name = data[i].bestClass,
-            amount = data[i].unlockedCount,
+            name = data[i].bestiaryClass,
+            amount = data[i].unlocked,
             know = data[i].count
         }
 
@@ -581,7 +577,6 @@ function Cyclopedia.verifyBestiaryButtons()
 end
 
 function requestBestiaryCategoryData(catName)
-
     local protocolGame = g_game.getProtocolGame()
     if protocolGame then
         local msg = OutputMessage.create()
@@ -594,7 +589,6 @@ function requestBestiaryCategoryData(catName)
 end
 
 function requestBestiaryMonsterData(raceId)
-
     local protocolGame = g_game.getProtocolGame()
     if protocolGame then
         local msg = OutputMessage.create()
@@ -605,7 +599,6 @@ function requestBestiaryMonsterData(raceId)
 end
 
 function sendRequestBestiary()
-
     local protocolGame = g_game.getProtocolGame()
     if protocolGame then
         local msg = OutputMessage.create()
@@ -1264,77 +1257,76 @@ protoData = {
 	[2053] = {name = "lil devol", type = 1666, head = 0, body = 0, legs = 0, feet = 0},
 	[2054] = {name = "Elite Guard", type = 1438, head = 0, body = 0, legs = 0, feet = 0},
 	[2055] = {name = "Orc Smasher", type = 1422, head = 0, body = 0, legs = 0, feet = 0},
-    [2056] = {name = "Tiny Head", type = 1423, head = 0, body = 0, legs = 0, feet = 0},
-    [2057] = {name = "skele pirate mage", type = 1221, head = 0, body = 0, legs = 0, feet = 0},
+	[2056] = {name = "Tiny Head", type = 1423, head = 0, body = 0, legs = 0, feet = 0},
+	[2057] = {name = "skele pirate mage", type = 1221, head = 0, body = 0, legs = 0, feet = 0},
 	[2058] = {name = "skele pirate ranger", type = 1222, head = 0, body = 0, legs = 0, feet = 0},
-    [2059] = {name = "skele pirate warrior", type = 1223, head = 0, body = 0, legs = 0, feet = 0},
+	[2059] = {name = "skele pirate warrior", type = 1223, head = 0, body = 0, legs = 0, feet = 0},
 	[2061] = {name = "pirate captain", type = 98, head = 0, body = 0, legs = 0, feet = 0},
 	[2062] = {name = "pirate bane", type = 1122, head = 0, body = 0, legs = 0, feet = 0},
 	[2063] = {name = "orclops savage", type = 935, head = 0, body = 0, legs = 0, feet = 0},
 	[2064] = {name = "orclops doom", type = 934, head = 0, body = 0, legs = 0, feet = 0},
-    [2066] = {name = "killer gator", type = 358, head = 0, body = 0, legs = 0, feet = 0},
-    [2067] = {name = "haunted wolf", type = 716, head = 0, body = 0, legs = 0, feet = 0},
-    [2068] = {name = "maskt demon", type = 1588, head = 0, body = 0, legs = 0, feet = 0},
+	[2066] = {name = "killer gator", type = 358, head = 0, body = 0, legs = 0, feet = 0},
+	[2067] = {name = "haunted wolf", type = 716, head = 0, body = 0, legs = 0, feet = 0},
+	[2068] = {name = "maskt demon", type = 1588, head = 0, body = 0, legs = 0, feet = 0},
 	[2069] = {name = "grim hound", type = 1591, head = 0, body = 0, legs = 0, feet = 0},
-    [2070] = {name = "lava djinn", type = 1592, head = 0, body = 0, legs = 0, feet = 0},
-    [2071] = {name = "lava viper", type = 1590, head = 0, body = 0, legs = 0, feet = 0},
+	[2070] = {name = "lava djinn", type = 1592, head = 0, body = 0, legs = 0, feet = 0},
+	[2071] = {name = "lava viper", type = 1590, head = 0, body = 0, legs = 0, feet = 0},
 	[2072] = {name = "razorbac", type = 1587, head = 0, body = 0, legs = 0, feet = 0},
-    [2073] = {name = "stompy", type = 1589, head = 0, body = 0, legs = 0, feet = 0},
-    [2074] = {name = "holy book", type = 1061, head = 113, body = 79, legs = 113, feet = 79},
+	[2073] = {name = "stompy", type = 1589, head = 0, body = 0, legs = 0, feet = 0},
+	[2074] = {name = "holy book", type = 1061, head = 113, body = 79, legs = 113, feet = 79},
 	[2075] = {name = "Spike Crawler", type = 1553, head = 113, body = 79, legs = 113, feet = 79},
 	[2076] = {name = "jungle djinn", type = 1758, head = 0, body = 0, legs = 0, feet = 0},
 	[2077] = {name = "jungle hero", type = 1771, head = 0, body = 0, legs = 0, feet = 0},
-    [2078] = {name = "jungle mage", type = 1769, head = 0, body = 0, legs = 0, feet = 0},
-    [2084] = {name = "jungle dragon", type = 1770, head = 0, body = 0, legs = 0, feet = 0},
-    [2080] = {name = "daemon", type = 1774, head = 0, body = 0, legs = 0, feet = 0},
+	[2078] = {name = "jungle mage", type = 1769, head = 0, body = 0, legs = 0, feet = 0},
+	[2084] = {name = "jungle dragon", type = 1770, head = 0, body = 0, legs = 0, feet = 0},
+	[2080] = {name = "daemon", type = 1774, head = 0, body = 0, legs = 0, feet = 0},
 	[2081] = {name = "demon gator", type = 1722, head = 77, body = 94, legs = 94, feet = 57},
-    [2082] = {name = "frenzy gator", type = 1722, head = 85, body = 86, legs = 85, feet = 58},
-    [2083] = {name = "icey behemoth", type = 1775, head = 0, body = 0, legs = 0, feet = 0},
-    [2085] = {name = "boarc", type = 1810, head = 0, body = 0, legs = 0, feet = 0},
+	[2082] = {name = "frenzy gator", type = 1722, head = 85, body = 86, legs = 85, feet = 58},
+	[2083] = {name = "icey behemoth", type = 1775, head = 0, body = 0, legs = 0, feet = 0},
+	[2085] = {name = "boarc", type = 1810, head = 0, body = 0, legs = 0, feet = 0},
 	[2086] = {name = "boarc bersker", type = 1814, head = 77, body = 94, legs = 94, feet = 57},
-    [2087] = {name = "boarc guard", type = 1813, head = 85, body = 86, legs = 85, feet = 58},
-    [2088] = {name = "boarc packer", type = 1811, head = 0, body = 0, legs = 0, feet = 0},
-    [2089] = {name = "boarc shaman", type = 1815, head = 0, body = 0, legs = 0, feet = 0},
+	[2087] = {name = "boarc guard", type = 1813, head = 85, body = 86, legs = 85, feet = 58},
+	[2088] = {name = "boarc packer", type = 1811, head = 0, body = 0, legs = 0, feet = 0},
+	[2089] = {name = "boarc shaman", type = 1815, head = 0, body = 0, legs = 0, feet = 0},
 	[2090] = {name = "boarc spearman", type = 1812, head = 77, body = 94, legs = 94, feet = 57},
-    [2091] = {name = "cave beholder", type = 1800, head = 85, body = 86, legs = 85, feet = 58},
-    [2092] = {name = "cave crawler ", type = 1798, head = 0, body = 0, legs = 0, feet = 0},
-    [2093] = {name = "cave parrot", type = 217, head = 85, body = 86, legs = 85, feet = 58},
-    [2094] = {name = "cave stalker ", type = 1808, head = 0, body = 0, legs = 0, feet = 0},
-    [2095] = {name = "ghouly", type = 18, head = 85, body = 86, legs = 85, feet = 58},
-    [2096] = {name = "shadow reaper", type = 300, head = 0, body = 0, legs = 0, feet = 0},
-    [2097] = {name = "Hydromancer", type = 121, head = 0, body = 0, legs = 0, feet = 0},
-      [2098] = {name = "the dragon king", type = 927, head = 0, body = 0, legs = 0, feet = 0},
-       [2099] = {name = "Morgaroth", type = 12, head = 0, body = 94, legs = 79, feet = 79},
-     [2100] = {name = "Ancient Spawn", type = 1055, head = 0, body = 94, legs = 79, feet = 79},
-     [2101] = {name = "Old giant spider", type = 910, head = 0, body = 94, legs = 79, feet = 79},
-     [2102] = {name = "The oz", type = 844, head = 0, body = 94, legs = 79, feet = 79},
-     [2103] = {name = "The Book Master", type = 939, head = 0, body = 94, legs = 79, feet = 79},
-     [2104] = {name = "Spike Stomper", type = 1755, head = 0, body = 94, legs = 79, feet = 79},
-     [2105] = {name = "King Zelos", type = 1224, head = 0, body = 94, legs = 79, feet = 79},
-     [2106] = {name = "Tower Guardian ", type = 1593, head = 0, body = 94, legs = 79, feet = 79},
-     [2107] = {name = "Dark Spider", type = 1752, head = 0, body = 94, legs = 79, feet = 79},
-     [2108] = {name = "Jungle Stomper", type = 1757, head = 0, body = 94, legs = 79, feet = 79},
-     [2109] = {name = "Infernal Rot", type = 1776, head = 0, body = 94, legs = 79, feet = 79},
-     [2110] = {name = "Cave Guardian", type = 1790, head = 0, body = 94, legs = 79, feet = 79},
-     [2111] = {name = "Apox", type = 1761, head = 0, body = 94, legs = 79, feet = 79},
-	 [2113] = {name = "Jungle Stomper", type = 1757, head = 0, body = 94, legs = 79, feet = 79},
-     [2112] = {name = "Drume", type = 1317, head = 0, body = 0, legs = 0, feet = 77, addons = 2},
+	[2091] = {name = "cave beholder", type = 1800, head = 85, body = 86, legs = 85, feet = 58},
+	[2092] = {name = "cave crawler ", type = 1798, head = 0, body = 0, legs = 0, feet = 0},
+	[2093] = {name = "cave parrot", type = 217, head = 85, body = 86, legs = 85, feet = 58},
+	[2094] = {name = "cave stalker ", type = 1808, head = 0, body = 0, legs = 0, feet = 0},
+	[2095] = {name = "ghouly", type = 18, head = 85, body = 86, legs = 85, feet = 58},
+	[2096] = {name = "shadow reaper", type = 300, head = 0, body = 0, legs = 0, feet = 0},
+	[2097] = {name = "Hydromancer", type = 121, head = 0, body = 0, legs = 0, feet = 0},
+	[2098] = {name = "the dragon king", type = 927, head = 0, body = 0, legs = 0, feet = 0},
+	[2099] = {name = "Morgaroth", type = 12, head = 0, body = 94, legs = 79, feet = 79},
+	[2100] = {name = "Ancient Spawn", type = 1055, head = 0, body = 94, legs = 79, feet = 79},
+	[2101] = {name = "Old giant spider", type = 910, head = 0, body = 94, legs = 79, feet = 79},
+	[2102] = {name = "The oz", type = 844, head = 0, body = 94, legs = 79, feet = 79},
+	[2103] = {name = "The Book Master", type = 939, head = 0, body = 94, legs = 79, feet = 79},
+	[2104] = {name = "Spike Stomper", type = 1755, head = 0, body = 94, legs = 79, feet = 79},
+	[2105] = {name = "King Zelos", type = 1224, head = 0, body = 94, legs = 79, feet = 79},
+	[2106] = {name = "Tower Guardian ", type = 1593, head = 0, body = 94, legs = 79, feet = 79},
+	[2107] = {name = "Dark Spider", type = 1752, head = 0, body = 94, legs = 79, feet = 79},
+	[2108] = {name = "Jungle Stomper", type = 1757, head = 0, body = 94, legs = 79, feet = 79},
+	[2109] = {name = "Infernal Rot", type = 1776, head = 0, body = 94, legs = 79, feet = 79},
+	[2110] = {name = "Cave Guardian", type = 1790, head = 0, body = 94, legs = 79, feet = 79},
+	[2111] = {name = "Apox", type = 1761, head = 0, body = 94, legs = 79, feet = 79},
+	[2113] = {name = "Jungle Stomper", type = 1757, head = 0, body = 94, legs = 79, feet = 79},
+	[2112] = {name = "Drume", type = 1317, head = 0, body = 0, legs = 0, feet = 77, addons = 2},
 	[2221] = {name = "crab hands", type = 1699, head = 0, body = 0, legs = 0, feet = 0},
 	[2222] = {name = "deadface", type = 1276, head = 0, body = 0, legs = 0, feet = 0},
-    [2223] = {name = "deerman", type = 1704, head = 0, body = 0, legs = 0, feet = 0},
-    [2224] = {name = "demon crawler", type = 1720, head = 0, body = 0, legs = 0, feet = 0},
-    [2225] = {name = "Demon Rat", type = 1698, head = 0, body = 0, legs = 0, feet = 0},
+	[2223] = {name = "deerman", type = 1704, head = 0, body = 0, legs = 0, feet = 0},
+	[2224] = {name = "demon crawler", type = 1720, head = 0, body = 0, legs = 0, feet = 0},
+	[2225] = {name = "Demon Rat", type = 1698, head = 0, body = 0, legs = 0, feet = 0},
 	[2226] = {name = "firey floater", type = 1728, head = 77, body = 94, legs = 94, feet = 57},
-    [2227] = {name = "flame head", type = 1726, head = 85, body = 86, legs = 85, feet = 58},
-    [2228] = {name = "giant spider X", type = 38, head = 0, body = 0, legs = 0, feet = 0},
-    [2229] = {name = "killer goanna", type = 1195, head = 0, body = 0, legs = 0, feet = 0},
+	[2227] = {name = "flame head", type = 1726, head = 85, body = 86, legs = 85, feet = 58},
+	[2228] = {name = "giant spider X", type = 38, head = 0, body = 0, legs = 0, feet = 0},
+	[2229] = {name = "killer goanna", type = 1195, head = 0, body = 0, legs = 0, feet = 0},
 	[2230] = {name = "light dragon", type = 1751, head = 77, body = 94, legs = 94, feet = 57},
-    [2231] = {name = "light floater", type = 1268, head = 85, body = 86, legs = 85, feet = 58},
-    [2232] = {name = "lionspawn", type = 1760, head = 0, body = 0, legs = 0, feet = 0},
-    [2233] = {name = "posion crawler", type = 1399, head = 0, body = 0, legs = 0, feet = 0},
+	[2231] = {name = "light floater", type = 1268, head = 85, body = 86, legs = 85, feet = 58},
+	[2232] = {name = "lionspawn", type = 1760, head = 0, body = 0, legs = 0, feet = 0},
+	[2233] = {name = "posion crawler", type = 1399, head = 0, body = 0, legs = 0, feet = 0},
 	[2234] = {name = "yo eyez", type = 1747, head = 77, body = 94, legs = 94, feet = 57},
-    [2235] = {name = "yo goanna", type = 1196, head = 85, body = 86, legs = 85, feet = 58},
-    [2236] = {name = "zombielion ", type = 1700, head = 0, body = 0, legs = 0, feet = 0}
-	
+	[2235] = {name = "yo goanna", type = 1196, head = 85, body = 86, legs = 85, feet = 58},
+	[2236] = {name = "zombielion ", type = 1700, head = 0, body = 0, legs = 0, feet = 0}	
 }
 -- LuaFormatter on
