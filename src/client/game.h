@@ -53,6 +53,44 @@ struct UnjustifiedPoints
     uint8_t skullTime;
 };
 
+struct CyclopediaCharacterGeneralStats
+{
+    uint64_t experience;
+    uint16_t level;
+    uint8_t levelPercent;
+    uint16_t baseExpGain;
+    uint16_t lowLevelExpBonus;
+    uint16_t XpBoostPercent;
+    uint16_t staminaExpBonus;
+    uint16_t XpBoostBonusRemainingTime;
+    uint8_t canBuyXpBoost;
+    uint32_t health;
+    uint32_t maxHealth;
+    uint32_t mana;
+    uint32_t maxMana;
+    uint8_t soul;
+    uint16_t staminaMinutes;
+    uint16_t regenerationCondition;
+    uint16_t offlineTrainingTime;
+    uint16_t speed;
+    uint16_t baseSpeed;
+    uint32_t capacity;
+    uint32_t baseCapacity;
+    uint32_t freeCapacity;
+    uint16_t magicLevel;
+    uint16_t baseMagicLevel;
+    uint16_t loyaltyMagicLevel;
+    uint16_t magicLevelPercent;
+};
+
+struct CyclopediaBestiaryRace
+{
+    uint8_t id;
+    std::string class;
+    uint16_t count;
+    uint16_t unlocked;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game
