@@ -86,7 +86,7 @@ struct CyclopediaCharacterGeneralStats
 struct CyclopediaBestiaryRace
 {
     uint8_t id;
-    std::string class;
+    std::string bestiaryClass;
     uint16_t count;
     uint16_t unlocked;
 };
