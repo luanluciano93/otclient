@@ -176,7 +176,7 @@ namespace Proto
         GameServerVipAdd = 210,
         GameServerVipState = 211,
         GameServerVipLogout = 212,
-        GameServerBestiaryGroups = 213,
+        GameServerBestiaryRaces = 213,
         GameServerSendBestiaryEntryChanged = 217,
         GameServerCyclopediaCharacterInfo = 218,
         GameServerTutorialHint = 220,
