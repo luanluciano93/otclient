@@ -196,6 +196,7 @@ protected:
 
     // cyclopedia
     static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
+    static void processBestiaryRaces(const CyclopediaBestiaryRace& bestiaryRaces);
 
     friend class ProtocolGame;
     friend class Map;
