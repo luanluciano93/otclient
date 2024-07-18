@@ -321,8 +321,8 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerVipLogout:
                     parseVipLogout(msg);
                     break;
-                case Proto::GameServerBestiaryGroups:
-                    parseBestiaryCharmsData(msg);
+                case Proto::GameServerBestiaryRaces:
+                    parseBestiaryRaces(msg);
                     break;
                 case Proto::GameServerTutorialHint:
                     parseTutorialHint(msg);
@@ -2565,28 +2565,21 @@ void ProtocolGame::parseVipLogout(const InputMessagePtr& msg)
     }
 }
 
-void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
+void ProtocolGame::parseBestiaryRaces(const InputMessagePtr& msg)
 {
+    std::vector<CyclopediaBestiaryRace> bestiaryRaces;
 
-    uint16_t bestiaryRaceLast = msg->getU16();
-
-    std::vector<BestiaryCategoryItem> bestiaryData;
-
-    for (uint16_t i = 1; i <= bestiaryRaceLast; ++i) {
-        std::string bestClass = msg->getString();
-        uint16_t count = msg->getU16();
-        uint16_t unlockedCount = msg->getU16();
-
-        BestiaryCategoryItem item;
-        item.race = i;
-        item.bestClass = bestClass;
-        item.count = count;
-        item.unlockedCount = unlockedCount;
-
-        bestiaryData.emplace_back(item);
+    const uint16_t bestiaryRaceLast = msg->getU16();
+    for (auto i = 0; i < bestiaryRaceLast; ++i) {
+        CyclopediaBestiaryRace race;
+        race.id = i;
+        race.bestiaryClass = msg->getString();
+        race.count = msg->getU16();
+        race.unlocked = msg->getU16();
+        bestiaryRaces.emplace_back(race);
     }
 
-    g_lua.callGlobalField("g_game", "onParseBestiaryGroups", bestiaryData);
+    g_game.processBestiaryRaces(bestiaryRaces);
 }
 
 void ProtocolGame::parseTutorialHint(const InputMessagePtr& msg)
