@@ -255,14 +255,6 @@ struct ImbuementTrackerItem
     std::map<uint8_t, ImbuementSlot> slots;
 };
 
-struct BestiaryCategoryItem
-{
-    uint8_t race;
-    std::string bestClass;
-    uint16_t count;
-    uint16_t unlockedCount;
-};
-
 struct MarketData
 {
     std::string name;
