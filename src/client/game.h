@@ -85,10 +85,67 @@ struct CyclopediaCharacterGeneralStats
 
 struct CyclopediaBestiaryRace
 {
-    uint8_t id;
-    std::string bestiaryClass;
+    uint8_t race;
+    std::string bestClass;
     uint16_t count;
-    uint16_t unlocked;
+    uint16_t unlockedCount;
+};
+
+struct CharmData
+{
+    uint8_t id;
+    std::string name;
+    std::string description;
+    uint16_t unlockPrice;
+    uint8_t activated;
+    bool asignedStatus;
+    uint16_t raceId;
+    uint32_t removeRuneCost;
+};
+
+struct BestiaryCharmsData
+{
+    uint32_t points;
+    std::vector<CharmData> charms;
+    std::vector<uint16_t> finishedMonsters;
+};
+
+struct BestiaryOverviewItem
+{
+    uint16_t id;
+    uint8_t currentLevel;
+};
+
+struct LootItem
+{
+    uint16_t itemId;
+    uint8_t diffculty;
+    uint8_t specialEvent;
+    std::string name;
+    uint8_t amount;
+};
+
+struct BestiaryMonsterData
+{
+    uint16_t id;
+    std::string bestClass;
+    uint8_t currentLevel;
+    uint32_t killCounter;
+    uint16_t thirdDifficulty;
+    uint16_t secondUnlock;
+    uint16_t lastProgressKillCount;
+    uint8_t difficulty;
+    uint8_t ocorrence;
+    std::vector<LootItem> loot;
+    uint16_t charmValue;
+    uint8_t attackMode;
+    uint32_t maxHealth;
+    uint32_t experience;
+    uint16_t speed;
+    uint16_t armor;
+    double mitigation;
+    std::map<uint8_t, uint16_t> combat;
+    std::string location;
 };
 
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;

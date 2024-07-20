@@ -115,7 +115,7 @@ UIWidget
       placeholder-color: #6E706F
       padding-top: 1
       size: 140 17
-      @onTextChange: Cyclopedia.searchCharmMonster(self:getText())
+      @onTextChange: modules.game_cyclopedia.Cyclopedia.searchCharmMonster(self:getText())
     Label
       id: SearchLabel
       anchors.left: SearchEdit.left

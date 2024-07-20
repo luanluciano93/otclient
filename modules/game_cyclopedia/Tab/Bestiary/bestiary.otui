@@ -142,24 +142,25 @@ UIWidget
       UIWidget
         id: ProgressFill
         anchors.fill: ProgressBack
-        image-source: /game_cyclopedia/images/bestiary/fill
+
       UIWidget
         id: ProgressBorder2
         anchors.horizontalCenter: ProgressBack.horizontalCenter
         anchors.bottom: ProgressBack.bottom
-        image-source: /game_cyclopedia/images/bestiary/progress_bar
+        //image-source: /game_cyclopedia/images/bestiary/progress_bar
       UIWidget
         id: ProgressBorder1
         anchors.right: ProgressBorder2.left
         anchors.bottom: ProgressBorder2.bottom
         margin-right: 1
         image-source: /game_cyclopedia/images/bestiary/progress_bar
+        image-offset: 95 0
       UIWidget
         id: ProgressBorder3
         anchors.left: ProgressBorder2.right
         anchors.bottom: ProgressBorder2.bottom
         margin-left: 1
-        image-source: /game_cyclopedia/images/bestiary/progress_bar
+        //image-source: /game_cyclopedia/images/bestiary/progress_bar
       UIWidget
         id: Sep1
         anchors.left: ProgressBorder1.right
@@ -443,7 +444,7 @@ UIWidget
         anchors.top: parent.top
         margin-top: 35
         margin-left: 10
-      ProgressBar
+      BestiaryResistProgress
         id: PhysicalProgress
         anchors.left: PhysicalResist.right
         anchors.bottom: PhysicalResist.bottom
@@ -454,7 +455,7 @@ UIWidget
         anchors.left: PhysicalProgress.right
         anchors.top: PhysicalResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: EarthProgress
         anchors.left: EarthResist.right
         anchors.bottom: EarthResist.bottom
@@ -465,7 +466,7 @@ UIWidget
         anchors.left: EarthProgress.right
         anchors.top: PhysicalResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: FireProgress
         anchors.left: FireResist.right
         anchors.bottom: FireResist.bottom
@@ -476,7 +477,7 @@ UIWidget
         anchors.left: FireProgress.right
         anchors.top: PhysicalResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: DeathProgress
         anchors.left: DeathResist.right
         anchors.bottom: DeathResist.bottom
@@ -488,18 +489,20 @@ UIWidget
         anchors.top: PhysicalResist.bottom
         margin-top: 10
         margin-left: 10
-      ProgressBar
+      BestiaryResistProgress
         id: EnergyProgress
         anchors.left: EnergyResist.right
         anchors.bottom: EnergyResist.bottom
         margin-left: 5
+        
+        
       UIWidget
         id: HolyResist
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-holy-resist
         anchors.left: EnergyProgress.right
         anchors.top: EnergyResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: HolyProgress
         anchors.left: HolyResist.right
         anchors.bottom: HolyResist.bottom
@@ -510,7 +513,7 @@ UIWidget
         anchors.left: HolyProgress.right
         anchors.top: EnergyResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: IceProgress
         anchors.left: IceResist.right
         anchors.bottom: IceResist.bottom
@@ -521,7 +524,7 @@ UIWidget
         anchors.left: IceProgress.right
         anchors.top: EnergyResist.top
         margin-left: 5
-      ProgressBar
+      BestiaryResistProgress
         id: HealingProgress
         anchors.left: HealingResist.right
         anchors.bottom: HealingResist.bottom
@@ -536,7 +539,7 @@ UIWidget
         margin-bottom: 5
         margin-left: 5
         margin-right: 5
-        image-source: /images/ui/panel_flat
+        image-source: /game_cyclopedia/images/panel_flat
         image-border: 10
         UIScrollArea
           id: Itemlist

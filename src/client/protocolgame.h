@@ -318,7 +318,11 @@ private:
     void parseBosstiaryCooldownTimer(const InputMessagePtr& msg);
     void parseBosstiaryEntryChanged(const InputMessagePtr& msg);
     void parseBestiaryRaces(const InputMessagePtr& msg);
-    
+    void parseBestiaryOverview(const InputMessagePtr& msg);
+    void parseBestiaryMonsterData(const InputMessagePtr& msg);
+    void parseBestiaryCharmsData(const InputMessagePtr& msg);
+
+
     void parseHighscores(const InputMessagePtr& msg);
     void parseAttachedEffect(const InputMessagePtr& msg);
     void parseDetachEffect(const InputMessagePtr& msg);

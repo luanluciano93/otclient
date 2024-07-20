@@ -51,6 +51,11 @@ int push_luavalue(const ImbuementTrackerItem& i);
 
 // cyclopedia
 int push_luavalue(const CyclopediaBestiaryRace& race);
-bool luavalue_cast(int index, CyclopediaBestiaryRace& race);
+
+int push_luavalue(const BestiaryOverviewItem& item);
+int push_luavalue(const CharmData& item);
+int push_luavalue(const BestiaryCharmsData& item);
 int push_luavalue(const CyclopediaCharacterGeneralStats& stats);
+int push_luavalue(const LootItem& stats);
+int push_luavalue(const BestiaryMonsterData& stats);
 bool luavalue_cast(int index, CyclopediaCharacterGeneralStats& stats);

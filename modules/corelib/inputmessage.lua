@@ -49,3 +49,9 @@ function InputMessage:getPosition()
     position.z = self:getU8()
     return position
 end
+
+function InputMessage:getDouble()
+    local precision = self:getU8()
+    local v = self:getU32() - 2147483647
+    return v / math.pow(10, precision)
+end

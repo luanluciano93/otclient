@@ -299,6 +299,7 @@ function internalCreateItem(data)
 
         itemPanel.EmptyLabel:setVisible(false)
         itemPanel.InfoBase:setVisible(true)
+   
         itemPanel.InfoBase.ResultGoldBase.Value:setText(formatGold(item.Value))
         itemPanel.SelectedItem.Sprite:setItemId(data:getId())
 

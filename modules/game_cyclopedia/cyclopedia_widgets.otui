@@ -346,7 +346,7 @@ SelectBossBossSlots < UICheckBox
   !text: tr('?')
   color: #BEBEBE
   border: 0 white
-  @onClick: modules.game_cyclopedia.bossSlotSelectBoss(self)
+  @onClick: modules.game_cyclopedia.Cyclopedia.bossSlotSelectBoss(self)
   $checked:
     border: 1 white
   $!checked:
@@ -424,7 +424,7 @@ SlotBossSlots < UIWidget
       padding-right: 15
       placeholder: Type to search
       placeholder-color: #6E706F
-      @onTextChange: modules.game_cyclopedia.SelectBossSearchText(self:getText())
+      @onTextChange: modules.game_cyclopedia.Cyclopedia.SelectBossSearchText(self:getText())
     UIWidget
       id: SearchClearButton
       anchors.right: SearchEdit.right
@@ -432,7 +432,7 @@ SlotBossSlots < UIWidget
       margin-top: 1
       margin-right: 1
       image-source: /images/ui/button-clear-18x18-up
-      @onClick: modules.game_cyclopedia.SelectBossSearchText("", true, self)
+      @onClick: modules.game_cyclopedia.Cyclopedia.SelectBossSearchText("", true, self)
       $pressed:
         image-source: /images/ui/button-clear-18x18-down
     Button
@@ -698,7 +698,7 @@ CharmItem < UICheckBox
   text-offset: 0 3
   text-align: top
   border: 0 white
-  @onClick: modules.game_cyclopedia.selectCharm(self, self:isChecked())
+  @onClick: modules.game_cyclopedia.Cyclopedia.selectCharm(self, self:isChecked())
   $checked:
     border: 2 white
   $!checked:
@@ -1018,7 +1018,7 @@ BestiaryCreature < UIWidget
     image-source: images/bestiary/complete_icon
     visible: false
 BestiaryResistProgress < UIWidget
-  image-source: images/bestiary/resist_border
+  image-source: /game_cyclopedia/images/bestiary/barra
   UIWidget
     id: Fill
     anchors.fill: parent
@@ -1031,10 +1031,10 @@ BestiaryResistProgress < UIWidget
   UIWidget
     id: Border
     anchors.fill: parent
-    image-source: images/bestiary/resist_border
+    image-source: /game_cyclopedia/images/bestiary/barra
     phantom: true
 BestiaryItem < UIItem
-  image-source: images/panel_texture2
+  image-source: /game_cyclopedia/images/bestiary/panel_texture2
   image-border: 10
   size: 34 34
   anchors.verticalCenter: parent.verticalCenter
@@ -1080,7 +1080,7 @@ BestiaryItemGroup < UIWidget
 CharmCreatureName < UICheckBox
   color: #C0C0C0
   background-color: #484848
-  @onClick: modules.game_cyclopedia.selectCreatureCharm(self, self:isChecked())
+  @onClick: modules.game_cyclopedia.Cyclopedia.selectCreatureCharm(self, self:isChecked())
   $checked:
     background-color: #585858
 InventoryItem < Item
