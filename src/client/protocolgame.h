@@ -138,7 +138,7 @@ public:
     void sendRequestBestiary();
     void sendRequestBestiaryOverview(const std::string catName);
     void sendRequestBestiarySearch(uint16_t raceId);
-    
+    void sendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId);
 
     // otclient only
     void sendChangeMapAwareRange(int xrange, int yrange);

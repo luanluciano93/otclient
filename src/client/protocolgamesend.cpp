@@ -981,6 +981,16 @@ void ProtocolGame::sendRequestBestiarySearch(uint16_t raceId)
     send(msg);
 }
 
+void ProtocolGame::sendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientSendBuyCharmRune);
+    msg->addU8(runeId);
+    msg->addU8(action);
+    msg->addU16(raceId);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();

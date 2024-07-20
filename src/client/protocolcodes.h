@@ -317,6 +317,7 @@ namespace Proto
         ClientRequestBestiary = 225,
         ClientRequestBestiaryOverview = 226,
         ClientRequestBestiarySearch = 227,
+        ClientSendBuyCharmRune = 228,
         ClientBugReport = 230,
         ClientRuleViolation = 231,
         ClientDebugReport = 232,

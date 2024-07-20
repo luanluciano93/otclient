@@ -1787,3 +1787,11 @@ void Game::requestBestiarySearch(uint16_t raceId)
 
     m_protocolGame->sendRequestBestiarySearch(raceId);
 }
+
+void Game::requestSendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendBuyCharmRune(runeId, action, raceId);
+}
