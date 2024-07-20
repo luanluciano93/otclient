@@ -73,7 +73,14 @@ end
 characterControllerCyclopedia = Controller:new()
 
 function characterControllerCyclopedia:onInit()
-    characterControllerCyclopedia:registerEvents(g_game, {})
+    characterControllerCyclopedia:registerEvents(g_game, {
+        onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
+        onCyclopediaCharacterCombatStats = Cyclopedia.onCyclopediaCharacterCombatStats,
+        onCyclopediaCharacterRecentDeaths = Cyclopedia.onCyclopediaCharacterRecentDeaths,
+        onCyclopediaCharacterRecentKills = Cyclopedia.onCyclopediaCharacterRecentKills,
+        onCyclopediaCharacterItems = Cyclopedia.onCyclopediaCharacterItems,
+        onCyclopediaCharacterAppearances = Cyclopedia.onCyclopediaCharacterAppearances
+    })
 
 end
 
