@@ -3678,7 +3678,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
 	        std::vector<std::vector<uint16_t>> skills;
 
             for (int_fast32_t skill = Otc::Fist; skill <= Otc::ManaLeechAmount; ++skill) {
-                msg->getU8() // Hardcoded Skill Ids
+                msg->getU8(); // Hardcoded Skill Ids
                 const uint16_t skillLevel = msg->getU16();
                 const uint16_t baseSkill = msg->getU16();
                 msg->getU16(); // base + loyalty bonus(?)
@@ -3694,7 +3694,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                         }
                     }
 
-                    msg->getU8() // Hardcoded Skill Ids
+                    msg->getU8(); // Hardcoded Skill Ids
                     const uint16_t skillLevel = msg->getU16();
                     const uint16_t baseSkill = msg->getU16();
                     msg->getU16(); // base + loyalty bonus(?)
