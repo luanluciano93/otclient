@@ -964,7 +964,7 @@ void ProtocolGame::sendRequestBestiary()
     send(msg);
 }
 
-void ProtocolGame::sendRequestBestiaryOverview(const std::string catName)
+void ProtocolGame::sendRequestBestiaryOverview(const std::string_view catName)
 {
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientRequestBestiaryOverview);
@@ -973,7 +973,7 @@ void ProtocolGame::sendRequestBestiaryOverview(const std::string catName)
     send(msg);
 }
 
-void ProtocolGame::sendRequestBestiarySearch(uint16_t raceId)
+void ProtocolGame::sendRequestBestiarySearch(const uint16_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientRequestBestiarySearch);
@@ -981,13 +981,28 @@ void ProtocolGame::sendRequestBestiarySearch(uint16_t raceId)
     send(msg);
 }
 
-void ProtocolGame::sendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId)
+void ProtocolGame::sendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
     msg->addU8(Proto::ClientSendBuyCharmRune);
     msg->addU8(runeId);
     msg->addU8(action);
     msg->addU16(raceId);
+    send(msg);
+}
+
+void ProtocolGame::sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientCyclopediaRequestCharacterInfo);
+    msg->addU32(playerId);
+    msg->addU8(characterInfoType);
+
+    if (characterInfoType == Otc::CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS || characterInfoType == Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS) {
+        msg->addU16(entriesPerPage);
+        msg->addU16(page);
+    }
+
     send(msg);
 }
 

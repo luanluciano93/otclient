@@ -499,9 +499,10 @@ public:
     void inspectionNormalObject(const Position& position);
     void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
     void requestBestiary();
-    void requestBestiaryOverview(const std::string& catName);
-    void requestBestiarySearch(uint16_t raceId);
-    void requestSendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId);
+    void requestBestiaryOverview(const std::string_view catName);
+    void requestBestiarySearch(const uint16_t raceId);
+    void requestSendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId);
+    void requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage = 0, const uint16_t page = 0);
 
     // imbuement related
     void imbuementDurations(bool isOpen = false);

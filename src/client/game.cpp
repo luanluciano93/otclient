@@ -1772,7 +1772,7 @@ void Game::requestBestiary()
     m_protocolGame->sendRequestBestiary();
 }
 
-void Game::requestBestiaryOverview(const std::string& catName)
+void Game::requestBestiaryOverview(const std::string_view catName)
 {
     if (!canPerformGameAction())
         return;
@@ -1780,7 +1780,7 @@ void Game::requestBestiaryOverview(const std::string& catName)
     m_protocolGame->sendRequestBestiaryOverview(catName);
 }
 
-void Game::requestBestiarySearch(uint16_t raceId)
+void Game::requestBestiarySearch(const uint16_t raceId)
 {
     if (!canPerformGameAction())
         return;
@@ -1788,10 +1788,18 @@ void Game::requestBestiarySearch(uint16_t raceId)
     m_protocolGame->sendRequestBestiarySearch(raceId);
 }
 
-void Game::requestSendBuyCharmRune(uint8_t runeId, uint8_t action, uint16_t raceId)
+void Game::requestSendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId)
 {
     if (!canPerformGameAction())
         return;
 
     m_protocolGame->sendBuyCharmRune(runeId, action, raceId);
+}
+
+void Game::requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendCyclopediaRequestCharacterInfo(playerId, characterInfoType, entriesPerPage, page);
 }
