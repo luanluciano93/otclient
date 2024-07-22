@@ -404,6 +404,26 @@ void Game::processVipStateChange(uint32_t id, uint32_t status)
     g_lua.callGlobalField("g_game", "onVipStateChange", id, status);
 }
 
+void Game::processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryData);
+}
+
+void Game::processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryOverview", raceName, data);
+}
+
+void Game::processUpdateBestiaryMonsterData(const BestiaryMonsterData& data)
+{
+    g_lua.callGlobalField("g_game", "onUpdateBestiaryMonsterData", data);
+}
+
+void Game::processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData)
+{
+    g_lua.callGlobalField("g_game", "onUpdateBestiaryCharmsData", charmData);
+}
+
 void Game::processTutorialHint(int id)
 {
     g_lua.callGlobalField("g_game", "onTutorialHint", id);
