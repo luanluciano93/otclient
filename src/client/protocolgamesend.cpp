@@ -960,14 +960,14 @@ void ProtocolGame::sendInspectionObject(const Otc::InspectObjectTypes inspection
 void ProtocolGame::sendRequestBestiary()
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBestiary);
+    msg->addU8(Proto::ClientBestiaryRequest);
     send(msg);
 }
 
 void ProtocolGame::sendRequestBestiaryOverview(const std::string_view catName)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBestiaryOverview);
+    msg->addU8(Proto::ClientBestiaryRequestOverview);
     msg->addU8(0x02);
     msg->addString(catName);
     send(msg);
@@ -976,7 +976,7 @@ void ProtocolGame::sendRequestBestiaryOverview(const std::string_view catName)
 void ProtocolGame::sendRequestBestiarySearch(const uint16_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBestiarySearch);
+    msg->addU8(Proto::ClientBestiaryRequestSearch);
     msg->addU16(raceId);
     send(msg);
 }
