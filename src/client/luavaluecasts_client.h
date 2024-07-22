@@ -52,9 +52,9 @@ int push_luavalue(const ImbuementTrackerItem& i);
 // cyclopedia
 int push_luavalue(const CyclopediaBestiaryRace& race);
 bool luavalue_cast(int index, CyclopediaCharacterGeneralStats& stats);
-int push_luavalue(const BestiaryOverviewItem& item);
-int push_luavalue(const CharmData& item);
-int push_luavalue(const BestiaryCharmsData& item);
+int push_luavalue(const BestiaryOverviewMonsters& monster);
+int push_luavalue(const CharmData& charm);
+int push_luavalue(const BestiaryCharmsData& charmData);
 int push_luavalue(const CyclopediaCharacterGeneralStats& stats);
-int push_luavalue(const LootItem& stats);
-int push_luavalue(const BestiaryMonsterData& stats);
+int push_luavalue(const LootItem& lootItem);
+int push_luavalue(const BestiaryMonsterData& data);
