@@ -2580,12 +2580,12 @@ void ProtocolGame::parseBestiaryRaces(const InputMessagePtr& msg)
 
     const uint16_t bestiaryRaceLast = msg->getU16();
     for (auto i = 1; i <= bestiaryRaceLast; ++i) {
-        CyclopediaBestiaryRace item;
-        item.race = i;
-        item.bestClass = msg->getString();
-        item.count = msg->getU16();
-        item.unlockedCount = msg->getU16();
-        bestiaryData.emplace_back(item);
+        CyclopediaBestiaryRace race;
+        race.race = i;
+        race.bestClass = msg->getString();
+        race.count = msg->getU16();
+        race.unlockedCount = msg->getU16();
+        bestiaryData.emplace_back(race);
     }
 
     g_game.processParseBestiaryRaces(bestiaryData);
@@ -2720,7 +2720,6 @@ void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
         charmData.finishedMonsters.emplace_back(raceId);
     }
 
-    g_lua.callGlobalField("g_game", "onUpdateBestiaryCharmsData", charmData);
     g_game.processUpdateBestiaryCharmsData(charmData);
 }
 
