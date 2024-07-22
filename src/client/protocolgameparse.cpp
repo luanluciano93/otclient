@@ -461,7 +461,7 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerPartyAnalyzer:
                     parsePartyAnalyzer(msg);
                     break;
-                case Proto::GameServerRefreshBestiaryTracker:
+                case Proto::GameServerBestiaryRefreshTracker:
                     parseBestiaryTracker(msg);
                     break;
                 case Proto::GameServerTaskHuntingBasicData:
@@ -503,10 +503,10 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerSendUpdateLootTracker:
                     parseUpdateLootTracker(msg);
                     break;
-                case Proto::GameServerSendBestiaryEntryChanged:
+                case Proto::GameServerBestiaryEntryChanged:
                     parseBestiaryEntryChanged(msg);
                     break;
-                case Proto::GameServerCyclopediaCharacterInfo:
+                case Proto::GameServerCyclopediaCharacterInfoData:
                     parseCyclopediaCharacterInfo(msg);
                     break;
                 case Proto::GameServerSendDailyRewardCollectionState:
@@ -2576,58 +2576,50 @@ void ProtocolGame::parseVipLogout(const InputMessagePtr& msg)
 
 void ProtocolGame::parseBestiaryRaces(const InputMessagePtr& msg)
 {
-    uint16_t bestiaryRaceLast = msg->getU16();
-
     std::vector<CyclopediaBestiaryRace> bestiaryData;
 
-    for (uint16_t i = 1; i <= bestiaryRaceLast; ++i) {
-        std::string bestClass = msg->getString();
-        uint16_t count = msg->getU16();
-        uint16_t unlockedCount = msg->getU16();
-
+    const uint16_t bestiaryRaceLast = msg->getU16();
+    for (auto i = 1; i <= bestiaryRaceLast; ++i) {
         CyclopediaBestiaryRace item;
         item.race = i;
-        item.bestClass = bestClass;
-        item.count = count;
-        item.unlockedCount = unlockedCount;
-
+        item.bestClass = msg->getString();
+        item.count = msg->getU16();
+        item.unlockedCount = msg->getU16();
         bestiaryData.emplace_back(item);
     }
 
-    g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryData);
+    g_game.processParseBestiaryRaces(bestiaryData);
 }
 
 void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
 {
-    std::string raceName = msg->getString();
-    uint16_t raceSize = msg->getU16();
+    const auto& raceName = msg->getString();
 
-    std::vector<BestiaryOverviewItem> data;
+    std::vector<BestiaryOverviewMonsters> data;
 
-    for (uint16_t i = 0; i < raceSize; ++i) {
-        uint16_t id = msg->getU16();
-        int8_t currentLevel = msg->getU8() - 1;
-
-        if (currentLevel >= 0) {
-            uint8_t actualProgress = msg->getU8();
-            (void)actualProgress;
-        } else {
-            currentLevel = 0;
+    const uint16_t raceSize = msg->getU16();
+    for (auto i = 0; i < raceSize; ++i) {
+        const uint16_t raceId = msg->getU16();
+        const int8_t progress = msg->getU8();
+        int8_t occurrence = 0;
+        if (progress > 0) {
+            occurrence = msg->getU8();
         }
 
-        BestiaryOverviewItem item;
-        item.id = id;
-        item.currentLevel = static_cast<uint8_t>(currentLevel);
+        BestiaryOverviewMonsters monster;
+        monster.id = raceId;
+        monster.currentLevel = progress;
+        monster.occurrence = occurrence;
 
-        data.emplace_back(item);
+        data.emplace_back(monster);
     }
 
-    g_lua.callGlobalField("g_game", "onParseBestiaryOverview", raceName, data);
+    g_game.processParseBestiaryOverview(raceName, data);
 }
 
-void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg) {
+void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
+{
     BestiaryMonsterData data;
-
     data.id = msg->getU16();
     data.bestClass = msg->getString();
     data.currentLevel = msg->getU8();
@@ -2635,12 +2627,11 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg) {
     data.thirdDifficulty = msg->getU16();
     data.secondUnlock = msg->getU16();
     data.lastProgressKillCount = msg->getU16();
-
     data.difficulty = msg->getU8();
     data.ocorrence = msg->getU8();
 
-    uint8_t lootCount = msg->getU8();
-    for (uint8_t i = 0; i < lootCount; ++i) {
+    const uint8_t lootCount = msg->getU8();
+    for (auto i = 0; i < lootCount; ++i) {
         LootItem lootItem;
         lootItem.itemId = msg->getU16();
         lootItem.diffculty = msg->getU8();
@@ -2652,6 +2643,7 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg) {
         }
         data.loot.emplace_back(lootItem);
     }
+
     if (data.currentLevel > 1) {
         data.charmValue = msg->getU16();
         data.attackMode = msg->getU8();
@@ -2664,21 +2656,20 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg) {
     }
 
     if (data.currentLevel > 2) {
-
-        uint8_t elementsCount = msg->getU8();
-        for (uint8_t i = 0; i < elementsCount; ++i) {
+        const uint8_t elementsCount = msg->getU8();
+        for (auto i = 0; i < elementsCount; ++i) {
             uint8_t elementId = msg->getU8();
             uint16_t elementValue = msg->getU16();
             data.combat[elementId] = elementValue;
         }
 
-        uint16_t locationsCount = msg->getU16();
+        msg->getU16(); // locationsCount
         data.location = msg->getString();
     }
 
     if (data.currentLevel > 3) {
-        uint8_t hasCharm = msg->getU8();
-        if (hasCharm > 0) {
+        const bool hasCharm = msg->getU8() > 0;
+        if (hasCharm) {
             msg->getU8();
             msg->getU32();
         } else {
@@ -2686,18 +2677,16 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg) {
         }
     }
 
-    g_lua.callGlobalField("g_game", "onUpdateBestiaryMonsterData", data);
+    g_game.processUpdateBestiaryMonsterData(data);
 }
 
 void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
 {
-    uint32_t charmPoints = msg->getU32(); 
-
     BestiaryCharmsData charmData;
-    charmData.points = charmPoints;
+    charmData.points = msg->getU32();
 
-    uint8_t charmsAmount = msg->getU8();  
-    for (uint8_t i = 0; i < charmsAmount; ++i) {
+    const uint8_t charmsAmount = msg->getU8();  
+    for (auto i = 0; i < charmsAmount; ++i) {
         CharmData charm;
         charm.id = msg->getU8();
         charm.name = msg->getString();
@@ -2710,9 +2699,9 @@ void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
         charm.removeRuneCost = 0;
 
         if (charm.activated > 0) {
-            uint8_t asigned = msg->getU8();
-            if (asigned > 0) {
-                charm.asignedStatus = true;
+            const bool asigned = msg->getU8() > 0;
+            if (asigned) {
+                charm.asignedStatus = asigned;
                 charm.raceId = msg->getU16(); 
                 charm.removeRuneCost = msg->getU32(); 
             }
@@ -2725,13 +2714,14 @@ void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
 
     msg->getU8(); 
 
-    uint16_t finishedMonstersSize = msg->getU16();
-    for (uint16_t i = 0; i < finishedMonstersSize; ++i) {
+    const uint16_t finishedMonstersSize = msg->getU16();
+    for (auto i = 0; i < finishedMonstersSize; ++i) {
         uint16_t raceId = msg->getU16();
         charmData.finishedMonsters.emplace_back(raceId);
     }
 
     g_lua.callGlobalField("g_game", "onUpdateBestiaryCharmsData", charmData);
+    g_game.processUpdateBestiaryCharmsData(charmData);
 }
 
 void ProtocolGame::parseTutorialHint(const InputMessagePtr& msg)
@@ -3776,10 +3766,10 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
 {
     const auto type = static_cast<Otc::CyclopediaCharacterInfoType_t>(msg->getU8());
 
-	// 0: Send no error
-	// 1: No data available at the moment.
-	// 2: You are not allowed to see this character's data.
-	// 3: You are not allowed to inspect this character.
+    // 0: Send no error
+    // 1: No data available at the moment.
+    // 2: You are not allowed to see this character's data.
+    // 3: You are not allowed to inspect this character.
     const uint8_t errorCode = msg->getU8();
     if (errorCode > 0) {
         return;
@@ -3822,37 +3812,22 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             stats.capacity = msg->getU32();
             stats.baseCapacity = msg->getU32();
             stats.freeCapacity = msg->getU32();
+            msg->getU8();
+            msg->getU8();
             stats.magicLevel = msg->getU16();
             stats.baseMagicLevel = msg->getU16();
             stats.loyaltyMagicLevel = msg->getU16();
             stats.magicLevelPercent = msg->getU16();
 
-	        std::vector<std::vector<uint16_t>> skills;
+            std::vector<std::vector<uint16_t>> skills;
 
-            for (int_fast32_t skill = Otc::Fist; skill <= Otc::ManaLeechAmount; ++skill) {
+            for (int_fast32_t skill = Otc::Fist; skill <= Otc::Fishing; ++skill) {
                 msg->getU8(); // Hardcoded Skill Ids
                 const uint16_t skillLevel = msg->getU16();
                 const uint16_t baseSkill = msg->getU16();
                 msg->getU16(); // base + loyalty bonus(?)
                 const uint16_t skillPercent = msg->getU16() / 100;
                 skills.push_back({ skillLevel, skillPercent, baseSkill });
-            }
-
-            if (g_game.getFeature(Otc::GameAdditionalSkills)) {
-                for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
-                    if (!g_game.getFeature(Otc::GameLeechAmount)) {
-                        if (skill == Otc::LifeLeechAmount || skill == Otc::ManaLeechAmount) {
-                            continue;
-                        }
-                    }
-
-                    msg->getU8(); // Hardcoded Skill Ids
-                    const uint16_t skillLevel = msg->getU16();
-                    const uint16_t baseSkill = msg->getU16();
-                    msg->getU16(); // base + loyalty bonus(?)
-                    const uint16_t skillPercent = msg->getU16() / 100;
-                    skills.push_back({ skillLevel, skillPercent, baseSkill });
-                }
             }
 
             std::vector<std::tuple<uint8_t, uint16_t>> combats;
