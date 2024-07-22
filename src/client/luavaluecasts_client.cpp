@@ -302,17 +302,17 @@ int push_luavalue(const CyclopediaBestiaryRace& race) {
     return 1;
 }
 
-int push_luavalue(const LootItem& loot) {
+int push_luavalue(const LootItem& lootItem) {
     g_lua.createTable(0, 5);
-    g_lua.pushInteger(loot.itemId);
+    g_lua.pushInteger(lootItem.itemId);
     g_lua.setField("itemId");
-    g_lua.pushInteger(loot.diffculty);
+    g_lua.pushInteger(lootItem.diffculty);
     g_lua.setField("diffculty");
-    g_lua.pushInteger(loot.specialEvent);
+    g_lua.pushInteger(lootItem.specialEvent);
     g_lua.setField("specialEvent");
-    g_lua.pushString(loot.name);
+    g_lua.pushString(lootItem.name);
     g_lua.setField("name");
-    g_lua.pushInteger(loot.amount);
+    g_lua.pushInteger(lootItem.amount);
     g_lua.setField("amount");
     return 1;
 }
@@ -397,21 +397,21 @@ int push_luavalue(const CharmData& charm) {
     return 1;
 }
 
-int push_luavalue(const BestiaryCharmsData& data) {
+int push_luavalue(const BestiaryCharmsData& charmData) {
     g_lua.createTable(0, 3);
-    g_lua.pushInteger(data.points);
+    g_lua.pushInteger(charmData.points);
     g_lua.setField("points");
 
-    g_lua.createTable(data.charms.size(), 0);
-    for (size_t i = 0; i < data.charms.size(); ++i) {
-        push_luavalue(data.charms[i]);
+    g_lua.createTable(charmData.charms.size(), 0);
+    for (size_t i = 0; i < charmData.charms.size(); ++i) {
+        push_luavalue(charmData.charms[i]);
         g_lua.rawSeti(i + 1);
     }
     g_lua.setField("charms");
 
-    g_lua.createTable(data.finishedMonsters.size(), 0);
-    for (size_t i = 0; i < data.finishedMonsters.size(); ++i) {
-        g_lua.pushInteger(data.finishedMonsters[i]);
+    g_lua.createTable(charmData.finishedMonsters.size(), 0);
+    for (size_t i = 0; i < charmData.finishedMonsters.size(); ++i) {
+        g_lua.pushInteger(charmData.finishedMonsters[i]);
         g_lua.rawSeti(i + 1);
     }
     g_lua.setField("finishedMonsters");
@@ -419,12 +419,14 @@ int push_luavalue(const BestiaryCharmsData& data) {
     return 1;
 }
 
-int push_luavalue(const BestiaryOverviewItem& item) {
-    g_lua.createTable(0, 2);
-    g_lua.pushInteger(item.id);
+int push_luavalue(const BestiaryOverviewMonsters& monster) {
+    g_lua.createTable(0, 3);
+    g_lua.pushInteger(monster.id);
     g_lua.setField("id");
-    g_lua.pushInteger(item.currentLevel);
+    g_lua.pushInteger(monster.currentLevel);
     g_lua.setField("currentLevel");
+    g_lua.pushInteger(monster.occurrence);
+    g_lua.setField("occurrence");
     return 1;
 }
 
