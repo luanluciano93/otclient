@@ -496,12 +496,12 @@ UIWidget
       anchors.top: prev.bottom
       anchors.left: separator.left
       anchors.right: parent.right
-      height: 130
+      height: 140
       background-color: #404040
       layout:
         type: grid
-        cell-size: 71 71
-        cell-spacing: 1
+        cell-size: 64 64
+        cell-spacing: 2
         flow: true
         fit-children: true
         
@@ -512,7 +512,7 @@ UIWidget
       anchors.bottom: ListBadge.bottom
       margin: 1
       margin-top: -15
-      step: 80
+      step: 5
       pixel-scroll: true
 
   BorderBox
