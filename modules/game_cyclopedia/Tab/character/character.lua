@@ -74,6 +74,7 @@ characterControllerCyclopedia = Controller:new()
 function characterControllerCyclopedia:onInit()
     characterControllerCyclopedia:registerEvents(g_game, {
         onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
+        processCyclopediaCharacterGeneralStatsBadge = Cyclopedia.processCyclopediaCharacterGeneralStatsBadge,
         onCyclopediaCharacterCombatStats = Cyclopedia.onCyclopediaCharacterCombatStats,
         onCyclopediaCharacterRecentDeaths = Cyclopedia.onCyclopediaCharacterRecentDeaths,
         onCyclopediaCharacterRecentKills = Cyclopedia.onCyclopediaCharacterRecentKills,
@@ -1100,6 +1101,7 @@ function Cyclopedia.configureCharacterCategories()
 
                     if subWidget.open == "CharacterStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.GeneralStats)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.Badges)
                     elseif subWidget.open == "CombatStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.CombatStats)
                     elseif subWidget.open == "RecentDeaths" then
@@ -1219,3 +1221,21 @@ function Cyclopedia.characterButton(widget)
     end
 end
 
+function Cyclopedia.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, player_online, player_premium,loyalt_title, badge)
+    UI.CharacterStats.ListBadge:destroyChildren()
+    for i, entry in ipairs(badge) do
+        local cell = g_ui.createWidget("CharacterBadge", UI.CharacterStats.ListBadge)
+        cell:setImageClip(getImageClip(entry[1]))
+        cell:setTooltip(entry[2])
+    end
+
+end
+
+function getImageClip(elementIndex)
+    local elementSize = 64
+    local elementsPerRow = 21
+    local y = 0 
+    local x = (elementIndex - 1) * elementSize
+    local imageClip = string.format("%d %d %d %d", x, y, elementSize, elementSize)
+    return imageClip
+end

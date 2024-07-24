@@ -483,6 +483,38 @@ UIWidget
         margin-top: 15
         margin-left: 5
         background-color: #00C000
+    Label
+      !text: tr('Account Badges')
+      margin-top: 12
+      anchors.top: skillId6.bottom
+      anchors.left: separator.left
+      anchors.right: parent.right
+
+    UIScrollArea
+      id: ListBadge
+      vertical-scrollbar: ListBadgeScrollbar
+      anchors.top: prev.bottom
+      anchors.left: separator.left
+      anchors.right: parent.right
+      height: 130
+      background-color: #404040
+      layout:
+        type: grid
+        cell-size: 71 71
+        cell-spacing: 1
+        flow: true
+        fit-children: true
+        
+    VerticalScrollBar
+      id: ListBadgeScrollbar
+      anchors.top: ListBadge.top
+      anchors.right: ListBadge.right
+      anchors.bottom: ListBadge.bottom
+      margin: 1
+      margin-top: -15
+      step: 80
+      pixel-scroll: true
+
   BorderBox
     id: CombatStats
     anchors.top: CharacterBase.top

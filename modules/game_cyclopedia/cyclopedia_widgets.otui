@@ -106,6 +106,10 @@ House < UICheckBox
     anchors.top: sold.top
     anchors.left: sold.left
     visible: false
+    
+CharacterBadge < UIWidget
+  image-source: /game_cyclopedia/images/character_icons/friend-badge-icons
+
 CharacterAppearance < UIWidget
   image-source: /images/ui/button-9grid-idle
   image-border: 5

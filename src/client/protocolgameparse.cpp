@@ -3843,15 +3843,20 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
         {
-            msg->getU8(); // bool showAccountInformation = is received 0x01, will show IsOnline, IsPremium, character title, badges
-            msg->getU8(); // bool player online
-            msg->getU8(); // bool player premium (GOD has always 'Premium')
-            msg->getString(); // character loyalty title
+            const uint8_t showAccountInformation = msg->getU8();
+            const uint8_t player_online = msg->getU8();
+            const uint8_t player_premium = msg->getU8();
+            const std::string_view loyalt_title = msg->getString();
+
+            std::vector<std::tuple<uint32_t, std::string_view>> badge;
             const uint8_t badgesSize = msg->getU8();
             for (auto i = 0; i < badgesSize; ++i) {
-                msg->getU32(); // badge id
-                msg->getString(); // badge name
+                const uint32_t badge_id = msg->getU32();
+                const std::string_view badgeName = msg->getString();
+                badge.emplace_back(badge_id, badgeName);
             }
+    
+            g_game.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, player_online,player_premium, loyalt_title, badge);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:

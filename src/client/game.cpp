@@ -339,6 +339,11 @@ void Game::processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGener
     g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterGeneralStats", stats, skills, combats);
 }
 
+void Game::processCyclopediaCharacterGeneralStatsBadge(uint8_t showAccountInformation, uint8_t player_online, uint8_t player_premium, std::string_view loyalt_title, const std::vector<std::tuple<uint32_t, std::string_view>>& badge)
+{
+    g_lua.callGlobalField("g_game", "processCyclopediaCharacterGeneralStatsBadge", showAccountInformation, player_online, player_premium,loyalt_title, badge);
+}
+
 void Game::processInventoryChange(int slot, const ItemPtr& item)
 {
     if (item)

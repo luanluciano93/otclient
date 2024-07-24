@@ -256,6 +256,7 @@ protected:
     static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
     static void processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces);
     static void processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, const std::vector<std::tuple<uint8_t, uint16_t>>& combats);
+    static void processCyclopediaCharacterGeneralStatsBadge(uint8_t showAccountInformation, uint8_t player_online, uint8_t player_premium, std::string_view loyalt_title, const std::vector<std::tuple<uint32_t, std::string_view>>& badge);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
     static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
