@@ -1099,13 +1099,13 @@ function Cyclopedia.configureCharacterCategories()
                     UI[subWidget.open]:setVisible(true)
 
                     if subWidget.open == "CharacterStats" then
-                        g_game.requestCharacterInfo(0, 1)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.GeneralStats)
                     elseif subWidget.open == "CombatStats" then
-                        g_game.requestCharacterInfo(0, 2)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.CombatStats)
                     elseif subWidget.open == "RecentDeaths" then
-                        g_game.requestCharacterInfo(0, 3, 23, 1)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.RecentDeaths, 23, 1)
                     elseif subWidget.open == "RecentKills" then
-                        g_game.requestCharacterInfo(0, 4, 23, 1)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.RecentPVPKills, 23, 1)
                     end
 
                     UI.selectedOption = subWidget.open
@@ -1137,10 +1137,10 @@ function Cyclopedia.configureCharacterCategories()
             if widget.open == "CharacterAchievements" then
                 Cyclopedia.loadCharacterAchievements()
             elseif widget.open == "CharacterItems" then
-                g_game.requestCharacterInfo(0, 6)
+                g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.ItemSummary)
                 Cyclopedia.characterItemListFilter(UI.CharacterItems.listFilter.list)
             elseif widget.open == "CharacterAppearances" then
-                g_game.requestCharacterInfo(0, 7)
+                g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.OutfitsAndMounts)
             end
 
             local parent = this:getParent()
