@@ -4,7 +4,7 @@ https://github.com/otland/forgottenserver/pull/4540/files
 https://github.com/otland/forgottenserver/pull/4461
 https://github.com/otland/forgottenserver/pull/4460
 https://github.com/otland/forgottenserver/pull/4456/files
-GET ]]
+GET ]] 
 
 local characterPanel = nil
 local UI = nil
@@ -68,7 +68,6 @@ local function open(parent)
 
     UI.openedCategory = parent
 end
-
 
 characterControllerCyclopedia = Controller:new()
 
@@ -189,7 +188,6 @@ Cyclopedia.InventorySlotStyles = {
         name = "AmmoSlot"
     }
 }
-
 
 function Cyclopedia.characterAppearancesFilter(widget)
     local parent = widget:getParent()
@@ -828,18 +826,18 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
     Cyclopedia.setCharacterSkillPercent("level", data.levelPercent, text)
     Cyclopedia.setCharacterSkillValue("experience", comma_value(player:getExperience()))
 
-    local expGainRate = data.gainRate + data.storeXpBoost
-    local hasStoreExpBonus = data.storeXpBoost > 0
+    local expGainRate = data.baseExpGain + data.XpBoostPercent
+    local hasStoreExpBonus = data.XpBoostPercent > 0
     local hasStaminaBonus = data.staminaMinutes / 60 >= 3
 
     expGainRate = hasStaminaBonus and expGainRate * 1.5 or expGainRate
 
     local staminaBonusTime = string.format("%02d:%02d", math.floor(math.min(data.staminaMinutes, 180) / 60),
         math.min(data.staminaMinutes, 180) % 60)
-    local storeExpBonusTime = format(data.expBoostTime)
+    local storeExpBonusTime = format(data.XpBoostBonusRemainingTime)
     local expGainRateTooltip = string.format(
         "Your current XP gain rate amounts to %d%%.\nYour XP gain rate is calculated as follows:\n- Base XP gain rate: %d%%",
-        expGainRate, data.gainRate)
+        expGainRate, data.baseExpGain)
 
     expGainRateTooltip = hasStoreExpBonus and expGainRateTooltip ..
                              string.format("\n- XP boost: %d%% (%s h remaining).", data.storeXpBoost, storeExpBonusTime) or
@@ -849,7 +847,7 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
                              expGainRateTooltip
 
     UI.CharacterStats.expGainRate:setTooltip(expGainRateTooltip)
-    UI.CharacterStats.expGainRate:setTooltipAlign(AlignTopLeft)
+    -- UI.CharacterStats.expGainRate:setTooltipAlign(AlignTopLeft)
     Cyclopedia.setCharacterSkillValue("expGainRate", comma_value(expGainRate) .. "%")
     Cyclopedia.setCharacterSkillValue("health", comma_value(data.maxHealth))
     Cyclopedia.setCharacterSkillValue("mana", comma_value(data.mana))
@@ -863,7 +861,7 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
     end
 
     Cyclopedia.setCharacterSkillValue("speed", comma_value(math.floor(data.speed)))
-    Cyclopedia.setCharacterSkillValue("food", format(data.food))
+    Cyclopedia.setCharacterSkillValue("food", format(data.regenerationCondition))
 
     local function formatTime(time)
         local hours = math.floor(time / 60)
@@ -904,8 +902,8 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         Cyclopedia.setCharacterSkillPercent("stamina", staminaPercent, text, "black")
     end
 
-    local trainerHours, trainerMinutes = formatTime(data.offlineTraining)
-    local trainerPercent = 100 * data.offlineTraining / 720
+    local trainerHours, trainerMinutes = formatTime(data.offlineTrainingTime)
+    local trainerPercent = 100 * data.offlineTrainingTime / 720
 
     Cyclopedia.setCharacterSkillValue("trainer", trainerHours .. ":" .. trainerMinutes)
     Cyclopedia.setCharacterSkillPercent("trainer", trainerPercent, tr("You have %s percent", trainerPercent))
@@ -914,9 +912,14 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         tr("You have %s percent to go", 100 - data.magicLevelPercent / 100))
     Cyclopedia.setCharacterSkillBase("magiclevel", data.magicLevel, data.baseMagicLevel)
 
-    for i = Skill.Fist, Skill.Fishing do
-        Cyclopedia.onSkillChange(player, i, skills[i].skillLevel, skills[i].skillPercent / 100)
-        Cyclopedia.onBaseCharacterSkillChange(player, i, skills[i].baseSkill)
+    for i = Skill.Fist + 1, Skill.Fishing + 1 do
+ 
+        local skillLevel = skills[i][1]
+        local baseSkill = skills[i][2]
+        local skillPercent = skills[i][3]
+
+        Cyclopedia.onSkillChange(player, i - 1, skillLevel, skillPercent)
+        Cyclopedia.onBaseCharacterSkillChange(player, i - 1, baseSkill)
     end
 end
 
@@ -1096,13 +1099,13 @@ function Cyclopedia.configureCharacterCategories()
                     UI[subWidget.open]:setVisible(true)
 
                     if subWidget.open == "CharacterStats" then
-                        --	g_game.requestCharacterInfo(0, 1)
+                        g_game.requestCharacterInfo(0, 1)
                     elseif subWidget.open == "CombatStats" then
-                        --		g_game.requestCharacterInfo(0, 2)
+                        g_game.requestCharacterInfo(0, 2)
                     elseif subWidget.open == "RecentDeaths" then
-                        --		g_game.requestCharacterInfo(0, 3, 23, 1)
+                        g_game.requestCharacterInfo(0, 3, 23, 1)
                     elseif subWidget.open == "RecentKills" then
-                        --		g_game.requestCharacterInfo(0, 4, 23, 1)
+                        g_game.requestCharacterInfo(0, 4, 23, 1)
                     end
 
                     UI.selectedOption = subWidget.open
@@ -1134,10 +1137,10 @@ function Cyclopedia.configureCharacterCategories()
             if widget.open == "CharacterAchievements" then
                 Cyclopedia.loadCharacterAchievements()
             elseif widget.open == "CharacterItems" then
-                -- g_game.requestCharacterInfo(0, 6)
+                g_game.requestCharacterInfo(0, 6)
                 Cyclopedia.characterItemListFilter(UI.CharacterItems.listFilter.list)
             elseif widget.open == "CharacterAppearances" then
-                --	g_game.requestCharacterInfo(0, 7)
+                g_game.requestCharacterInfo(0, 7)
             end
 
             local parent = this:getParent()
