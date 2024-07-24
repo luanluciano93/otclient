@@ -3841,6 +3841,50 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             g_game.processCyclopediaCharacterGeneralStats(stats, skills, combats);
             break;
         }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_COMBATSTATS:
+        {
+            std::vector<std::vector<uint16_t>> additionalSkills;
+            if (g_game.getFeature(Otc::GameAdditionalSkills)) {
+                // Critical, Life Leech, Mana Leech
+                for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
+                    if (!g_game.getFeature(Otc::GameLeechAmount)) {
+                        if (skill == Otc::LifeLeechAmount || skill == Otc::ManaLeechAmount) {
+                            continue;
+                        }
+                    }
+
+                    const uint16_t skillLevel = msg->getU16();
+                    msg->getU16();
+                    additionalSkills.push_back({ skill, skillLevel });
+                }
+            }
+
+            std::vector<std::vector<uint16_t>> forgeSkills;
+            if (g_game.getClientVersion() >= 1281) {
+                // forge skill stats
+                const uint8_t lastSkill = g_game.getClientVersion() >= 1332 ? Otc::LastSkill : Otc::Momentum + 1;
+                for (int_fast32_t skill = Otc::Fatal; skill < lastSkill; ++skill) {
+                    const uint16_t skillLevel = msg->getU16();
+                    msg->getU16();
+                    forgeSkills.push_back({ skill, skillLevel });
+                }
+            }
+
+            // data.weapoElement
+            // data.weapoElement
+            // data.weaponMaxHitChance
+            // data.weaponElementDamage
+            // data.weaponElementType
+            // data.weaponElementDamag
+            // data.defense
+            // data.armor
+            // data.blessings
+
+            // mitigation
+            
+            //g_game.processCyclopediaCharacterGeneralStats(stats, additionalSkills, forgeSkills);
+            break;
+        }
         case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
         {
             const uint8_t showAccountInformation = msg->getU8();
