@@ -141,6 +141,7 @@ public:
     void sendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId);
     void sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page);
     void sendRequestBosstiaryInfo();
+    void sendRequestBossSlootInfo();
 
     // otclient only
     void sendChangeMapAwareRange(int xrange, int yrange);

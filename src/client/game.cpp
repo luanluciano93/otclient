@@ -1841,3 +1841,11 @@ void Game::requestBosstiaryInfo()
 
     m_protocolGame->sendRequestBosstiaryInfo();
 }
+
+void Game::requestBossSlootInfo()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBossSlootInfo();
+}

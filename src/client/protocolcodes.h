@@ -300,6 +300,7 @@ namespace Proto
         ClientInviteToOwnChannel = 171,
         ClientExcludeFromOwnChannel = 172,
         ClientRequestBosstiaryInfo = 174,
+        ClientRequestBossSlootInfo = 175,
         ClientRequestHighscore = 177,
         ClientCancelAttackAndFollow = 190,
         ClientUpdateTile = 201,

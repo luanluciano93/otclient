@@ -1013,6 +1013,13 @@ void ProtocolGame::sendRequestBosstiaryInfo()
     send(msg);
 }
 
+void ProtocolGame::sendRequestBossSlootInfo()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBossSlootInfo);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();
