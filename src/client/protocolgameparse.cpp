@@ -3843,7 +3843,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_COMBATSTATS:
         {
-            std::vector<std::vector<uint16_t>> additionalSkills;
+            std::vector<std::vector<int_fast32_t>> additionalSkills;
             if (g_game.getFeature(Otc::GameAdditionalSkills)) {
                 // Critical, Life Leech, Mana Leech
                 for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
@@ -3859,7 +3859,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 }
             }
 
-            std::vector<std::vector<uint16_t>> forgeSkills;
+            std::vector<std::vector<int_fast32_t>> forgeSkills;
             if (g_game.getClientVersion() >= 1281) {
                 // forge skill stats
                 const uint8_t lastSkill = g_game.getClientVersion() >= 1332 ? Otc::LastSkill : Otc::Momentum + 1;
