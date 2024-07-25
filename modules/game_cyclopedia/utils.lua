@@ -12,7 +12,6 @@
 	return number
 end
 
-
 function calculateCombatValues(percent)
     local values = {}
 
@@ -1090,5 +1089,3 @@ function safeOutfit(raceData)
         return raceData
     end
 end
-
-

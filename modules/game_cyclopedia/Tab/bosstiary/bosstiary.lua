@@ -2,8 +2,7 @@
 function showBosstiary()
     UI = g_ui.loadUI("bosstiary", contentContainer)
     UI:show()
-	g_game.requestBosstiaryInfo()
-    -- g_game.requestBosstiary()
+    g_game.requestBosstiaryInfo()
     UI.FilterBase.BaneIcon:setTooltip(
         "Bane\n\nFor unlocking a level, you will receive the following boss points:\nProwess: 5\nExpertise: 15\nMastery: 30")
     -- UI.FilterBase.BaneIcon:setTooltipAlign(AlignTopLeft)
@@ -27,9 +26,9 @@ BosstiaryControllerCyclopedia = Controller:new()
 
 function BosstiaryControllerCyclopedia:onInit()
     BosstiaryControllerCyclopedia:registerEvents(g_game, {
-		onParseSendBosstiary = Cyclopedia.LoadBoostiaryCreatures
-	})
-  --  ProtocolGame.registerOpcode(0x73, parseSendBosstiary)
+        onParseSendBosstiary = Cyclopedia.LoadBoostiaryCreatures
+    })
+
 end
 
 function BosstiaryControllerCyclopedia:onGameStart()
@@ -167,21 +166,13 @@ function Cyclopedia.CreateBosstiaryCreature(data)
         widget.Sprite:setOutfit({
             type = safeOutfit(raceData.type)
         })
-		widget.Sprite:getCreature():setStaticWalking(1000)
+        widget.Sprite:getCreature():setStaticWalking(1000)
         if data.unlocked then
-            --		outfit.shader = ""
             widget.Sprite:getCreature():setShader("")
             widget:setText(format(data.name))
         else
-            --	outfit.shader = "black"
-            if widget.Sprite:getCreature() then
-                widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
-            end
-
+            widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
         end
-
-
-
 
     end
 end
@@ -461,23 +452,3 @@ function Cyclopedia.ReadjustPages()
     Cyclopedia.LoadBoostiaryCreature(Cyclopedia.Bosstiary.Page)
     Cyclopedia.verifyBosstiaryButtons()
 end
-
---[[ function parseSendBosstiary(protocol, msg)
-
-    local bossesCount = msg:getU16()
-    local bosses = {}
-
-    for i = 1, bossesCount do
-        local boss = {
-            raceId = msg:getU32(),
-            category = msg:getU8(),
-            kills = msg:getU32(),
-            unk1 = msg:getU8(),
-            isTrackerActived = msg:getU8() == 1
-        }
-        table.insert(bosses, boss)
-    end
-
-    Cyclopedia.LoadBoostiaryCreatures(bosses)
-end
- ]]
