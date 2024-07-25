@@ -1006,6 +1006,13 @@ void ProtocolGame::sendCyclopediaRequestCharacterInfo(const uint32_t playerId, c
     send(msg);
 }
 
+void ProtocolGame::sendRequestBosstiaryInfo()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBosstiaryInfo);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();

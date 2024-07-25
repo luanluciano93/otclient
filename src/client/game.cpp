@@ -1828,3 +1828,11 @@ void Game::requestSendCharacterInfo(const uint32_t playerId, const Otc::Cycloped
 
     m_protocolGame->sendCyclopediaRequestCharacterInfo(playerId, characterInfoType, entriesPerPage, page);
 }
+
+void Game::requestBosstiaryInfo()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBosstiaryInfo();
+}
