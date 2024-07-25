@@ -59,3 +59,8 @@ int push_luavalue(const CyclopediaCharacterGeneralStats& stats);
 int push_luavalue(const LootItem& lootItem);
 int push_luavalue(const BestiaryMonsterData& data);
 int push_luavalue(const BosstiaryData& boss);
+
+
+int push_luavalue(const BosstiarySlot& slot);
+int push_luavalue(const BossUnlocked& boss);
+int push_luavalue(const BosstiarySlotsData& data);

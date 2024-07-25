@@ -157,6 +157,42 @@ struct BosstiaryData
     uint8_t isTrackerActived;
 };
 
+struct BosstiarySlot
+{
+    uint8_t bossRace;
+    uint32_t killCount;
+    uint16_t lootBonus;
+    uint8_t killBonus;
+    uint8_t bossRaceRepeat;
+    uint32_t removePrice;
+    uint8_t inactive;
+};
+
+struct BossUnlocked
+{
+    uint32_t bossId;
+    uint8_t bossRace;
+};
+
+struct BosstiarySlotsData
+{
+    uint32_t playerPoints;
+    uint32_t totalPointsNextBonus;
+    uint16_t currentBonus;
+    uint16_t nextBonus;
+    bool isSlotOneUnlocked;
+    uint32_t bossIdSlotOne;
+    std::optional<BosstiarySlot> slotOneData;
+    bool isSlotTwoUnlocked;
+    uint32_t bossIdSlotTwo;
+    std::optional<BosstiarySlot> slotTwoData;
+    bool isTodaySlotUnlocked;
+    uint32_t boostedBossId;
+    std::optional<BosstiarySlot> todaySlotData;
+    bool bossesUnlocked;
+    std::vector<BossUnlocked> bossesUnlockedData;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game

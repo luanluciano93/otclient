@@ -4523,47 +4523,54 @@ void ProtocolGame::parseBosstiaryData(const InputMessagePtr& msg)
 }
 
 void ProtocolGame::parseBosstiarySlots(const InputMessagePtr& msg) {
-    const auto& getBosstiarySlot = [&]() {
-        msg->getU8(); // Boss Race
-        msg->getU32(); // Kill Count
-        msg->getU16(); // Loot Bonus
-        msg->getU8(); // Kill Bonus
-        msg->getU8(); // Boss Race
-        msg->getU32(); // Remove Price
-        msg->getU8(); // Inactive? (Only true if equal to Boosted Boss)
+    BosstiarySlotsData data;
+
+    auto getBosstiarySlot = [&msg]() -> BosstiarySlot {
+        BosstiarySlot slot;
+        slot.bossRace = msg->getU8();
+        slot.killCount = msg->getU32();
+        slot.lootBonus = msg->getU16();
+        slot.killBonus = msg->getU8();
+        slot.bossRaceRepeat = msg->getU8();
+        slot.removePrice = msg->getU32();
+        slot.inactive = msg->getU8();
+        return slot;
     };
 
-    msg->getU32(); // Player Points
-    msg->getU32(); // Total Points next bonus
-    msg->getU16(); // Current Bonus
-    msg->getU16(); // Next Bonus
+    data.playerPoints = msg->getU32();
+    data.totalPointsNextBonus = msg->getU32();
+    data.currentBonus = msg->getU16();
+    data.nextBonus = msg->getU16();
 
-    const bool isSlotOneUnlocked = msg->getU8();
-    const uint32_t bossIdSlotOne = msg->getU32();
-    if (isSlotOneUnlocked && bossIdSlotOne != 0) {
-        getBosstiarySlot();
+    data.isSlotOneUnlocked = msg->getU8();
+    data.bossIdSlotOne = msg->getU32();
+    if (data.isSlotOneUnlocked && data.bossIdSlotOne != 0) {
+        data.slotOneData = getBosstiarySlot();
     }
 
-    const bool isSlotTwoUnlocked = msg->getU8();
-    const uint32_t bossIdSlotTwo = msg->getU32();
-    if (isSlotTwoUnlocked && bossIdSlotTwo != 0) {
-        getBosstiarySlot();
+    data.isSlotTwoUnlocked = msg->getU8();
+    data.bossIdSlotTwo = msg->getU32();
+    if (data.isSlotTwoUnlocked && data.bossIdSlotTwo != 0) {
+        data.slotTwoData = getBosstiarySlot();
     }
 
-    const bool isTodaySlotUnlocked = msg->getU8();
-    const uint32_t boostedBossId = msg->getU32();
-    if (isTodaySlotUnlocked && boostedBossId != 0) {
-        getBosstiarySlot();
+    data.isTodaySlotUnlocked = msg->getU8();
+    data.boostedBossId = msg->getU32();
+    if (data.isTodaySlotUnlocked && data.boostedBossId != 0) {
+        data.todaySlotData = getBosstiarySlot();
     }
 
-    const bool bossesUnlocked = msg->getU8();
-    if (bossesUnlocked) {
-        const uint16_t bossesUnlockedSize = msg->getU16();
-        for (auto i = 0; i < bossesUnlockedSize; ++i) {
-            msg->getU32(); // bossId
-            msg->getU8(); // bossRace
+    data.bossesUnlocked = msg->getU8();
+    if (data.bossesUnlocked) {
+        uint16_t bossesUnlockedSize = msg->getU16();
+        for (uint16_t i = 0; i < bossesUnlockedSize; ++i) {
+            BossUnlocked boss;
+            boss.bossId = msg->getU32();
+            boss.bossRace = msg->getU8();
+            data.bossesUnlockedData.emplace_back(boss);
         }
     }
+    g_lua.callGlobalField("g_game", "onUpdateBosstiarySlots", data);
 }
 
 void ProtocolGame::parseBosstiaryCooldownTimer(const InputMessagePtr& msg) {

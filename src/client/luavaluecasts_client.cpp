@@ -561,3 +561,84 @@ int push_luavalue(const BosstiaryData& boss) {
     g_lua.setField("isTrackerActived");
     return 1;
 }
+
+int push_luavalue(const BosstiarySlot& slot) {
+    g_lua.createTable(0, 7);
+    g_lua.pushInteger(slot.bossRace);
+    g_lua.setField("bossRace");
+    g_lua.pushInteger(slot.killCount);
+    g_lua.setField("killCount");
+    g_lua.pushInteger(slot.lootBonus);
+    g_lua.setField("lootBonus");
+    g_lua.pushInteger(slot.killBonus);
+    g_lua.setField("killBonus");
+    g_lua.pushInteger(slot.bossRaceRepeat);
+    g_lua.setField("bossRaceRepeat");
+    g_lua.pushInteger(slot.removePrice);
+    g_lua.setField("removePrice");
+    g_lua.pushInteger(slot.inactive);
+    g_lua.setField("inactive");
+    return 1;
+}
+
+// Función para convertir BossUnlocked a valor Lua
+int push_luavalue(const BossUnlocked& boss) {
+    g_lua.createTable(0, 2);
+    g_lua.pushInteger(boss.bossId);
+    g_lua.setField("bossId");
+    g_lua.pushInteger(boss.bossRace);
+    g_lua.setField("bossRace");
+    return 1;
+}
+
+// Función para convertir BosstiarySlotsData a valor Lua
+int push_luavalue(const BosstiarySlotsData& data) {
+    g_lua.createTable(0, 13);
+    g_lua.pushInteger(data.playerPoints);
+    g_lua.setField("playerPoints");
+    g_lua.pushInteger(data.totalPointsNextBonus);
+    g_lua.setField("totalPointsNextBonus");
+    g_lua.pushInteger(data.currentBonus);
+    g_lua.setField("currentBonus");
+    g_lua.pushInteger(data.nextBonus);
+    g_lua.setField("nextBonus");
+
+    g_lua.pushBoolean(data.isSlotOneUnlocked);
+    g_lua.setField("isSlotOneUnlocked");
+    g_lua.pushInteger(data.bossIdSlotOne);
+    g_lua.setField("bossIdSlotOne");
+    if (data.slotOneData) {
+        push_luavalue(*data.slotOneData);
+        g_lua.setField("slotOneData");
+    }
+
+    g_lua.pushBoolean(data.isSlotTwoUnlocked);
+    g_lua.setField("isSlotTwoUnlocked");
+    g_lua.pushInteger(data.bossIdSlotTwo);
+    g_lua.setField("bossIdSlotTwo");
+    if (data.slotTwoData) {
+        push_luavalue(*data.slotTwoData);
+        g_lua.setField("slotTwoData");
+    }
+
+    g_lua.pushBoolean(data.isTodaySlotUnlocked);
+    g_lua.setField("isTodaySlotUnlocked");
+    g_lua.pushInteger(data.boostedBossId);
+    g_lua.setField("boostedBossId");
+    if (data.todaySlotData) {
+        push_luavalue(*data.todaySlotData);
+        g_lua.setField("todaySlotData");
+    }
+
+    g_lua.pushBoolean(data.bossesUnlocked);
+    g_lua.setField("bossesUnlocked");
+
+    g_lua.createTable(data.bossesUnlockedData.size(), 0);
+    for (size_t i = 0; i < data.bossesUnlockedData.size(); ++i) {
+        push_luavalue(data.bossesUnlockedData[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("bossesUnlockedData");
+
+    return 1;
+}
