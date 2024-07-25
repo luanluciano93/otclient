@@ -372,20 +372,15 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
 
     widget:setId(data.id)
     local formattedName = "BUSCAR__" .. data.id
-    local outfit = 22
+
     if RACE[data.id] then
         formattedName = RACE[data.id].name:gsub("(%l)(%w*)", function(first, rest)
             return first:upper() .. rest
         end)
-        outfit = RACE[data.id].type
     end
-    if outfit > 1469 then
-        outfit = 1468 -- prevent error : ERROR: invalid thing type client id 1776 in category 1
-    end
-
     widget.Name:setText(verify(formattedName))
     widget.Sprite:setOutfit({
-        type = outfit
+        type = safeOutfit(RACE[data.id].type)
     })
     widget.Sprite:getCreature():setStaticWalking(1000)
 
@@ -394,8 +389,11 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     if data.currentLevel > 3 then
         widget.Finalized:setVisible(true)
         widget.KillsLabel:setVisible(false)
+        widget.Sprite:getCreature():setShader("")
     else
         widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel))
+        widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
+        widget.Name:setText("uknown")
     end
 
     function widget.ClassBase:onClick()
