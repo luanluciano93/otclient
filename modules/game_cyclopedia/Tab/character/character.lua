@@ -81,7 +81,6 @@ function characterControllerCyclopedia:onInit()
         onCyclopediaCharacterItems = Cyclopedia.onCyclopediaCharacterItems,
         onCyclopediaCharacterAppearances = Cyclopedia.onCyclopediaCharacterAppearances
     })
-
 end
 
 function characterControllerCyclopedia:onGameStart()
@@ -103,7 +102,6 @@ function showCharacter()
     UI.selectedOption = "InfoBase"
     if g_game.isOnline() then
         local player = g_game.getLocalPlayer()
-
         UI.CharacterBase:setText(player:getName())
         UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocation()))
         UI.CharacterBase.Outfit:setOutfit(player:getOutfit())
@@ -192,10 +190,8 @@ Cyclopedia.InventorySlotStyles = {
 
 function Cyclopedia.characterAppearancesFilter(widget)
     local parent = widget:getParent()
-
     for i = 1, parent:getChildCount() do
         local child = parent:getChildByIndex(i)
-
         if child:getId() ~= "show" then
             child:setChecked(false)
         end
@@ -220,7 +216,6 @@ function Cyclopedia.reloadCharacterAppearances()
     for _, data in ipairs(Cyclopedia.Character.Appearances) do
         if data.visible then
             local widget = g_ui.createWidget("CharacterAppearance", UI.CharacterAppearances.ListBase.list)
-
             widget.name:setText(data.name)
             widget.creature:setOutfit(data.outfit)
             widget.creature:getCreature():setStaticWalking(1000)
@@ -259,8 +254,9 @@ function Cyclopedia.loadCharacterAppearances(color, outfits, mounts)
     local function process(container, containerType)
         for i = 0, #container do
             local value = container[i]
-
-            insert(value, containerType)
+            if value then
+                insert(value, containerType)
+            end
         end
     end
 
@@ -278,7 +274,6 @@ function Cyclopedia.characterItemsSearch(text)
 
     for i = 1, filter:getChildCount() do
         local child = filter:getChildByIndex(i)
-
         if child:isChecked() then
             table.insert(activeFilters, child:getId())
         end
@@ -289,7 +284,6 @@ function Cyclopedia.characterItemsSearch(text)
         local name = data.name:lower()
         local meetsSearchCriteria = text == "" or string.find(name, text:lower()) ~= nil
         local meetsFilterCriteria = #activeFilters == 0 or table.contains(activeFilters, data.type)
-
         data.visible = meetsSearchCriteria and meetsFilterCriteria
     end
 
@@ -305,7 +299,6 @@ function Cyclopedia.characterItemsFilter(widget, force)
 
     for _, item in ipairs(Cyclopedia.Character.Items) do
         local data = item.data
-
         if data.type == id then
             data.visible = widget:isChecked()
         end
@@ -373,8 +366,8 @@ function Cyclopedia.loadCharacterItems(inventory, store, stash, depot, inbox)
             type = type,
             value = thing:getResultingValue()
         }
-        local insertedItem = Cyclopedia.Character.Items[data.itemId]
 
+        local insertedItem = Cyclopedia.Character.Items[data.itemId]
         if insertedItem then
             insertedItem.amount = insertedItem.amount + data.amount
         else
@@ -385,8 +378,9 @@ function Cyclopedia.loadCharacterItems(inventory, store, stash, depot, inbox)
     local function processContainer(container, containerType)
         for i = 0, #container do
             local data = container[i]
-
-            insert(data, containerType)
+            if data then
+                insert(data, containerType)
+            end
         end
     end
 
@@ -419,9 +413,7 @@ function Cyclopedia.loadCharacterItems(inventory, store, stash, depot, inbox)
     end
 
     table.sort(sortedItems, compareByName)
-
     Cyclopedia.Character.Items = sortedItems
-
     Cyclopedia.characterItemsFilter(UI.CharacterItems.filters.inventory, true)
 end
 
@@ -431,18 +423,17 @@ function Cyclopedia.loadCharacterAchievements()
         UI.CharacterAchievements.sort:addOption("By Grade", 2, true)
         UI.CharacterAchievements.sort:addOption("By Unlock Date", 3, true)
         Cyclopedia.achievementFilter(UI.CharacterAchievements.filters.accomplished)
-
         Cyclopedia.Character.Achievements.Loaded = true
     end
 end
 
 function Cyclopedia.characterItemListFilter(widget)
     local parent = widget:getParent()
-
     for i = 1, parent:getChildCount() do
         local child = parent:getChildByIndex(i)
-
-        child:setChecked(false)
+        if child then
+            child:setChecked(false)
+        end
     end
 
     widget:setChecked(true)
@@ -462,18 +453,16 @@ function Cyclopedia.achievementFilter(widget)
     end
 
     local parent = widget:getParent()
-
     for i = 1, parent:getChildCount() do
         local child = parent:getChildByIndex(i)
-
-        child:setChecked(false)
+        if child then
+            child:setChecked(false)
+        end
     end
 
     if widget:getId() ~= "accomplished" then
         local last = Cyclopedia.Character.Achievements.lastSort
-
         last = last or 1
-
         Cyclopedia.achievementSort(last)
     else
         UI.CharacterAchievements.ListBase.List:destroyChildren()
@@ -510,15 +499,11 @@ function Cyclopedia.achievementSort(option)
 
     for _, data in pairs(tempTable) do
         local widget = g_ui.createWidget("Achievement", UI.CharacterAchievements.ListBase.List)
-
         widget:setId(data.id)
         widget.title:setText(data.name)
-
         widget.title = data.name
-
         widget:setText(data.description)
         widget.icon:setWidth(11 * data.grade)
-
         widget.grade = data.grade
     end
 
@@ -550,10 +535,8 @@ function Cyclopedia.loadCharacterRecentKills(timeData, descriptionData, statusDa
 
             function widget:onClick()
                 local parent = widget:getParent()
-
                 for y = 1, parent:getChildCount() do
                     local child = parent:getChildByIndex(y)
-
                     child:setChecked(false)
                     child.date:setOn(false)
                     child.description:setOn(false)
@@ -596,16 +579,12 @@ function Cyclopedia.loadCharacterRecentDeaths(timeData, reasonData)
             widget:setId(i)
             widget.date:setText(os.date("%Y-%m-%d, %H:%M:%S", time))
             widget.cause:setText(reason)
-
             widget.color = color
-
             widget:setBackgroundColor(color)
-
             color = color == "#484848" and "#414141" or "#484848"
 
             function widget:onClick()
                 local parent = widget:getParent()
-
                 for y = 1, parent:getChildCount() do
                     local child = parent:getChildByIndex(y)
 
@@ -660,7 +639,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
 
     for i = 0, 6 do
         local id = "reduction_" .. i
-
         if UI.CombatStats[id] then
             UI.CombatStats[id]:destroy()
         end
@@ -677,7 +655,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
             widget:setId("reduction_" .. i)
 
             local element = Icons[elements[i].type]
-
             widget.icon:setImageSource(element.icon)
             widget.icon:setImageClip(element.clip)
             widget.value:setText(string.format("+%d%%", elements[i].value))
@@ -733,7 +710,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
 
     for i = 0, #forgeSkills do
         local id = "special_" .. i
-
         if UI.CombatStats[id] then
             UI.CombatStats[id]:destroy()
         end
@@ -743,7 +719,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
 
     for i = 0, #forgeSkills do
         local percent = forgeSkills[i].value
-
         if percent > 0 then
             local widget = g_ui.createWidget("CharacterSkillBase", UI.CombatStats)
 
@@ -771,12 +746,10 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
             widget:setMarginLeft(0)
 
             local name = g_ui.createWidget("SkillNameLabel", widget)
-
             name:setText(specialName[i])
             name:setColor("#C0C0C0")
 
             local value = g_ui.createWidget("SkillValueLabel", widget)
-
             value:setText(string.format("%.2f%%", percent / 100))
             value:setColor("#C0C0C0")
             value:setMarginRight(2)
@@ -794,7 +767,6 @@ end
 
 function Cyclopedia.loadCharacterGeneralStats(data, skills)
     local player = g_game.getLocalPlayer()
-
     if not player then
         return
     end
@@ -818,7 +790,6 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
     Cyclopedia.setCharacterSkillValue("level", comma_value(data.level))
 
     local text = tr("You have %s percent to go ", 100 - data.levelPercent)
-
     Cyclopedia.setCharacterSkillPercent("level", data.levelPercent, text)
     Cyclopedia.setCharacterSkillValue("experience", comma_value(player:getExperience()))
 
@@ -862,7 +833,6 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
     local function formatTime(time)
         local hours = math.floor(time / 60)
         local minutes = time % 60
-
         if minutes < 10 then
             minutes = "0" .. minutes
         end
@@ -909,7 +879,6 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
     Cyclopedia.setCharacterSkillBase("magiclevel", data.magicLevel, data.baseMagicLevel)
 
     for i = Skill.Fist + 1, Skill.Fishing + 1 do
- 
         local skillLevel = skills[i][1]
         local baseSkill = skills[i][2]
         local skillPercent = skills[i][3]
@@ -922,14 +891,12 @@ end
 function Cyclopedia.setCharacterSkillValue(id, value)
     local skill = UI.CharacterStats:recursiveGetChildById(id)
     local widget = skill:getChildById("value")
-
     widget:setText(value)
 end
 
 function Cyclopedia.setCharacterSkillPercent(id, percent, tooltip, color)
     local skill = UI.CharacterStats:recursiveGetChildById(id)
     local widget = skill:getChildById("percent")
-
     if widget then
         widget:setPercent(math.floor(percent))
 
@@ -975,13 +942,11 @@ end
 
 function Cyclopedia.selectCharacterPage()
     local selectedOption = UI.selectedOption
-
     UI[selectedOption]:setVisible(false)
     UI.InfoBase:setVisible(true)
     Cyclopedia.closeCharacterButtons()
 
     local oldOpen = UI.openedCategory
-
     if oldOpen ~= nil then
         close(oldOpen)
     end
@@ -991,10 +956,8 @@ end
 
 function Cyclopedia.closeCharacterButtons()
     local size = UI.OptionsBase:getChildCount()
-
     for i = 1, size do
         local widget = UI.OptionsBase:getChildByIndex(i)
-
         if widget then
             if widget.subCategories ~= nil then
                 for subId, _ in ipairs(widget.subCategories) do
@@ -1058,7 +1021,6 @@ function Cyclopedia.configureCharacterCategories()
 
     for id, button in ipairs(buttons) do
         local widget = g_ui.createWidget("CharacterCategoryItem", UI.OptionsBase)
-
         widget:setId(id)
         widget.Button.Icon:setIcon(button.icon)
         widget.Button.Title:setText(button.text)
@@ -1141,7 +1103,6 @@ function Cyclopedia.configureCharacterCategories()
             end
 
             local parent = this:getParent()
-
             if parent.subCategoriesSize ~= nil then
                 if parent.closedSize == nil then
                     parent.closedSize = parent:getHeight() / (parent.subCategoriesSize + 1) + 15
