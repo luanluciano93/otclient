@@ -151,6 +151,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerDeleteInContainer:
                     parseContainerRemoveItem(msg);
                     break;
+                case Proto::GameServerBosstiaryInfo:
+                    parseBosstiaryInfo(msg);
+                    break;
                 case Proto::GameServerTakeScreenshot:
                     parseTakeScreenshot(msg);
                     break;
@@ -1217,6 +1220,22 @@ void ProtocolGame::parseContainerRemoveItem(const InputMessagePtr& msg)
     }
 
     g_game.processContainerRemoveItem(containerId, slot, lastItem);
+}
+
+void ProtocolGame::parseBosstiaryInfo(const InputMessagePtr& msg) 
+{
+    std::vector<BosstiaryData> bossData;
+    uint16_t BosstiaryRaceLast = msg->getU16();
+    for (auto i = 0; i < BosstiaryRaceLast; ++i) {
+        BosstiaryData boss;
+        boss.raceId = msg->getU32();
+        boss.category = msg->getU8();
+        boss.kills = msg->getU32();
+        msg->getU8();
+        boss.isTrackerActived = msg->getU8();
+        bossData.emplace_back(boss);
+    }
+    g_game.processBosstiaryInfo(bossData);
 }
 
 void ProtocolGame::parseTakeScreenshot(const InputMessagePtr& msg) {

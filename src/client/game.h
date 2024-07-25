@@ -149,6 +149,14 @@ struct BestiaryMonsterData
     std::string location;
 };
 
+struct BosstiaryData
+{
+    uint32_t raceId;
+    uint8_t category;
+    uint32_t kills;
+    uint8_t isTrackerActived;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game
@@ -261,6 +269,7 @@ protected:
     static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
     static void processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData);
+    static void processBosstiaryInfo(const std::vector<BosstiaryData>& boss);
 
     friend class ProtocolGame;
     friend class Map;

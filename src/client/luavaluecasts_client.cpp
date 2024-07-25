@@ -548,3 +548,16 @@ bool luavalue_cast(int index, CyclopediaCharacterGeneralStats& stats)
 
     return true;
 }
+
+int push_luavalue(const BosstiaryData& boss) {
+    g_lua.createTable(0, 4);
+    g_lua.pushInteger(boss.raceId);
+    g_lua.setField("raceId");
+    g_lua.pushInteger(boss.category);
+    g_lua.setField("category");
+    g_lua.pushInteger(boss.kills);
+    g_lua.setField("kills");
+    g_lua.pushInteger(boss.isTrackerActived);
+    g_lua.setField("isTrackerActived");
+    return 1;
+}

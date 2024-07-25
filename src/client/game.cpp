@@ -344,6 +344,11 @@ void Game::processCyclopediaCharacterGeneralStatsBadge(uint8_t showAccountInform
     g_lua.callGlobalField("g_game", "processCyclopediaCharacterGeneralStatsBadge", showAccountInformation, player_online, player_premium,loyalt_title, badge);
 }
 
+void Game::processBosstiaryInfo(const std::vector<BosstiaryData>& boss)
+{
+    g_lua.callGlobalField("g_game", "onParseSendBosstiary", boss);
+}
+
 void Game::processInventoryChange(int slot, const ItemPtr& item)
 {
     if (item)

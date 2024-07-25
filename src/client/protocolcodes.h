@@ -100,6 +100,7 @@ namespace Proto
         GameServerCreateContainer = 112,
         GameServerChangeInContainer = 113,
         GameServerDeleteInContainer = 114,
+        GameServerBosstiaryInfo = 115,
         GameServerTakeScreenshot = 117,
         GameServerCyclopediaItemDetail = 118,
         GameServerSetInventory = 120,

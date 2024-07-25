@@ -206,6 +206,7 @@ private:
     void parseContainerAddItem(const InputMessagePtr& msg);
     void parseContainerUpdateItem(const InputMessagePtr& msg);
     void parseContainerRemoveItem(const InputMessagePtr& msg);
+    void parseBosstiaryInfo(const InputMessagePtr& msg);
     void parseTakeScreenshot(const InputMessagePtr& msg);
     void parseCyclopediaItemDetail(const InputMessagePtr& msg);
     void parseAddInventoryItem(const InputMessagePtr& msg);
