@@ -3967,6 +3967,54 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             }
             break;
         }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_ITEMSUMMARY:
+        {
+            CyclopediaCharacterItemSummary data;
+
+            uint16_t inventoryItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < inventoryItemsCount; ++i) {
+                ItemSummary item;
+                item.itemId = msg->getU16();
+                item.amount = msg->getU32();
+                data.inventory.emplace_back(item);
+            }
+
+            uint16_t storeItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < storeItemsCount; ++i) {
+                ItemSummary item;
+                item.itemId = msg->getU16();
+                item.amount = msg->getU32();
+                data.store.emplace_back(item);
+            }
+
+            uint16_t stashItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < stashItemsCount; ++i) {
+                ItemSummary item;
+                item.itemId = msg->getU16();
+                item.amount = msg->getU32();
+                data.stash.emplace_back(item);
+            }
+
+            uint16_t depotItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < depotItemsCount; ++i) {
+                ItemSummary item;
+                item.itemId = msg->getU16();
+                item.amount = msg->getU32();
+                data.depot.emplace_back(item);
+            }
+
+            uint16_t inboxItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < inboxItemsCount; ++i) {
+                ItemSummary item;
+                item.itemId = msg->getU16();
+                item.amount = msg->getU32();
+                data.inbox.emplace_back(item);
+            }
+
+            g_game.processCyclopediaCharacterItemSummary(data);
+            break;
+        }
+        
     }
 
     // TODO: implement cyclopedia player info entry changed usage

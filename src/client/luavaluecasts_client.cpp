@@ -600,7 +600,6 @@ int push_luavalue(const BosstiarySlot& slot) {
     return 1;
 }
 
-// Función para convertir BossUnlocked a valor Lua
 int push_luavalue(const BossUnlocked& boss) {
     g_lua.createTable(0, 2);
     g_lua.pushInteger(boss.bossId);
@@ -610,7 +609,6 @@ int push_luavalue(const BossUnlocked& boss) {
     return 1;
 }
 
-// Función para convertir BosstiarySlotsData a valor Lua
 int push_luavalue(const BosstiarySlotsData& data) {
     g_lua.createTable(0, 13);
     g_lua.pushInteger(data.playerPoints);
@@ -658,6 +656,56 @@ int push_luavalue(const BosstiarySlotsData& data) {
         g_lua.rawSeti(i + 1);
     }
     g_lua.setField("bossesUnlockedData");
+
+    return 1;
+}
+
+int push_luavalue(const ItemSummary& item) {
+    g_lua.createTable(0, 2);
+    g_lua.pushInteger(item.itemId);
+    g_lua.setField("itemId");
+    g_lua.pushInteger(item.amount);
+    g_lua.setField("amount");
+    return 1;
+}
+
+int push_luavalue(const CyclopediaCharacterItemSummary& data) {
+    g_lua.createTable(0, 5);
+
+    g_lua.createTable(data.inventory.size(), 0);
+    for (size_t i = 0; i < data.inventory.size(); ++i) {
+        push_luavalue(data.inventory[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("inventory");
+
+    g_lua.createTable(data.store.size(), 0);
+    for (size_t i = 0; i < data.store.size(); ++i) {
+        push_luavalue(data.store[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("store");
+
+    g_lua.createTable(data.stash.size(), 0);
+    for (size_t i = 0; i < data.stash.size(); ++i) {
+        push_luavalue(data.stash[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("stash");
+
+    g_lua.createTable(data.depot.size(), 0);
+    for (size_t i = 0; i < data.depot.size(); ++i) {
+        push_luavalue(data.depot[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("depot");
+
+    g_lua.createTable(data.inbox.size(), 0);
+    for (size_t i = 0; i < data.inbox.size(); ++i) {
+        push_luavalue(data.inbox[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("inbox");
 
     return 1;
 }

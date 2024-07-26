@@ -351,6 +351,11 @@ void Game::processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccount
     g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterBadges", showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
 }
 
+void Game::processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data)
+{
+    g_lua.callGlobalField("g_game", "onUpdateCyclopediaCharacterItemSummary", data);
+}
+
 void Game::processBosstiaryInfo(const std::vector<BosstiaryData>& boss)
 {
     g_lua.callGlobalField("g_game", "onParseSendBosstiary", boss);

@@ -78,7 +78,7 @@ function characterControllerCyclopedia:onInit()
         onParseCyclopediaCharacterBadges = Cyclopedia.loadCharacterBadges,
         onCyclopediaCharacterRecentDeaths = Cyclopedia.onCyclopediaCharacterRecentDeaths,
         onCyclopediaCharacterRecentKills = Cyclopedia.onCyclopediaCharacterRecentKills,
-        onCyclopediaCharacterItems = Cyclopedia.onCyclopediaCharacterItems,
+        onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
         onCyclopediaCharacterAppearances = Cyclopedia.onCyclopediaCharacterAppearances
     })
 end
@@ -319,7 +319,7 @@ function Cyclopedia.reloadCharacterItems()
 
         if data.visible then
             local listItem = g_ui.createWidget("CharacterListItem", UI.CharacterItems.ListBase.list)
-            local frame = g_game.getItemFrame(data.value)
+            --local frame = g_game.getItemFrame(data.value)
 
             listItem.item:setItemId(itemId)
             listItem.name:setText(data.name)
@@ -331,7 +331,7 @@ function Cyclopedia.reloadCharacterItems()
             gridItem.item:setItemId(itemId)
             gridItem.amount:setText(data.amount)
 
-            if frame > 0 then
+--[[             if frame > 0 then
                 listItem.rarity:setImageSource("/images/ui/frames")
                 listItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
                 gridItem.rarity:setImageSource("/images/ui/frames")
@@ -339,14 +339,19 @@ function Cyclopedia.reloadCharacterItems()
             else
                 listItem.rarity:setImageSource("")
                 gridItem.rarity:setImageSource("")
-            end
+            end ]]
 
             colorIndex = 3 - colorIndex
         end
     end
 end
 
-function Cyclopedia.loadCharacterItems(inventory, store, stash, depot, inbox)
+function Cyclopedia.loadCharacterItems(data)
+    local inventory = data.inventory
+    local store = data.store
+    local stash = data.stash
+    local depot = data.depot
+    local inbox = data.inbox
     Cyclopedia.Character.Items = {}
 
     local function insert(data, type)
@@ -364,7 +369,7 @@ function Cyclopedia.loadCharacterItems(inventory, store, stash, depot, inbox)
             name = name,
             amount = data.amount,
             type = type,
-            value = thing:getResultingValue()
+           -- value = thing:getResultingValue()
         }
 
         local insertedItem = Cyclopedia.Character.Items[data.itemId]
