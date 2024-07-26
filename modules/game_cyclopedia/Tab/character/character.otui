@@ -768,7 +768,7 @@ UIWidget
         background-color: #404040
         layout:
           type: verticalBox
-          spacing: -1
+          spacing: 3
       VerticalScrollBar
         id: ListScrollbar
         anchors.top: List.top
