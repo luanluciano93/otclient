@@ -572,20 +572,20 @@ function Cyclopedia.loadCharacterRecentKills(data)
     end
 end
 
-function Cyclopedia.loadCharacterRecentDeaths(timeData, reasonData)
+function Cyclopedia.loadCharacterRecentDeaths(data)
+
     UI.RecentDeaths.ListBase.List:destroyChildren()
 
-    if not table.empty(timeData) then
+    if not table.empty(data) then
         local color = "#484848"
 
-        for i = 0, #timeData do
-            local time = timeData[i]
-            local reason = reasonData[i]
+        for i = 1, #data do
+            local entry = data[i]
             local widget = g_ui.createWidget("CharacterDeath", UI.RecentDeaths.ListBase.List)
 
             widget:setId(i)
-            widget.date:setText(os.date("%Y-%m-%d, %H:%M:%S", time))
-            widget.cause:setText(reason)
+            widget.date:setText(os.date("%Y-%m-%d, %H:%M:%S", entry.timestamp))
+            widget.cause:setText(entry.cause)
             widget.color = color
             widget:setBackgroundColor(color)
             color = color == "#484848" and "#414141" or "#484848"
@@ -614,7 +614,7 @@ function Cyclopedia.loadCharacterRecentDeaths(timeData, reasonData)
                 self.date:setOn(not self:isOn())
             end
 
-            if i == 0 then
+            if i == 1 then
                 widget:setChecked(true)
             end
         end

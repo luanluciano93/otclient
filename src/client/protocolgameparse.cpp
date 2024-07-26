@@ -4014,7 +4014,21 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             g_game.processCyclopediaCharacterItemSummary(data);
             break;
         }
-        
+        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS:
+        {
+            CyclopediaCharacterRecentDeaths data;
+            msg->getU16();  
+            msg->getU16();
+            uint16_t entriesCount = msg->getU16();  
+            for (auto i = 0; i < entriesCount; ++i) {
+                RecentDeathEntry entry;
+                entry.timestamp = msg->getU32();
+                entry.cause = msg->getString();
+                data.entries.emplace_back(entry);
+            }
+            g_game.processCyclopediaCharacterRecentDeaths(data);
+            break;
+        }
         case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS:
         {
             CyclopediaCharacterRecentPvPKills data;
@@ -4022,7 +4036,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             msg->getU16();  
             msg->getU16();  
             uint16_t entriesCount = msg->getU16();  
-            for (uint16_t i = 0; i < entriesCount; ++i) {
+            for (auto i = 0; i < entriesCount; ++i) {
                 RecentPvPKillEntry entry;
                 entry.timestamp = msg->getU32();
                 entry.description = msg->getString();

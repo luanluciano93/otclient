@@ -729,3 +729,21 @@ int push_luavalue(const CyclopediaCharacterRecentPvPKills& data) {
     }
     return 1;
 }
+
+int push_luavalue(const RecentDeathEntry& entry) {
+    g_lua.createTable(0, 2);
+    g_lua.pushInteger(entry.timestamp);
+    g_lua.setField("timestamp");
+    g_lua.pushString(entry.cause);
+    g_lua.setField("cause");
+    return 1;
+}
+
+int push_luavalue(const CyclopediaCharacterRecentDeaths& data) {
+    g_lua.createTable(data.entries.size(), 0);
+    for (size_t i = 0; i < data.entries.size(); ++i) {
+        push_luavalue(data.entries[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    return 1;
+}

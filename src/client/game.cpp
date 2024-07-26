@@ -356,6 +356,11 @@ void Game::processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSu
     g_lua.callGlobalField("g_game", "onUpdateCyclopediaCharacterItemSummary", data);
 }
 
+void Game::processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data)
+{
+    g_lua.callGlobalField("g_game", "onCyclopediaCharacterRecentDeaths", data);
+}
+
 void Game::processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data)
 {
     g_lua.callGlobalField("g_game", "onCyclopediaCharacterRecentKills", data);

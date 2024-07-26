@@ -69,3 +69,6 @@ int push_luavalue(const BosstiarySlotsData& data);
 
 int push_luavalue(const RecentPvPKillEntry& entry);
 int push_luavalue(const CyclopediaCharacterRecentPvPKills& data);
+
+int push_luavalue(const RecentDeathEntry& entry);
+int push_luavalue(const CyclopediaCharacterRecentDeaths& data);
