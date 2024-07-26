@@ -83,6 +83,17 @@ struct CyclopediaCharacterGeneralStats
     uint16_t magicLevelPercent;
 };
 
+struct CyclopediaCharacterCombatStats
+{
+    uint8_t weaponElement;
+    uint16_t weaponMaxHitChance;
+    uint8_t weaponElementDamage;
+    uint8_t weaponElementType;
+    uint16_t defense;
+    uint16_t armor;
+    uint8_t haveBlessings;
+};
+
 struct CyclopediaBestiaryRace
 {
     uint8_t race;
@@ -300,7 +311,11 @@ protected:
     static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
     static void processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces);
     static void processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, const std::vector<std::tuple<uint8_t, uint16_t>>& combats);
-    static void processCyclopediaCharacterGeneralStatsBadge(uint8_t showAccountInformation, uint8_t player_online, uint8_t player_premium, std::string_view loyalt_title, const std::vector<std::tuple<uint32_t, std::string_view>>& badge);
+    static void processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation,  const std::vector<std::vector<uint16_t>>& additionalSkillsArray
+                                                 const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
+                                                 const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray);
+    static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, const std::string_view loyaltyTitle,
+                                                 const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
     static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
@@ -556,7 +571,6 @@ public:
     void requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage = 0, const uint16_t page = 0);
     void requestBosstiaryInfo();
     void requestBossSlootInfo();
-    
 
     // imbuement related
     void imbuementDurations(bool isOpen = false);
