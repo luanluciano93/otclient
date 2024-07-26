@@ -219,6 +219,18 @@ struct CyclopediaCharacterItemSummary
     std::vector<ItemSummary> inbox;
 };
 
+struct RecentPvPKillEntry
+{
+    uint32_t timestamp;
+    std::string description;
+    uint8_t status;
+};
+
+struct CyclopediaCharacterRecentPvPKills
+{
+    std::vector<RecentPvPKillEntry> entries;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game
@@ -332,6 +344,7 @@ protected:
     static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, const std::string_view loyaltyTitle,
                                                  const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
     static void processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data);
+    static void processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
     static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);

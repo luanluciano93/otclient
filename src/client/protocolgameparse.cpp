@@ -4015,6 +4015,23 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             break;
         }
         
+        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS:
+        {
+            CyclopediaCharacterRecentPvPKills data;
+
+            msg->getU16();  
+            msg->getU16();  
+            uint16_t entriesCount = msg->getU16();  
+            for (uint16_t i = 0; i < entriesCount; ++i) {
+                RecentPvPKillEntry entry;
+                entry.timestamp = msg->getU32();
+                entry.description = msg->getString();
+                entry.status = msg->getU8();
+                data.entries.emplace_back(entry);
+            }
+            g_game.processCyclopediaCharacterRecentPvpKills(data);
+            break;
+        }
     }
 
     // TODO: implement cyclopedia player info entry changed usage

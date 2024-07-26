@@ -76,10 +76,10 @@ function characterControllerCyclopedia:onInit()
         onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
         onParseCyclopediaCharacterCombatStats = Cyclopedia.loadCharacterCombatStats,
         onParseCyclopediaCharacterBadges = Cyclopedia.loadCharacterBadges,
-        onCyclopediaCharacterRecentDeaths = Cyclopedia.onCyclopediaCharacterRecentDeaths,
-        onCyclopediaCharacterRecentKills = Cyclopedia.onCyclopediaCharacterRecentKills,
+        onCyclopediaCharacterRecentDeaths = Cyclopedia.loadCharacterRecentDeaths,
+        onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
         onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
-        onCyclopediaCharacterAppearances = Cyclopedia.onCyclopediaCharacterAppearances
+        onCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances
     })
 end
 
@@ -515,16 +515,18 @@ function Cyclopedia.achievementSort(option)
     Cyclopedia.Character.Achievements.lastSort = option
 end
 
-function Cyclopedia.loadCharacterRecentKills(timeData, descriptionData, statusData)
+function Cyclopedia.loadCharacterRecentKills(data)
+    pdump(data)
     UI.RecentKills.ListBase.List:destroyChildren()
 
-    if not table.empty(timeData) then
+    if not table.empty(data) then
         local color = "#484848"
 
-        for i = 0, #timeData do
-            local time = timeData[i]
-            local description = descriptionData[i]
-            local status = statusData[i]
+        for i = 1, #data do
+            local entry = data[i]
+            local time = entry.timestamp
+            local description = entry.description
+            local status = entry.status
             local widget = g_ui.createWidget("CharacterKill", UI.RecentKills.ListBase.List)
 
             widget:setId(i)
@@ -563,7 +565,7 @@ function Cyclopedia.loadCharacterRecentKills(timeData, descriptionData, statusDa
                 self.status:setOn(not self:isOn())
             end
 
-            if i == 0 then
+            if i == 1 then
                 widget:setChecked(true)
             end
         end
