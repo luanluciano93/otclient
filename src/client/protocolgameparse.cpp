@@ -3865,7 +3865,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             std::vector<std::vector<uint16_t>> additionalSkillsArray;
             if (g_game.getFeature(Otc::GameAdditionalSkills)) {
                 // Critical, Life Leech, Mana Leech
-                for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
+                for (uint16_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
                     if (!g_game.getFeature(Otc::GameLeechAmount)) {
                         if (skill == Otc::LifeLeechAmount || skill == Otc::ManaLeechAmount) {
                             continue;
@@ -3882,7 +3882,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             if (g_game.getClientVersion() >= 1281) {
                 // forge skill stats
                 const uint8_t lastSkill = g_game.getClientVersion() >= 1332 ? Otc::LastSkill : Otc::Momentum + 1;
-                for (int_fast32_t skill = Otc::Fatal; skill < lastSkill; ++skill) {
+                for (uint16_t skill = Otc::Fatal; skill < lastSkill; ++skill) {
                     const uint16_t skillLevel = msg->getU16();
                     msg->getU16();
                     forgeSkillsArray.push_back({ skill, skillLevel });
@@ -3952,7 +3952,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 badgesVector.emplace_back(badgeId, badgeName);
             }
     
-            g_game.processCyclopediaCharacterBadges(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
+            g_game.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:

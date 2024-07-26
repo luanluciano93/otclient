@@ -1058,7 +1058,7 @@ function Cyclopedia.configureCharacterCategories()
 
                     if subWidget.open == "CharacterStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.GeneralStats)
-                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.Badges)
                     elseif subWidget.open == "CombatStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.CombatStats)
                     elseif subWidget.open == "RecentDeaths" then
