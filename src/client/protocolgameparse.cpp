@@ -3862,7 +3862,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_COMBATSTATS:
         {
-            std::vector<std::vector<int_fast32_t>> additionalSkills;
+            std::vector<std::vector<uint16_t>> additionalSkillsArray;
             if (g_game.getFeature(Otc::GameAdditionalSkills)) {
                 // Critical, Life Leech, Mana Leech
                 for (int_fast32_t skill = Otc::CriticalChance; skill <= Otc::ManaLeechAmount; ++skill) {
@@ -3874,52 +3874,85 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
 
                     const uint16_t skillLevel = msg->getU16();
                     msg->getU16();
-                    additionalSkills.push_back({ skill, skillLevel });
+                    additionalSkillsArray.push_back({ skill, skillLevel });
                 }
             }
 
-            std::vector<std::vector<int_fast32_t>> forgeSkills;
+            std::vector<std::vector<uint16_t>> forgeSkillsArray;
             if (g_game.getClientVersion() >= 1281) {
                 // forge skill stats
                 const uint8_t lastSkill = g_game.getClientVersion() >= 1332 ? Otc::LastSkill : Otc::Momentum + 1;
                 for (int_fast32_t skill = Otc::Fatal; skill < lastSkill; ++skill) {
                     const uint16_t skillLevel = msg->getU16();
                     msg->getU16();
-                    forgeSkills.push_back({ skill, skillLevel });
+                    forgeSkillsArray.push_back({ skill, skillLevel });
                 }
             }
 
-            // data.weapoElement
-            // data.weapoElement
-            // data.weaponMaxHitChance
-            // data.weaponElementDamage
-            // data.weaponElementType
-            // data.weaponElementDamag
-            // data.defense
-            // data.armor
-            // data.blessings
+            msg->getU16(); // Cleave Percent
+            msg->getU16(); // Magic Shield Capacity Flat
+            msg->getU16(); // Magic Shield Capacity Percent
 
-            // mitigation
-            
-            //g_game.processCyclopediaCharacterGeneralStats(stats, additionalSkills, forgeSkills);
+            std::vector<uint16_t> perfectShotDamageRangesArray;
+            for (auto range = 1; range <= 5; range++) {
+                const uint16_t perfectShotDamageRange = msg->getU16();
+                perfectShotDamageRangesArray.emplace_back(perfectShotDamageRange);
+            }
+
+            msg->getU16(); // Damage reflection
+
+            CyclopediaCharacterCombatStats data;
+            data.haveBlessings = msg->getU8();
+            msg->getU8(); // total blessings
+
+			data.weaponMaxHitChance = msg->getU16();
+			data.weaponElement = msg->getU8();
+			data.weaponElementDamage = msg->getU8();
+			data.weaponElementType = msg->getU8();
+
+            data.armor = msg->getU16();
+            data.defense = msg->getU16();
+
+            const double mitigation = msg->getDouble();
+
+            std::vector<std::tuple<uint8_t, uint16_t>> combatsArray;
+
+            const uint8_t combatCount = msg->getU8();
+            for (auto i = 0; i < combatCount; ++i) {
+                const uint8_t element = msg->getU8();
+                const uint16_t clientModifier = msg->getU16();
+                combatsArray.emplace_back(element, clientModifier);
+            }
+
+            std::vector<std::tuple<uint16_t, uint16_t>> concoctionsArray;
+
+            const uint8_t concoctionsCount = msg->getU8();
+            for (auto i = 0; i < concoctionsCount; ++i) {
+                const uint16_t concoctionFirst = msg->getU8();
+                const uint16_t concoctionSecond = msg->getU16();
+                concoctionsArray.emplace_back(concoctionFirst, concoctionSecond);
+            }
+
+            g_game.processCyclopediaCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRangesArray, combatsArray, concoctionsArray);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
         {
             const uint8_t showAccountInformation = msg->getU8();
-            const uint8_t player_online = msg->getU8();
-            const uint8_t player_premium = msg->getU8();
-            const std::string_view loyalt_title = msg->getString();
+            const uint8_t playerOnline = msg->getU8();
+            const uint8_t playerPremium = msg->getU8();
+            const auto& loyaltyTitle = msg->getString();
 
-            std::vector<std::tuple<uint32_t, std::string_view>> badge;
+            std::vector<std::tuple<uint32_t, std::string_view>> badgesVector;
+
             const uint8_t badgesSize = msg->getU8();
             for (auto i = 0; i < badgesSize; ++i) {
-                const uint32_t badge_id = msg->getU32();
-                const std::string_view badgeName = msg->getString();
-                badge.emplace_back(badge_id, badgeName);
+                const uint32_t badgeId = msg->getU32();
+                const auto& badgeName = msg->getString();
+                badgesVector.emplace_back(badgeId, badgeName);
             }
     
-            g_game.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, player_online,player_premium, loyalt_title, badge);
+            g_game.processCyclopediaCharacterBadges(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:
@@ -4562,8 +4595,8 @@ void ProtocolGame::parseBosstiarySlots(const InputMessagePtr& msg) {
 
     data.bossesUnlocked = msg->getU8();
     if (data.bossesUnlocked) {
-        uint16_t bossesUnlockedSize = msg->getU16();
-        for (uint16_t i = 0; i < bossesUnlockedSize; ++i) {
+        const uint16_t bossesUnlockedSize = msg->getU16();
+        for (auto i = 0; i < bossesUnlockedSize; ++i) {
             BossUnlocked boss;
             boss.bossId = msg->getU32();
             boss.bossRace = msg->getU8();
