@@ -74,8 +74,8 @@ characterControllerCyclopedia = Controller:new()
 function characterControllerCyclopedia:onInit()
     characterControllerCyclopedia:registerEvents(g_game, {
         onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
-        processCyclopediaCharacterGeneralStatsBadge = Cyclopedia.processCyclopediaCharacterGeneralStatsBadge,
-        onCyclopediaCharacterCombatStats = Cyclopedia.onCyclopediaCharacterCombatStats,
+        onParseCyclopediaCharacterCombatStats = Cyclopedia.loadCharacterCombatStats,
+        onParseCyclopediaCharacterBadges = Cyclopedia.loadCharacterBadges,
         onCyclopediaCharacterRecentDeaths = Cyclopedia.onCyclopediaCharacterRecentDeaths,
         onCyclopediaCharacterRecentKills = Cyclopedia.onCyclopediaCharacterRecentKills,
         onCyclopediaCharacterItems = Cyclopedia.onCyclopediaCharacterItems,
@@ -614,9 +614,9 @@ function Cyclopedia.loadCharacterRecentDeaths(timeData, reasonData)
     end
 end
 
-function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills, forgeSkills, perfect, elements, potions)
-    UI.CombatStats.attack.icon:setImageSource(Icons[data.weapoElement].icon)
-    UI.CombatStats.attack.icon:setImageClip(Icons[data.weapoElement].clip)
+function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRanges, combatsArray, concoctionsArray)
+    UI.CombatStats.attack.icon:setImageSource(Icons[data.weaponElement].icon)
+    UI.CombatStats.attack.icon:setImageClip(Icons[data.weaponElement].clip)
     UI.CombatStats.attack.value:setText(data.weaponMaxHitChance)
 
     if data.weaponElementDamage > 0 then
@@ -644,20 +644,20 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         end
     end
 
-    if table.empty(elements) then
+    if table.empty(combatsArray) then
         UI.CombatStats.reductionNone:setVisible(true)
     else
         UI.CombatStats.reductionNone:setVisible(false)
 
-        for i = 0, #elements do
+        for i = 0, #combatsArray do
             local widget = g_ui.createWidget("CharacterElementReduction", UI.CombatStats)
 
             widget:setId("reduction_" .. i)
 
-            local element = Icons[elements[i].type]
+            local element = Icons[combatsArray[i].type]
             widget.icon:setImageSource(element.icon)
             widget.icon:setImageClip(element.clip)
-            widget.value:setText(string.format("+%d%%", elements[i].value))
+            widget.value:setText(string.format("+%d%%", combatsArray[i].value))
             widget.name:setText(element.name)
 
             if i == 0 then
@@ -674,7 +674,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         end
     end
 
-    local skill = additionalSkills[Skill.CriticalChance].level
+    local skill = additionalSkillsArray[Skill.CriticalChance].level
     UI.CombatStats.criticalChance.value:setText(skill .. "%")
     if skill > 0 then
         UI.CombatStats.criticalChance.value:setColor("#44AD25")
@@ -682,7 +682,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         UI.CombatStats.criticalChance.value:setColor("#C0C0C0")
     end
 
-    skill = additionalSkills[Skill.CriticalDamage].level
+    skill = additionalSkillsArray[Skill.CriticalDamage].level
     UI.CombatStats.criticalDamage.value:setText(skill .. "%")
     if skill > 0 then
         UI.CombatStats.criticalDamage.value:setColor("#44AD25")
@@ -690,7 +690,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         UI.CombatStats.criticalDamage.value:setColor("#C0C0C0")
     end
 
-    skill = additionalSkills[Skill.LifeLeechAmount].level
+    skill = additionalSkillsArray[Skill.LifeLeechAmount].level
     if skill > 0 then
         UI.CombatStats.lifeLeech.value:setColor("#44AD25")
         UI.CombatStats.lifeLeech.value:setText(string.format("%.2f%%", skill / 100))
@@ -699,7 +699,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         UI.CombatStats.lifeLeech.value:setText(string.format("%d%%", skill))
     end
 
-    skill = additionalSkills[Skill.ManaLeechAmount].level
+    skill = additionalSkillsArray[Skill.ManaLeechAmount].level
     if skill > 0 then
         UI.CombatStats.manaLeech.value:setColor("#44AD25")
         UI.CombatStats.manaLeech.value:setText(string.format("%.2f%%", skill / 100))
@@ -708,7 +708,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
         UI.CombatStats.manaLeech.value:setText(string.format("%d%%", skill))
     end
 
-    for i = 0, #forgeSkills do
+    for i = 0, #forgeSkillsArray do
         local id = "special_" .. i
         if UI.CombatStats[id] then
             UI.CombatStats[id]:destroy()
@@ -717,8 +717,8 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkills,
 
     local firstSpecial = true
 
-    for i = 0, #forgeSkills do
-        local percent = forgeSkills[i].value
+    for i = 0, #forgeSkillsArray do
+        local percent = forgeSkillsArray[i].value
         if percent > 0 then
             local widget = g_ui.createWidget("CharacterSkillBase", UI.CombatStats)
 
@@ -1058,7 +1058,7 @@ function Cyclopedia.configureCharacterCategories()
 
                     if subWidget.open == "CharacterStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.GeneralStats)
-                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.Badges)
+                        g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.)
                     elseif subWidget.open == "CombatStats" then
                         g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.CombatStats)
                     elseif subWidget.open == "RecentDeaths" then
@@ -1177,14 +1177,15 @@ function Cyclopedia.characterButton(widget)
     end
 end
 
-function Cyclopedia.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, player_online, player_premium,loyalt_title, badge)
+function Cyclopedia.loadCharacterBadges(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector)
     UI.CharacterStats.ListBadge:destroyChildren()
-    for i, entry in ipairs(badge) do
+    for _, badge in ipairs(badgesVector) do
         local cell = g_ui.createWidget("CharacterBadge", UI.CharacterStats.ListBadge)
-        cell:setImageClip(getImageClip(entry[1]))
-        cell:setTooltip(entry[2])
+        if cell then
+            cell:setImageClip(getImageClip(badge[1]))
+            cell:setTooltip(badge[2])
+        end
     end
-
 end
 
 function getImageClip(elementIndex)
