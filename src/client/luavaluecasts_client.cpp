@@ -549,6 +549,25 @@ bool luavalue_cast(int index, CyclopediaCharacterGeneralStats& stats)
     return true;
 }
 
+int push_luavalue(const CyclopediaCharacterCombatStats& data) {
+    g_lua.createTable(0, 7);
+    g_lua.pushInteger(data.weaponElement);
+    g_lua.setField("weaponElement");
+    g_lua.pushInteger(data.weaponMaxHitChance);
+    g_lua.setField("weaponMaxHitChance");
+    g_lua.pushInteger(data.weaponElementDamage);
+    g_lua.setField("weaponElementDamage");
+    g_lua.pushInteger(data.weaponElementType);
+    g_lua.setField("weaponElementType");
+    g_lua.pushInteger(data.defense);
+    g_lua.setField("defense");
+    g_lua.pushInteger(data.armor);
+    g_lua.setField("armor");
+    g_lua.pushInteger(data.haveBlessings);
+    g_lua.setField("haveBlessings");
+    return 1;
+}
+
 int push_luavalue(const BosstiaryData& boss) {
     g_lua.createTable(0, 4);
     g_lua.pushInteger(boss.raceId);
@@ -581,7 +600,7 @@ int push_luavalue(const BosstiarySlot& slot) {
     return 1;
 }
 
-// Función para convertir BossUnlocked a valor Lua
+// FunciÃ³n para convertir BossUnlocked a valor Lua
 int push_luavalue(const BossUnlocked& boss) {
     g_lua.createTable(0, 2);
     g_lua.pushInteger(boss.bossId);
@@ -591,7 +610,7 @@ int push_luavalue(const BossUnlocked& boss) {
     return 1;
 }
 
-// Función para convertir BosstiarySlotsData a valor Lua
+// FunciÃ³n para convertir BosstiarySlotsData a valor Lua
 int push_luavalue(const BosstiarySlotsData& data) {
     g_lua.createTable(0, 13);
     g_lua.pushInteger(data.playerPoints);
