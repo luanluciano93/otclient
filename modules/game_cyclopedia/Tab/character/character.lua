@@ -516,7 +516,6 @@ function Cyclopedia.achievementSort(option)
 end
 
 function Cyclopedia.loadCharacterRecentKills(data)
-    pdump(data)
     UI.RecentKills.ListBase.List:destroyChildren()
 
     if not table.empty(data) then
@@ -622,16 +621,16 @@ function Cyclopedia.loadCharacterRecentDeaths(data)
 end
 
 function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRanges, combatsArray, concoctionsArray)
-    UI.CombatStats.attack.icon:setImageSource(Icons[data.weaponElement].icon)
-    UI.CombatStats.attack.icon:setImageClip(Icons[data.weaponElement].clip)
+    UI.CombatStats.attack.icon:setImageSource(ICONS[data.weaponElement].icon)
+    UI.CombatStats.attack.icon:setImageClip(ICONS[data.weaponElement].clip)
     UI.CombatStats.attack.value:setText(data.weaponMaxHitChance)
 
     if data.weaponElementDamage > 0 then
         UI.CombatStats.converted.none:setVisible(false)
         UI.CombatStats.converted.value:setVisible(true)
         UI.CombatStats.converted.icon:setVisible(true)
-        UI.CombatStats.converted.icon:setImageSource(Icons[data.weaponElementType].icon)
-        UI.CombatStats.converted.icon:setImageClip(Icons[data.weaponElementType].clip)
+        UI.CombatStats.converted.icon:setImageSource(ICONS[data.weaponElementType].icon)
+        UI.CombatStats.converted.icon:setImageClip(ICONS[data.weaponElementType].clip)
         UI.CombatStats.converted.value:setText(data.weaponElementDamage .. "%")
     else
         UI.CombatStats.converted.none:setVisible(true)
@@ -642,7 +641,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
     UI.CombatStats.defence.value:setText(data.defense)
     UI.CombatStats.armor.value:setText(data.armor)
     UI.CombatStats.mitigation.value:setText(string.format("%.2f%%", mitigation))
-    UI.CombatStats.blessings.value:setText(string.format("%d/8", data.blessings))
+    UI.CombatStats.blessings.value:setText(string.format("%d/8", data.haveBlessings))
 
     for i = 0, 6 do
         local id = "reduction_" .. i
@@ -661,7 +660,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
 
             widget:setId("reduction_" .. i)
 
-            local element = Icons[combatsArray[i].type]
+            local element = ICONS[combatsArray[i].type]
             widget.icon:setImageSource(element.icon)
             widget.icon:setImageClip(element.clip)
             widget.value:setText(string.format("+%d%%", combatsArray[i].value))
@@ -681,7 +680,16 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         end
     end
 
-    local skill = additionalSkillsArray[Skill.CriticalChance].level
+    local skillsIndexes = {
+        [Skill.CriticalChance] = 1,
+        [Skill.CriticalDamage] = 2,
+        [Skill.LifeLeechAmount] = 3,
+        [Skill.ManaLeechAmount] = 4
+    }
+
+    -- Critical Chance
+    local skillIndex = skillsIndexes[Skill.CriticalChance]
+    local skill = additionalSkillsArray[skillIndex][2]
     UI.CombatStats.criticalChance.value:setText(skill .. "%")
     if skill > 0 then
         UI.CombatStats.criticalChance.value:setColor("#44AD25")
@@ -689,7 +697,9 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         UI.CombatStats.criticalChance.value:setColor("#C0C0C0")
     end
 
-    skill = additionalSkillsArray[Skill.CriticalDamage].level
+    -- Critical Damage
+    skillIndex = skillsIndexes[Skill.CriticalDamage]
+    skill = additionalSkillsArray[skillIndex][2]
     UI.CombatStats.criticalDamage.value:setText(skill .. "%")
     if skill > 0 then
         UI.CombatStats.criticalDamage.value:setColor("#44AD25")
@@ -697,7 +707,9 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         UI.CombatStats.criticalDamage.value:setColor("#C0C0C0")
     end
 
-    skill = additionalSkillsArray[Skill.LifeLeechAmount].level
+    -- Life Leech Amount
+    skillIndex = skillsIndexes[Skill.LifeLeechAmount]
+    skill = additionalSkillsArray[skillIndex][2]
     if skill > 0 then
         UI.CombatStats.lifeLeech.value:setColor("#44AD25")
         UI.CombatStats.lifeLeech.value:setText(string.format("%.2f%%", skill / 100))
@@ -706,7 +718,9 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         UI.CombatStats.lifeLeech.value:setText(string.format("%d%%", skill))
     end
 
-    skill = additionalSkillsArray[Skill.ManaLeechAmount].level
+    -- Mana Leech Amount
+    skillIndex = skillsIndexes[Skill.ManaLeechAmount]
+    skill = additionalSkillsArray[skillIndex][2]
     if skill > 0 then
         UI.CombatStats.manaLeech.value:setColor("#44AD25")
         UI.CombatStats.manaLeech.value:setText(string.format("%.2f%%", skill / 100))
@@ -715,8 +729,10 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         UI.CombatStats.manaLeech.value:setText(string.format("%d%%", skill))
     end
 
-    for i = 0, #forgeSkillsArray do
-        local id = "special_" .. i
+
+    for i = 1, #forgeSkillsArray do
+        local skillId = forgeSkillsArray[i][1]
+        local id = "special_" .. skillId
         if UI.CombatStats[id] then
             UI.CombatStats[id]:destroy()
         end
@@ -724,20 +740,22 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
 
     local firstSpecial = true
 
-    for i = 0, #forgeSkillsArray do
-        local percent = forgeSkillsArray[i].value
+    for i = 1, #forgeSkillsArray do
+        local skillId = forgeSkillsArray[i][1]
+        local percent = forgeSkillsArray[i][2]
+        
         if percent > 0 then
             local widget = g_ui.createWidget("CharacterSkillBase", UI.CombatStats)
-
-            widget:setId("special_" .. i)
-
+    
+            widget:setId("special_" .. skillId)
+    
             local specialName = {
-                [0] = "Onslaught",
-                "Ruse",
-                "Momentum",
-                "Transcendence"
+                [13] = "Onslaught",
+                [14] = "Ruse",
+                [15] = "Momentum",
+                [16] = "Transcendence"
             }
-
+    
             if firstSpecial then
                 widget:addAnchor(AnchorTop, "manaLeech", AnchorBottom)
                 widget:addAnchor(AnchorLeft, "criticalHit", AnchorLeft)
@@ -749,24 +767,24 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
                 widget:addAnchor(AnchorRight, "parent", AnchorRight)
                 widget:setMarginTop(0)
             end
-
+    
             widget:setMarginLeft(0)
-
+    
             local name = g_ui.createWidget("SkillNameLabel", widget)
-            name:setText(specialName[i])
+            name:setText(specialName[skillId])
             name:setColor("#C0C0C0")
-
+    
             local value = g_ui.createWidget("SkillValueLabel", widget)
             value:setText(string.format("%.2f%%", percent / 100))
             value:setColor("#C0C0C0")
             value:setMarginRight(2)
-
+    
             if percent > 0 then
                 value:setColor("#44AD25")
             else
                 value:setColor("#C0C0C0")
             end
-
+    
             firstSpecial = firstSpecial and false
         end
     end

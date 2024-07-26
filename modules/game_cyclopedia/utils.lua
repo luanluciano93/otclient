@@ -1080,6 +1080,44 @@ RACE_Bosstiary = {
 	[2299] = {name = "the monster", type = 1600},
 	[2346] = {name = "ahau", type = 1591},
 }
+
+ICONS ={
+	[0] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[1] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[2] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[3] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[4] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[5] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	},
+	[6] = {
+		icon= "/images/icons/icons-skills",
+		clip ="0 0 9 9",
+		type =""
+	}
+}
 -- LuaFormatter on
 
 function safeOutfit(raceData)

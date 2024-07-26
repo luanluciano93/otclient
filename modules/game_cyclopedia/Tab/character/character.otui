@@ -224,6 +224,7 @@ UIWidget
       image-source: /images/ui/button-storexp
       anchors.horizontalCenter: level.horizontalCenter
       anchors.top: expGainRate.bottom
+      @onClick: modules.game_shop.toggle()
       $pressed:
         image-source: /images/ui/button-storexp-pressed
     HorizontalSeparator
@@ -626,13 +627,18 @@ UIWidget
         anchors.right: parent.right
         margin-top: 1
         margin-right: 3
+        image-clip: 0 0 12 12
         image-source: /images/inventory/button_blessings_grey
+        @onClick: modules.game_blessing.toggle()
         $pressed:
           image-source: /images/inventory/button_blessings_grey
+          image-clip: 12 0 12 12
         $on:
           image-source: /images/inventory/button_blessings_grey
+          image-clip: 12 0 12 12
         $on pressed:
           image-source: /images/inventory/button_blessings_grey
+          image-clip: 12 0 12 12
     CharacterSkillBase
       id: reduction
       anchors.top: blessings.bottom
