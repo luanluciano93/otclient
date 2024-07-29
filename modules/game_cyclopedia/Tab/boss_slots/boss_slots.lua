@@ -1,4 +1,5 @@
 ﻿local UI = nil
+
 function showBossSlot()
     UI = g_ui.loadUI("boss_slots", contentContainer)
     UI:show()
@@ -9,9 +10,8 @@ boss_slotControllerCyclopedia = Controller:new()
 
 function boss_slotControllerCyclopedia:onInit()
     boss_slotControllerCyclopedia:registerEvents(g_game, {
-        onUpdateBosstiarySlots = Cyclopedia.BossSlotsLoad
+        onParseBosstiarySlots = Cyclopedia.loadBossSlots
     })
-
 end
 
 function boss_slotControllerCyclopedia:onGameStart()
@@ -31,20 +31,24 @@ local CATEGORY = {
     NEMESIS = 2,
     ARCHFOE = 1
 }
+
 local SLOT_STATE = {
     EMPTY = 1,
     LOCKED = 0,
     ACTIVE = 2
 }
+
 local ICONS = {
     [CATEGORY.BANE] = "/game_cyclopedia/images/boss/icon_bane",
     [CATEGORY.ARCHFOE] = "/game_cyclopedia/images/boss/icon_archfoe",
     [CATEGORY.NEMESIS] = "/game_cyclopedia/images/boss/icon_nemesis"
 }
+
 local SLOTS = {
     [1] = "LeftBase",
     [2] = "RightBase"
 }
+
 local CONFIG = {
     [0] = {
         EXPERTISE = 100,
@@ -65,7 +69,7 @@ local CONFIG = {
 
 Cyclopedia.BossSlots = {}
 
--- Cyclopedia.BossSlotsLoad(data, slots, unlockedBosses)
+-- Cyclopedia.loadBossSlots(data, slots, unlockedBosses)
 
 --[[ { 
     ["playerPoints"] = 0,
@@ -93,10 +97,12 @@ Cyclopedia.BossSlots = {}
     ["bossesUnlocked"] = false
 }
  ]]
-function Cyclopedia.BossSlotsLoad(data)
+
+function Cyclopedia.loadBossSlots(data)
     if not UI then
         return
     end
+
     Cyclopedia.BossSlots.UnlockBosses = {}
     local raceData = RACE_Bosstiary[data.boostedBossId]
 
@@ -109,13 +115,11 @@ function Cyclopedia.BossSlotsLoad(data)
         data.nextBonus))
 
     local fullText = ""
-
     if data.playerPoints >= CONFIG[data.bossIdSlotOne].MASTERY then
         fullText = "(fully unlocked)"
     end
 
     local progress = UI.BoostedProgress
-
     progress.ProgressBorder1:setTooltip(string.format(" %d / %d %s", data.playerPoints,
         CONFIG[data.bossIdSlotOne].PROWESS, fullText))
     progress.ProgressBorder2:setTooltip(string.format(" %d / %d %s", data.playerPoints,
@@ -143,13 +147,11 @@ function Cyclopedia.BossSlotsLoad(data)
 
     for i = 0, #data.bossesUnlockedData do
         local unlockData = data.bossesUnlockedData[i]
-
         if not unlockData then
             return
         end
 
         local raceData = RACE_Bosstiary[unlockData.bossId]
-
         if raceData then
             local data_t = {
                 visible = true,
@@ -165,6 +167,7 @@ function Cyclopedia.BossSlotsLoad(data)
     table.sort(Cyclopedia.BossSlots.UnlockBosses, function(a, b)
         return a.name < b.name
     end)
+
     UI.MainLabel:setText(string.format("Equipment loot bonus: %d%%\nKill bonus: %dx", data.boostedBonusValue,
         data.boostedKillValue))
     Cyclopedia.setBosstiarySlotsProgress(data.bossPoints, data.nextBossPoints)
@@ -198,7 +201,6 @@ end
 
 function Cyclopedia.BossSlotChangeSlot(slot, data, unlockedBosses)
     local widget = UI[SLOTS[slot]]
-
     if data.state == SLOT_STATE.LOCKED then
         widget.LockLabel:setVisible(true)
         widget.SelectBoss:setVisible(false)
@@ -222,7 +224,6 @@ function Cyclopedia.BossSlotChangeSlot(slot, data, unlockedBosses)
 
         for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
             local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
-
             internalWidget:setId(internalData.bossId)
             internalWidget.Sprite:setOutfit(RACE_Bosstiary[internalData.bossId].outfit)
             internalWidget:setText(format(RACE_Bosstiary[internalData.bossId].name))
@@ -265,13 +266,11 @@ function Cyclopedia.BossSlotChangeSlot(slot, data, unlockedBosses)
         widget.ActivedBoss.Progress.ProgressBorder1:setTooltip()
 
         local fullText = ""
-
         if data.kills >= CONFIG[data.category].MASTERY then
             fullText = "(fully unlocked)"
         end
 
         local progress = widget.ActivedBoss.Progress
-
         progress.ProgressBorder1:setTooltip(string.format(" %d / %d %s", data.kills, CONFIG[data.category].PROWESS,
             fullText))
         progress.ProgressBorder2:setTooltip(string.format(" %d / %d %s", data.kills, CONFIG[data.category].EXPERTISE,
@@ -372,15 +371,12 @@ function Cyclopedia.bossSlotSelectBoss(widget)
     end
 
     widget:setChecked(true)
-
     Cyclopedia.BossSlots.lastSelected = widget
-
     button:setEnabled(true)
 end
 
 function Cyclopedia.readjustSelectBoss()
     local slot = 1
-
     if not UI.LeftBase.SelectBoss:isVisible() then
         slot = 2
     end
@@ -400,7 +396,6 @@ function Cyclopedia.readjustSelectBoss()
     end
 
     local widget = UI[SLOTS[slot]]
-
     widget.SelectBoss.ListBase.List:destroyChildren()
 
     for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
