@@ -3980,8 +3980,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             for (auto i = 0; i < inventoryItemsCount; ++i) {
                 ItemSummary item;
                 const uint16_t itemId = msg->getU16();
-                const auto& item = Item::create(itemId);
-                const uint16_t classification = item->getClassification();
+                const auto& itemCreated = Item::create(itemId);
+                const uint16_t classification = itemCreated->getClassification();
 
                 uint8_t itemClass = 0;
                 if (classification > 0) {
@@ -3998,8 +3998,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             for (auto i = 0; i < storeItemsCount; ++i) {
                 ItemSummary item;
                 const uint16_t itemId = msg->getU16();
-                const auto& item = Item::create(itemId);
-                const uint16_t classification = item->getClassification();
+                const auto& itemCreated = Item::create(itemId);
+                const uint16_t classification = itemCreated->getClassification();
 
                 uint8_t itemClass = 0;
                 if (classification > 0) {
@@ -4016,8 +4016,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             for (auto i = 0; i < stashItemsCount; ++i) {
                 ItemSummary item;
                 const uint16_t itemId = msg->getU16();
-                const auto& item = Item::create(itemId);
-                const uint16_t classification = item->getClassification();
+                const auto& itemCreated = Item::create(itemId);
+                const uint16_t classification = itemCreated->getClassification();
 
                 uint8_t itemClass = 0;
                 if (classification > 0) {
@@ -4034,8 +4034,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             for (auto i = 0; i < depotItemsCount; ++i) {
                 ItemSummary item;
                 const uint16_t itemId = msg->getU16();
-                const auto& item = Item::create(itemId);
-                const uint16_t classification = item->getClassification();
+                const auto& itemCreated = Item::create(itemId);
+                const uint16_t classification = itemCreated->getClassification();
 
                 uint8_t itemClass = 0;
                 if (classification > 0) {
@@ -4052,8 +4052,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             for (auto i = 0; i < inboxItemsCount; ++i) {
                 ItemSummary item;
                 const uint16_t itemId = msg->getU16();
-                const auto& item = Item::create(itemId);
-                const uint16_t classification = item->getClassification();
+                const auto& itemCreated = Item::create(itemId);
+                const uint16_t classification = itemCreated->getClassification();
 
                 uint8_t itemClass = 0;
                 if (classification > 0) {
