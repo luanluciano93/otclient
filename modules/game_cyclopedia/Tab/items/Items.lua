@@ -1,4 +1,3 @@
--- wtf is this
 -- LuaFormatter off
 ArrayCiclopedia = {
     Items = {
@@ -264,8 +263,12 @@ function internalCreateItem(data)
 
     -- NEED item:getResultingValue()
     -- item.Value = data:getResultingValue()
-    item.Value = 1
+    local price, rarity = ItemsDatabase.getSellValueAndColor(data:getId())
+    item.Value = price
     item.Vocation = marketData.restrictVocation
+    if price > 0 then
+        item.Rarity:setImageSource("/images/ui/rarity_".. rarity)
+    end
 
     --[[    
 
@@ -278,6 +281,7 @@ function internalCreateItem(data)
         item.Rarity:setImageClip(torect(g_game.getRectFrame(frame)))
     end
  ]]
+    ItemsDatabase.setRarityItem(item.Sprite, item)
     function item.onClick(widget)
         itemPanel.InfoBase.SellBase.List:destroyChildren()
         itemPanel.InfoBase.BuyBase.List:destroyChildren()
@@ -315,10 +319,17 @@ function internalCreateItem(data)
             itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("")
             itemPanel.SelectedItem.Rarity:setImageSource("")
         end ]]
+        --ItemsDatabase.setRarityItem(itemPanel.SelectedItem.Rarity, itemPanel.SelectedItem.Sprite)
+        if price > 0 then
+            itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("/images/ui/rarity_".. rarity)
+            itemPanel.SelectedItem.Rarity:setImageSource("/images/ui/rarity_".. rarity)
+        else
+            itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("")
+            itemPanel.SelectedItem.Rarity:setImageSource("")
+        end
 
-        itemPanel.InfoBase.ResultGoldBase.Rarity:setImageSource("")
-        itemPanel.SelectedItem.Rarity:setImageSource("")
         widget:setBackgroundColor("#585858")
+
 
         --[[    
         --NEEED getNpcSaleData
@@ -482,7 +493,7 @@ function loadItemsCategories()
 
         ItemList[category] = itemList
     end
-    print(#ItemList)
+
 end
 
 function FillItemList()

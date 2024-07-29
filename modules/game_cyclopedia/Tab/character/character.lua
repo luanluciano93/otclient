@@ -1,11 +1,3 @@
----------//-- LuaFormatter on
---[[ SEND 
-https://github.com/otland/forgottenserver/pull/4540/files
-https://github.com/otland/forgottenserver/pull/4461
-https://github.com/otland/forgottenserver/pull/4460
-https://github.com/otland/forgottenserver/pull/4456/files
-GET ]] 
-
 local characterPanel = nil
 local UI = nil
 local function close(parent)
