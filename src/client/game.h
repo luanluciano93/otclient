@@ -207,6 +207,7 @@ struct BosstiarySlotsData
 struct ItemSummary
 {
     uint16_t itemId;
+    uint8_t classification;
     uint32_t amount;
 };
 
