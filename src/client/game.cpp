@@ -371,7 +371,7 @@ void Game::processBosstiaryInfo(const std::vector<BosstiaryData>& boss)
     g_lua.callGlobalField("g_game", "onParseSendBosstiary", boss);
 }
 
-void Game::processBosstiarySlots(const std::vector<BosstiarySlotsData>& data)
+void Game::processBosstiarySlots(const BosstiarySlotsData& data)
 {
     g_lua.callGlobalField("g_game", "onParseBosstiarySlots", data);
 }

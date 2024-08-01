@@ -363,7 +363,7 @@ protected:
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
     static void processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData);
     static void processBosstiaryInfo(const std::vector<BosstiaryData>& boss);
-    static void processBosstiarySlots(const std::vector<BosstiarySlotsData>& data);
+    static void processBosstiarySlots(const BosstiarySlotsData& data);
 
     friend class ProtocolGame;
     friend class Map;
