@@ -471,7 +471,7 @@ end
 function Cyclopedia.achievementSort(option)
     local tempTable = {}
 
-    for id, data in pairs(ACHIEVEMENT) do
+    for id, data in pairs(ACHIEVEMENTS) do
         local tempData = {
             id = id,
             name = data.name,
@@ -824,7 +824,7 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         expGainRate, data.baseExpGain)
 
     expGainRateTooltip = hasStoreExpBonus and expGainRateTooltip ..
-                             string.format("\n- XP boost: %d%% (%s h remaining).", data.storeXpBoost, storeExpBonusTime) or
+                             string.format("\n- XP boost: %d%% (%s h remaining).", data.XpBoostPercent, storeExpBonusTime) or
                              expGainRateTooltip
     expGainRateTooltip = hasStaminaBonus and expGainRateTooltip ..
                              string.format("\n- Stamina bonus: x1.5 (%s h remaining).", staminaBonusTime) or
