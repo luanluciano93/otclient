@@ -71,7 +71,7 @@ function characterControllerCyclopedia:onInit()
         onCyclopediaCharacterRecentDeaths = Cyclopedia.loadCharacterRecentDeaths,
         onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
         onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
-        onCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances
+        onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances
     })
 end
 
@@ -215,14 +215,13 @@ function Cyclopedia.reloadCharacterAppearances()
     end
 end
 
-function Cyclopedia.loadCharacterAppearances(color, outfits, mounts)
+function Cyclopedia.loadCharacterAppearances(color, outfits, mounts, familiars)
     local data = {}
 
     local function insert(value, type)
-        local look = value.lookType
-
+        local lookData = value.lookType
         if type == "mounts" then
-            look = value.mountId
+            lookData = value.mountId
         end
 
         local data_t = {
@@ -231,11 +230,11 @@ function Cyclopedia.loadCharacterAppearances(color, outfits, mounts)
             type = type,
             outfit = {
                 auxType = 0,
-                type = look,
-                head = color.head,
-                body = color.body,
-                legs = color.legs,
-                feet = color.feet,
+                type = lookData,
+                head = color.lookHead,
+                body = color.lookBody,
+                legs = color.lookLegs,
+                feet = color.lookFeet,
                 addon = outfits.addons and outfits.addons or 0
             }
         }
@@ -254,6 +253,7 @@ function Cyclopedia.loadCharacterAppearances(color, outfits, mounts)
 
     process(outfits, "outfits")
     process(mounts, "mounts")
+    process(familiars, "familiars")
 
     Cyclopedia.Character.Appearances = data
 

@@ -3941,35 +3941,43 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             g_game.processCyclopediaCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRangesArray, combatsArray, concoctionsArray);
             break;
         }
-        case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
+        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS:
         {
-            const uint8_t showAccountInformation = msg->getU8();
-            const uint8_t playerOnline = msg->getU8();
-            const uint8_t playerPremium = msg->getU8();
-            const auto& loyaltyTitle = msg->getString();
+            CyclopediaCharacterRecentDeaths data;
+            msg->getU16();  
+            msg->getU16();
 
-            std::vector<std::tuple<uint32_t, std::string_view>> badgesVector;
-
-            const uint8_t badgesSize = msg->getU8();
-            for (auto i = 0; i < badgesSize; ++i) {
-                const uint32_t badgeId = msg->getU32();
-                const auto& badgeName = msg->getString();
-                badgesVector.emplace_back(badgeId, badgeName);
+            const uint16_t entriesCount = msg->getU16();  
+            for (auto i = 0; i < entriesCount; ++i) {
+                RecentDeathEntry entry;
+                entry.timestamp = msg->getU32();
+                entry.cause = msg->getString();
+                data.entries.emplace_back(entry);
             }
-    
-            g_game.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
+
+            g_game.processCyclopediaCharacterRecentDeaths(data);
             break;
         }
-        case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:
+        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS:
         {
-            msg->getU8(); // current title
-            const uint8_t titlesSize = msg->getU8();
-            for (auto i = 0; i < titlesSize; ++i) {
-                msg->getString(); // title name
-                msg->getString(); // title description
-                msg->getU8(); // bool title permanent
-                msg->getU8(); // bool title unlocked
+            CyclopediaCharacterRecentPvPKills data;
+            msg->getU16();  
+            msg->getU16();
+
+            const uint16_t entriesCount = msg->getU16();  
+            for (auto i = 0; i < entriesCount; ++i) {
+                RecentPvPKillEntry entry;
+                entry.timestamp = msg->getU32();
+                entry.description = msg->getString();
+                entry.status = msg->getU8();
+                data.entries.emplace_back(entry);
             }
+
+            g_game.processCyclopediaCharacterRecentPvpKills(data);
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_ACHIEVEMENTS:
+        {
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_ITEMSUMMARY:
@@ -4069,39 +4077,100 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             g_game.processCyclopediaCharacterItemSummary(data);
             break;
         }
-        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS:
+        case Otc::CYCLOPEDIA_CHARACTERINFO_OUTFITSMOUNTS:
         {
-            CyclopediaCharacterRecentDeaths data;
-            msg->getU16();  
-            msg->getU16();
+            std::vector<CharacterInfoOutfits> outfits;
 
-            const uint16_t entriesCount = msg->getU16();  
-            for (auto i = 0; i < entriesCount; ++i) {
-                RecentDeathEntry entry;
-                entry.timestamp = msg->getU32();
-                entry.cause = msg->getString();
-                data.entries.emplace_back(entry);
+            const uint16_t outfitsSize = msg->getU16();
+            for (auto i = 0; i < outfitsSize; ++i) {
+                CharacterInfoOutfits outfit;
+                outfit.lookType = msg->getU16();
+                outfit.name = msg->getString();
+                outfit.addons = msg->getU8();
+                outfit.type = msg->getU8(); // store / quest / none
+                outfit.isCurrent = msg->getU32(); // 1000 = true / 0 = false
+                outfits.emplace_back(outfit);
             }
 
-            g_game.processCyclopediaCharacterRecentDeaths(data);
+            OutfitColorStruct currentOutfit;
+            if (outfitsSize > 0) {
+                currentOutfit.lookHead = msg->getU8();
+                currentOutfit.lookBody = msg->getU8();
+                currentOutfit.lookLegs = msg->getU8();
+                currentOutfit.lookFeet = msg->getU8();
+            }
+
+            std::vector<CharacterInfoMounts> mounts;
+
+            const uint16_t mountsSize = msg->getU16();
+            for (auto i = 0; i < mountsSize; ++i) {
+                CharacterInfoMounts mount;
+                mount.mountId = msg->getU16();
+                mount.name = msg->getString();
+                mount.type = msg->getU8(); // store / quest / none
+                mount.isCurrent = msg->getU32(); // 1000 = true / 0 = false
+                mounts.emplace_back(mount);
+            }
+
+            if (mountsSize > 0) {
+                currentOutfit.lookMountHead = msg->getU8();
+                currentOutfit.lookMountBody = msg->getU8();
+                currentOutfit.lookMountLegs = msg->getU8();
+                currentOutfit.lookMountFeet = msg->getU8();
+            }
+
+            std::vector<CharacterInfoFamiliar> familiars;
+
+            const uint16_t familiarsSize = msg->getU16();
+            for (auto i = 0; i < familiarsSize; ++i) {
+                CharacterInfoFamiliar familiar;
+                familiar.lookType = msg->getU16();
+                familiar.name = msg->getString();
+                familiar.type = msg->getU8(); // quest / none
+                familiar.isCurrent = msg->getU32(); // 1000 = true / 0 = false
+                familiars.emplace_back(familiar);
+            }
+
+            g_game.processCyclopediaCharacterAppearances(currentOutfit, outfits, mounts, familiars);
             break;
         }
-        case Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS:
+        case Otc::CYCLOPEDIA_CHARACTERINFO_STORESUMMARY:
         {
-            CyclopediaCharacterRecentPvPKills data;
-            msg->getU16();  
-            msg->getU16();
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_INSPECTION:
+        {
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_BADGES:
+        {
+            const uint8_t showAccountInformation = msg->getU8();
+            const uint8_t playerOnline = msg->getU8();
+            const uint8_t playerPremium = msg->getU8();
+            const auto& loyaltyTitle = msg->getString();
 
-            const uint16_t entriesCount = msg->getU16();  
-            for (auto i = 0; i < entriesCount; ++i) {
-                RecentPvPKillEntry entry;
-                entry.timestamp = msg->getU32();
-                entry.description = msg->getString();
-                entry.status = msg->getU8();
-                data.entries.emplace_back(entry);
+            std::vector<std::tuple<uint32_t, std::string_view>> badgesVector;
+
+            const uint8_t badgesSize = msg->getU8();
+            for (auto i = 0; i < badgesSize; ++i) {
+                const uint32_t badgeId = msg->getU32();
+                const auto& badgeName = msg->getString();
+                badgesVector.emplace_back(badgeId, badgeName);
             }
-
-            g_game.processCyclopediaCharacterRecentPvpKills(data);
+    
+            g_game.processCyclopediaCharacterGeneralStatsBadge(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
+            break;
+        }
+        case Otc::CYCLOPEDIA_CHARACTERINFO_TITLES:
+        {
+            msg->getU8(); // current title
+            const uint8_t titlesSize = msg->getU8();
+            for (auto i = 0; i < titlesSize; ++i) {
+                msg->getString(); // title name
+                msg->getString(); // title description
+                msg->getU8(); // bool title permanent
+                msg->getU8(); // bool title unlocked
+            }
             break;
         }
     }

@@ -243,6 +243,43 @@ struct CyclopediaCharacterRecentDeaths
     std::vector<RecentDeathEntry> entries;
 };
 
+struct OutfitColorStruct
+{
+    uint8_t lookHead;
+    uint8_t lookBody;
+    uint8_t lookLegs;
+    uint8_t lookFeet;
+    uint8_t lookMountHead;
+    uint8_t lookMountBody;
+    uint8_t lookMountLegs;
+    uint8_t lookMountFeet;
+};
+
+struct CharacterInfoOutfits
+{
+    uint16_t lookType;
+    std::string name;
+    uint8_t addons;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
+struct CharacterInfoMounts
+{
+    uint16_t mountId;
+    std::string name;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
+struct CharacterInfoFamiliar
+{
+    uint16_t lookType;
+    std::string name;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game
@@ -349,13 +386,19 @@ protected:
     // cyclopedia
     static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
     static void processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces);
-    static void processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, const std::vector<std::tuple<uint8_t, uint16_t>>& combats);
-    static void processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation,  const std::vector<std::vector<uint16_t>>& additionalSkillsArray,
-                                                 const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
-                                                 const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray);
-    static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, const std::string_view loyaltyTitle,
-                                                 const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
+    static void processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, 
+                                                    const std::vector<std::tuple<uint8_t, uint16_t>>& combats);
+    static void processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation, 
+                                                    const std::vector<std::vector<uint16_t>>& additionalSkillsArray,
+                                                    const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
+                                                    const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, 
+                                                    const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray);
+    static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, 
+                                                    const std::string_view loyaltyTitle,
+                                                    const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
     static void processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data);
+    static void processCyclopediaCharacterAppearances(const OutfitColorStruct& currentOutfit, const std::vector<CharacterInfoOutfits>& outfits, 
+                                                    const std::vector<CharacterInfoMounts>& mounts, std::vector<CharacterInfoFamiliar>& familiars);
     static void processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data);
     static void processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);

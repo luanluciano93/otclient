@@ -488,67 +488,6 @@ int push_luavalue(const CyclopediaCharacterGeneralStats& stats) {
     return 1;
 }
 
-bool luavalue_cast(int index, CyclopediaCharacterGeneralStats& stats)
-{
-    if (!g_lua.isTable(index))
-        return false;
-
-    g_lua.getField("experience", index);
-    stats.experience = g_lua.popInteger();
-    g_lua.getField("level", index);
-    stats.level = g_lua.popInteger();
-    g_lua.getField("levelPercent", index);
-    stats.levelPercent = g_lua.popInteger();
-    g_lua.getField("baseExpGain", index);
-    stats.baseExpGain = g_lua.popInteger();
-    g_lua.getField("lowLevelExpBonus", index);
-    stats.lowLevelExpBonus = g_lua.popInteger();
-    g_lua.getField("XpBoostPercent", index);
-    stats.XpBoostPercent = g_lua.popInteger();
-    g_lua.getField("staminaExpBonus", index);
-    stats.staminaExpBonus = g_lua.popInteger();
-    g_lua.getField("XpBoostBonusRemainingTime", index);
-    stats.XpBoostBonusRemainingTime = g_lua.popInteger();
-    g_lua.getField("canBuyXpBoost", index);
-    stats.canBuyXpBoost = g_lua.popInteger();
-    g_lua.getField("health", index);
-    stats.health = g_lua.popInteger();
-    g_lua.getField("maxHealth", index);
-    stats.maxHealth = g_lua.popInteger();
-    g_lua.getField("mana", index);
-    stats.mana = g_lua.popInteger();
-    g_lua.getField("maxMana", index);
-    stats.maxMana = g_lua.popInteger();
-    g_lua.getField("soul", index);
-    stats.soul = g_lua.popInteger();
-    g_lua.getField("staminaMinutes", index);
-    stats.staminaMinutes = g_lua.popInteger();
-    g_lua.getField("regenerationCondition", index);
-    stats.regenerationCondition = g_lua.popInteger();
-    g_lua.getField("offlineTrainingTime", index);
-    stats.offlineTrainingTime = g_lua.popInteger();
-    g_lua.getField("speed", index);
-    stats.speed = g_lua.popInteger();
-    g_lua.getField("baseSpeed", index);
-    stats.baseSpeed = g_lua.popInteger();
-    g_lua.getField("capacity", index);
-    stats.capacity = g_lua.popInteger();
-    g_lua.getField("baseCapacity", index);
-    stats.baseCapacity = g_lua.popInteger();
-    g_lua.getField("freeCapacity", index);
-    stats.freeCapacity = g_lua.popInteger();
-    g_lua.getField("magicLevel", index);
-    stats.magicLevel = g_lua.popInteger();
-    g_lua.getField("baseMagicLevel", index);
-    stats.baseMagicLevel = g_lua.popInteger();
-    g_lua.getField("loyaltyMagicLevel", index);
-    stats.loyaltyMagicLevel = g_lua.popInteger();
-    g_lua.getField("magicLevelPercent", index);
-    stats.magicLevelPercent = g_lua.popInteger();
-
-    return true;
-}
-
 int push_luavalue(const CyclopediaCharacterCombatStats& data) {
     g_lua.createTable(0, 7);
     g_lua.pushInteger(data.weaponElement);
@@ -745,5 +684,67 @@ int push_luavalue(const CyclopediaCharacterRecentDeaths& data) {
         push_luavalue(data.entries[i]);
         g_lua.rawSeti(i + 1);
     }
+    return 1;
+}
+
+int push_luavalue(const OutfitColorStruct& currentOutfit) {
+    g_lua.createTable(0, 8);
+    g_lua.pushInteger(currentOutfit.lookHead);
+    g_lua.setField("lookHead");
+    g_lua.pushInteger(currentOutfit.lookBody);
+    g_lua.setField("lookBody");
+    g_lua.pushInteger(currentOutfit.lookLegs);
+    g_lua.setField("lookLegs");
+    g_lua.pushInteger(currentOutfit.lookFeet);
+    g_lua.setField("lookFeet");
+    g_lua.pushInteger(currentOutfit.lookMountHead);
+    g_lua.setField("lookMountHead");
+    g_lua.pushInteger(currentOutfit.lookMountBody);
+    g_lua.setField("lookMountBody");
+    g_lua.pushInteger(currentOutfit.lookMountLegs);
+    g_lua.setField("lookMountLegs");
+    g_lua.pushInteger(currentOutfit.lookMountFeet);
+    g_lua.setField("lookMountFeet");
+    return 1;
+}
+
+int push_luavalue(const CharacterInfoOutfits& outfit) {
+    g_lua.createTable(0, 5);
+    g_lua.pushInteger(outfit.lookType);
+    g_lua.setField("lookType");
+    g_lua.pushString(outfit.name);
+    g_lua.setField("name");
+    g_lua.pushInteger(outfit.addons);
+    g_lua.setField("addons");
+    g_lua.pushInteger(outfit.type);
+    g_lua.setField("type");
+    g_lua.pushInteger(outfit.isCurrent);
+    g_lua.setField("isCurrent");
+    return 1;
+}
+
+int push_luavalue(const CharacterInfoMounts& mount) {
+    g_lua.createTable(0, 4);
+    g_lua.pushInteger(mount.mountId);
+    g_lua.setField("mountId");
+    g_lua.pushString(mount.name);
+    g_lua.setField("name");
+    g_lua.pushInteger(mount.type);
+    g_lua.setField("type");
+    g_lua.pushInteger(mount.isCurrent);
+    g_lua.setField("isCurrent");
+    return 1;
+}
+
+int push_luavalue(const CharacterInfoFamiliar& familiar) {
+    g_lua.createTable(0, 4);
+    g_lua.pushInteger(familiar.lookType);
+    g_lua.setField("lookType");
+    g_lua.pushString(familiar.name);
+    g_lua.setField("name");
+    g_lua.pushInteger(familiar.type);
+    g_lua.setField("type");
+    g_lua.pushInteger(familiar.isCurrent);
+    g_lua.setField("isCurrent");
     return 1;
 }

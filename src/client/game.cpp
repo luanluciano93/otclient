@@ -334,19 +334,21 @@ void Game::processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& besti
     g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryRaces);
 }
 
-void Game::processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, const std::vector<std::tuple<uint8_t, uint16_t>>& combats)
+void Game::processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, 
+                                                const std::vector<std::tuple<uint8_t, uint16_t>>& combats)
 {
     g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterGeneralStats", stats, skills, combats);
 }
 
 void Game::processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation, const std::vector<std::vector<uint16_t>>& additionalSkillsArray,
-                                                 const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
-                                                 const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray)
+                                                const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
+                                                const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray)
 {
     g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterCombatStats", data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRangesArray, combatsArray, concoctionsArray);
 }
 
-void Game::processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, const std::string_view loyaltyTitle, const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector)
+void Game::processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, 
+                                                const std::string_view loyaltyTitle, const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector)
 {
     g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterBadges", showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
 }
@@ -354,6 +356,12 @@ void Game::processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccount
 void Game::processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data)
 {
     g_lua.callGlobalField("g_game", "onUpdateCyclopediaCharacterItemSummary", data);
+}
+
+void Game::processCyclopediaCharacterAppearances(const OutfitColorStruct& currentOutfit, const std::vector<CharacterInfoOutfits>& outfits, 
+                                                const std::vector<CharacterInfoMounts>& mounts, std::vector<CharacterInfoFamiliar>& familiars)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterAppearances", currentOutfit, outfits, mounts, familiars);
 }
 
 void Game::processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data)
