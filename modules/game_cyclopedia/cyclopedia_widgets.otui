@@ -1090,52 +1090,52 @@ CharmCreatureName < UICheckBox
 InventoryItem < Item
 HeadSlot < InventoryItem
   id: slot1
-  image-source: /images/ui/character/helmet2
+
   &position: {x=65535, y=1, z=0}
 
 BodySlot < InventoryItem
   id: slot4
-  image-source: /images/ui/character/armor2
+
   &position: {x=65535, y=4, z=0}
 
 LegSlot < InventoryItem
   id: slot7
-  image-source: /images/ui/character/legs2
+
   &position: {x=65535, y=7, z=0}
 
 FeetSlot < InventoryItem
   id: slot8
-  image-source: /images/ui/character/boots2
+
   &position: {x=65535, y=8, z=0}
 
 NeckSlot < InventoryItem
   id: slot2
-  image-source: /images/ui/character/amulet2
+
   &position: {x=65535, y=2, z=0}
 
 LeftSlot < InventoryItem
   id: slot6
-  image-source: /images/ui/character/mainhand2
+
   &position: {x=65535, y=6, z=0}
 
 FingerSlot < InventoryItem
   id: slot9
-  image-source: /images/ui/character/ring2
+
   &position: {x=65535, y=9, z=0}
 
 BackSlot < InventoryItem
   id: slot3
-  image-source: /images/ui/character/primary_backpack
+
   &position: {x=65535, y=3, z=0}
 
 RightSlot < InventoryItem
   id: slot5
-  image-source: /images/ui/character/offhand2
+
   &position: {x=65535, y=5, z=0}
 
 AmmoSlot < InventoryItem
   id: slot10
-  image-source: /images/ui/character/ammo2
+
   &position: {x=65535, y=10, z=0}
 
 BackSlot2 < InventoryItem
@@ -1150,22 +1150,22 @@ BackSlot3 < InventoryItem
 
 BackSlot4 < InventoryItem
   id: slot14
-  image-source: /images/ui/character/secondary_backpack
+
   &position: {x=65535, y=14, z=0}
 
 BackSlot5 < InventoryItem
   id: slot15
-  image-source: /images/ui/character/secondary_backpack
+
   &position: {x=65535, y=15, z=0}
 
 ArtifactSlot < InventoryItem
   id: slot16
-  image-source: /images/ui/character/artifact2
+
   &position: {x=65535, y=16, z=0}
 
 RuneSlot < InventoryItem
   id: slot18
-  image-source: /images/ui/character/rune2
+
   &position: {x=65535, y=18, z=0}
 
 RoundCheckBox < CheckBox
