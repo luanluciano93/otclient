@@ -570,3 +570,84 @@ function Cyclopedia.verifyBestiaryButtons()
     end
 end
 
+
+
+
+--[[
+===================================================
+=					tracker		  =
+=================================================== 
+]]
+
+function Cyclopedia.toggleBestiaryTracker()
+	if not trackerWindow then
+		return 
+	end
+	
+	if trackerButton:isOn() then
+		trackerWindow:close()
+		trackerButton:setOn(false)
+	else
+		trackerWindow:open()
+		trackerButton:setOn(true)
+	end
+end
+
+function Cyclopedia.onTrackerClose()
+	trackerButton:setOn(false)
+end
+function Cyclopedia.setBarPercent(widget, percent)
+	if percent > 92 then
+		widget.killsBar:setBackgroundColor("#00BC00")
+	elseif percent > 60 then
+		widget.killsBar:setBackgroundColor("#50A150")
+	elseif percent > 30 then
+		widget.killsBar:setBackgroundColor("#A1A100")
+	elseif percent > 8 then
+		widget.killsBar:setBackgroundColor("#BF0A0A")
+	elseif percent > 3 then
+		widget.killsBar:setBackgroundColor("#910F0F")
+	else
+		widget.killsBar:setBackgroundColor("#850C0C")
+	end
+	
+	widget.killsBar:setPercent(percent)
+end
+
+function Cyclopedia.onBestiaryUpdate(data)
+
+    for i = 1, #data do
+
+        local name = RACE[data[i][1]].name
+
+        local widget = trackerWindow.contentsPanel.trackerPanel[tostring(name)]
+	
+        if not widget then
+            widget = g_ui.createWidget("TrackerButton", trackerWindow.contentsPanel.trackerPanel)
+
+            widget:setId(name)
+
+            local outfit = RACE[data[i][1]].type
+
+            widget.creature:setOutfit({
+                type = outfit
+            })
+            if name:len() > 12 then
+                widget.label:setText(name:sub(1, 9) .. "...")
+            else
+                widget.label:setText(name)
+            end
+
+            widget.kills:setText(data[i][2] .. "/" .. data[i][5])
+	
+            local percent = data[i][2] / data[i][5] * 100
+            
+            if percent > 100 then
+                percent = 100
+            end
+            
+            Cyclopedia.setBarPercent(widget, percent)
+        end
+    end
+
+end

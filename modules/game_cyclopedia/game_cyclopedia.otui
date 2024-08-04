@@ -282,6 +282,7 @@ MainWindow
     anchors.left: CharmsBase.right
     margin-left: 5
     !text: tr('Bestiary Tracker')
-    //font: verdana-bold-8px-antialiased
+    font: small-9px
+    @onClick: modules.game_cyclopedia.Cyclopedia.toggleBestiaryTracker()
     text-offset: 0 -1
     color: #C0C0C0

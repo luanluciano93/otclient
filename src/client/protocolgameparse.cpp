@@ -3481,15 +3481,18 @@ void ProtocolGame::parseBestiaryTracker(const InputMessagePtr& msg)
     if (g_game.getFeature(Otc::GameBosstiaryTracker)) {
         msg->getU8(); // is bestiary boolean
     }
-
+    std::vector<std::tuple<uint16_t, uint32_t, uint16_t, uint16_t, uint16_t, uint8_t>> bestiaryTracker;
     const uint8_t size = msg->getU8();
     for (auto i = 0; i < size; ++i) {
-        msg->getU16(); // RaceID
-        msg->getU32(); // Kill count
-        msg->getU16(); // First unlock
-        msg->getU16(); // Second unlock
-        msg->getU16(); // Last unlock
-        msg->getU8(); // Status
+        uint16_t raceID = msg->getU16();
+        uint32_t killCount = msg->getU32();
+        uint16_t firstUnlock = msg->getU16();
+        uint16_t secondUnlock = msg->getU16();
+        uint16_t lastUnlock = msg->getU16();
+        uint8_t status = msg->getU8();
+
+        bestiaryTracker.emplace_back(raceID, killCount, firstUnlock, secondUnlock, lastUnlock, status);
+        g_lua.callGlobalField("g_game", "onparseBestiaryTracker", bestiaryTracker);
     }
 }
 

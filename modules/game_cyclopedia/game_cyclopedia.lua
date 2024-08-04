@@ -11,6 +11,8 @@ local character = nil
 local CyclopediaButton = nil
 local bosstiary = nil
 local bossSlot = nil
+trackerButton = nil
+trackerWindow = nil
 
 function toggle()
     if not controllerCyclopedia.ui then
@@ -63,8 +65,28 @@ function controllerCyclopedia:onInit()
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
         -- items
-        onParseItemDetail = onParseItemDetail
+        onParseItemDetail = onParseItemDetail,
+
+        onparseBestiaryTracker = Cyclopedia.onBestiaryUpdate
     })
+    
+--[[
+===================================================
+=					tracker		  =
+=================================================== 
+]]
+    trackerButton = modules.client_topmenu.addRightGameToggleButton("trackerButton", tr("Bestiary Tracker"), "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
+
+	trackerButton:setOn(true)
+	
+	trackerWindow = g_ui.loadUI("Tab/Bestiary/bestiary_tracker", modules.game_interface.getRightPanel())
+	
+	trackerWindow.miniwindowScrollBar:mergeStyle({
+		["$!on"] = {}
+	})
+	trackerWindow:setContentMinimumHeight(120)
+	trackerWindow:setup()
+	
 
 end
 
@@ -130,5 +152,3 @@ function SelectWindow(type)
     end
 end
 -- LuaFormatter on
-
-
