@@ -580,17 +580,26 @@ end
 ]]
 
 function Cyclopedia.toggleBestiaryTracker()
-	if not trackerWindow then
+	if not trackerMiniWindow then
 		return 
 	end
 	
 	if trackerButton:isOn() then
-		trackerWindow:close()
+		trackerMiniWindow:close()
 		trackerButton:setOn(false)
 	else
-		trackerWindow:open()
-		trackerButton:setOn(true)
+        if not trackerMiniWindow:getParent() then
+            local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindow, trackerMiniWindow:getMinimumHeight())
+            if not panel then
+                return
+            end
+
+            panel:addChild(trackerMiniWindow)
+        end
+        trackerMiniWindow:open()
+        trackerButton:setOn(true)
 	end
+
 end
 
 function Cyclopedia.onTrackerClose()
@@ -615,18 +624,18 @@ function Cyclopedia.setBarPercent(widget, percent)
 end
 
 function Cyclopedia.onBestiaryUpdate(data)
-    trackerWindow.contentsPanel.trackerPanel:destroyChildren()
+    trackerMiniWindow.contentsPanel.trackerPanel:destroyChildren()
     if not data then return end
     for i = 1, #data do
 
         local name = RACE[data[i][1]].name
 
-        local widget = trackerWindow.contentsPanel.trackerPanel[tostring(name)]
+        local widget = trackerMiniWindow.contentsPanel.trackerPanel[tostring(data[i][1])]
 	
         if not widget then
-            widget = g_ui.createWidget("TrackerButton", trackerWindow.contentsPanel.trackerPanel)
+            widget = g_ui.createWidget("TrackerButton", trackerMiniWindow.contentsPanel.trackerPanel)
 
-            widget:setId(name)
+            widget:setId(data[i][1])
 
             local outfit = RACE[data[i][1]].type
 
@@ -646,11 +655,22 @@ function Cyclopedia.onBestiaryUpdate(data)
             if percent > 100 then
                 percent = 100
             end
-            
+            widget.onMouseRelease = onTrackerClick
             Cyclopedia.setBarPercent(widget, percent)
         end
     end
 
 end
 
---g_game.sendStatusTrackerBestiary(uno,dos)
+function onTrackerClick(widget, mousePosition, mouseButton)
+	local taskId = tonumber(widget:getId())
+	local menu = g_ui.createWidget("PopupMenu")
+
+	menu:setGameMenu(true)
+	menu:addOption("stop Tracking ".. widget.label:getText(), function ()
+		g_game.sendStatusTrackerBestiary(taskId,0)
+	end)
+	menu:display(menuPosition)
+
+	return true
+end

@@ -84,7 +84,7 @@ function showCharacter()
 
             if itemWidget then
                 if item then
-                    itemWidget:setStyle("InventoryItem")
+                    itemWidget:setStyle("InventoryItemCyclopedia")
                     itemWidget:setItem(item)
                     itemWidget:setIcon("")
                 else

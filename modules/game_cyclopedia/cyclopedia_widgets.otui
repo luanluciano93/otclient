@@ -1087,7 +1087,8 @@ CharmCreatureName < UICheckBox
   @onClick: modules.game_cyclopedia.Cyclopedia.selectCreatureCharm(self, self:isChecked())
   $checked:
     background-color: #585858
-InventoryItem < Item
+	
+InventoryItemCyclopedia < Item
 HeadSlot < InventoryItem
   id: slot1
 

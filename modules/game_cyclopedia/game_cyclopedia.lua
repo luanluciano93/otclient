@@ -12,7 +12,7 @@ local CyclopediaButton = nil
 local bosstiary = nil
 local bossSlot = nil
 trackerButton = nil
-trackerWindow = nil
+trackerMiniWindow = nil
 
 function toggle()
     if not controllerCyclopedia.ui then
@@ -75,27 +75,26 @@ function controllerCyclopedia:onInit()
 =					tracker		  =
 =================================================== 
 ]]
-    trackerButton = modules.client_topmenu.addRightGameToggleButton("trackerButton", tr("Bestiary Tracker"), "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
+    trackerButton = modules.game_mainpanel.addToggleButton("trackerButton", tr("Bestiary Tracker"), "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
 
 	trackerButton:setOn(true)
 	
-	trackerWindow = g_ui.loadUI("Tab/Bestiary/bestiary_tracker", modules.game_interface.getRightPanel())
+	trackerMiniWindow = g_ui.loadUI("Tab/Bestiary/bestiary_tracker", modules.game_interface.getRightPanel())
 	
-	trackerWindow.miniwindowScrollBar:mergeStyle({
+	trackerMiniWindow.miniwindowScrollBar:mergeStyle({
 		["$!on"] = {}
 	})
-	trackerWindow:setContentMinimumHeight(120)
-	trackerWindow:setup()
+	trackerMiniWindow:setContentMinimumHeight(120)
+	trackerMiniWindow:setup()
 	
-
 end
 
 function controllerCyclopedia:onGameStart()
-
+    trackerMiniWindow:setupOnStart()
 end
 
 function controllerCyclopedia:onGameEnd()
-    trackerWindow.contentsPanel.trackerPanel:destroyChildren()
+    trackerMiniWindow.contentsPanel.trackerPanel:destroyChildren()
     hide()
 end
 
