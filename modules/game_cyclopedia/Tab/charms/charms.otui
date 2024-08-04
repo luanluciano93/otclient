@@ -44,7 +44,7 @@ UIWidget
       margin-left: 10
       margin-right: 10
       !text: tr('Unlock')
-      font: verdana-bold-8px-antialiased
+      //font: verdana-bold-8px-antialiased
       text-offset: 0 -1
       color: #C0C0C0
       enabled: false

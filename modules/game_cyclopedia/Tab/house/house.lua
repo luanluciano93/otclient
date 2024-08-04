@@ -3,23 +3,25 @@ function showHouse()
     UI = g_ui.loadUI("house", contentContainer)
     UI:show()
 	UI.LateralBase.LayerScrollbar.decrementButton:setVisible(false)
-UI.LateralBase.LayerScrollbar.incrementButton:setVisible(false)
-UI.LateralBase.LayerScrollbar.sliderButton:setImageSource("")
---[[g_ui.createWidget("MapLayerSelector", UI.LateralBase.LayerScrollbar.sliderButton)
- function UI.LateralBase.LayerScrollbar:onValueChange(value)
-    local rect = {
-        width = 14,
-        height = 67,
-        y = 0,
-        x = Cyclopedia.ConvertLayer(value) * 14
-    }
+    UI.LateralBase.LayerScrollbar.incrementButton:setVisible(false)
+    UI.LateralBase.LayerScrollbar.sliderButton:setImageSource("")
+    --[[g_ui.createWidget("MapLayerSelector", UI.LateralBase.LayerScrollbar.sliderButton)
+    function UI.LateralBase.LayerScrollbar:onValueChange(value)
+        local rect = {
+            width = 14,
+            height = 67,
+            y = 0,
+            x = Cyclopedia.ConvertLayer(value) * 14
+        }
 
-    UI.LateralBase.LayerIndicator:setImageClip(rect)
-end ]]
+        UI.LateralBase.LayerIndicator:setImageClip(rect)
+    end ]]
 
-UI.LateralBase.LayerScrollbar:setValue(150)
+    UI.LateralBase.LayerScrollbar:setValue(150)
 
-
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 houseControllerCyclopedia = Controller:new()

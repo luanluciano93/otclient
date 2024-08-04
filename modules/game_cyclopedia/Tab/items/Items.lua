@@ -78,6 +78,10 @@ function showItems()
 
     itemPanel.LootValue.NpcBuyCheck.onClick = onChangeLootValue
     itemPanel.LootValue.MarketCheck.onClick = onChangeLootValue
+
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(false)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 function onParseItemDetail(itemId, descriptions) -- GET INFO

@@ -33,9 +33,12 @@ function showMap()
 		Cyclopedia.prevFloor = layerIndex
 	end
 	
-UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:setValue(150)
-Cyclopedia.loadMap()
+    UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:setValue(150)
+    Cyclopedia.loadMap()
 
+    controllerCyclopedia.ui.CharmsBase:setVisible(true)
+    controllerCyclopedia.ui.GoldBase:setVisible(false)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 

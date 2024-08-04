@@ -62,10 +62,9 @@ function controllerCyclopedia:onInit()
         onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances,
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
+        -- items
         onParseItemDetail = onParseItemDetail
     })
-
-
 
 end
 
@@ -98,6 +97,7 @@ function show()
     controllerCyclopedia.ui:raise()
     controllerCyclopedia.ui:focus()
     SelectWindow("items")
+    controllerCyclopedia.ui.GoldBase.Value:setText(g_game.getLocalPlayer():getResourceBalance(1))
 end
 
 -- LuaFormatter off

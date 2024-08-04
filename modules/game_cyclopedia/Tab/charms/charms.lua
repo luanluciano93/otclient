@@ -3,6 +3,9 @@ function showCharms()
     UI = g_ui.loadUI("charms", contentContainer)
     UI:show()
     g_game.requestBestiary()
+    controllerCyclopedia.ui.CharmsBase:setVisible(true)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 
@@ -162,6 +165,7 @@ end
 
 -- function Cyclopedia.loadCharms(points, data, monsters)
 function Cyclopedia.loadCharms(data2)
+    controllerCyclopedia.ui.CharmsBase.Value:setText(data2.points)
     if UI == nil or UI.CharmList == nil then -- I know, don't change it
         return
     end
@@ -244,6 +248,9 @@ function Cyclopedia.loadCharms(data2)
     else
         Cyclopedia.selectCharm(UI.CharmList:getChildByIndex(1), UI.CharmList:getChildByIndex(1):isChecked())
     end
+
+
+ 
 end
 
 function Cyclopedia.selectCharm(widget, isChecked)
@@ -455,14 +462,14 @@ function Cyclopedia.actionCharmButton(widget)
 
     if type == "Unlock" then
         local function yesCallback()
-            g_game.requestUnlockCharm(data.id)
-
+            g_game.BuyCharmRune(data.id)
+           -- parseSendBuyCharmRune(id, 0, nil)
             if confirmWindow then
                 confirmWindow:destroy()
 
                 confirmWindow = nil
-
-                Cyclopedia.Toggle(true, false, 3)
+                toggle()
+               -- Cyclopedia.Toggle(true, false, 3)
             end
 
             Cyclopedia.Charms.redirect = data.id
@@ -474,7 +481,7 @@ function Cyclopedia.actionCharmButton(widget)
 
                 confirmWindow = nil
 
-                Cyclopedia.Toggle(true, false, 3)
+             toggle()
             end
         end
 
@@ -493,7 +500,7 @@ function Cyclopedia.actionCharmButton(widget)
                     anchor = AnchorHorizontalCenter
                 }, yesCallback, noCallback)
 
-            Cyclopedia.Toggle(true, false)
+            toggle()
         end
     end
 

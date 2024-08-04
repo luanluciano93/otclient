@@ -102,6 +102,9 @@ function showCharacter()
     end
 
     reset()
+    controllerCyclopedia.ui.CharmsBase:setVisible(true)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 --[[ 

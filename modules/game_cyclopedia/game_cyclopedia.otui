@@ -232,3 +232,56 @@ MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     margin-bottom: 10
+  UIWidget
+    id: GoldBase
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    image-source: /images/ui/item
+    image-border: 10
+    size: 131 20
+    UIWidget
+      id: Icon
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 4
+      image-source: /game_cyclopedia/images/icon_gold
+    Label
+      id: Value
+      anchors.right: Icon.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 4
+      !text: tr('0')
+      text-auto-resize: true
+      color: #BDBDBD
+  UIWidget
+    id: CharmsBase
+    anchors.bottom: parent.bottom
+    anchors.left: GoldBase.right
+    margin-left: 5
+    image-source: /images/ui/item
+    image-border: 10
+    size: 100 20
+    UIWidget
+      id: Icon
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 4
+      image-source: /game_cyclopedia/images/icon_charms
+    Label
+      id: Value
+      anchors.right: Icon.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 4
+      !text: tr('0')
+      text-auto-resize: true
+      color: #BDBDBD
+  Button
+    id: BestiaryTrackerButton
+    size: 90 20
+    anchors.bottom: parent.bottom
+    anchors.left: CharmsBase.right
+    margin-left: 5
+    !text: tr('Bestiary Tracker')
+    //font: verdana-bold-8px-antialiased
+    text-offset: 0 -1
+    color: #C0C0C0

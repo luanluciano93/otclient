@@ -20,6 +20,9 @@ function showBosstiary()
     UI.StarBase.Info3:setTooltip(
         "Once you have reached the Mastery Level, youl will receive an\nadditional 25% loot bonus when the boss is assigned to a boss slot.")
     -- UI.StarBase.Info3:setTooltipAlign(AlignTopLeft)
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(false)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 

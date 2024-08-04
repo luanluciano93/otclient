@@ -24,8 +24,11 @@ function showBestiary()
     UI.ListBase.CreatureInfo:setVisible(false)
 
     Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
-
+    controllerCyclopedia.ui.CharmsBase:setVisible(true)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(true)
     g_game.requestBestiary()
+    
 end
 
 Cyclopedia.Bestiary = {}

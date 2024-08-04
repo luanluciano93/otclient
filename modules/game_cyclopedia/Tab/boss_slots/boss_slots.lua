@@ -4,6 +4,9 @@ function showBossSlot()
     UI = g_ui.loadUI("boss_slots", contentContainer)
     UI:show()
     g_game.requestBossSlootInfo()
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
 
