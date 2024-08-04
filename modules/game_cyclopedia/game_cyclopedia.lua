@@ -95,7 +95,7 @@ function controllerCyclopedia:onGameStart()
 end
 
 function controllerCyclopedia:onGameEnd()
-
+    trackerWindow.contentsPanel.trackerPanel:destroyChildren()
     hide()
 end
 

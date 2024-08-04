@@ -142,6 +142,7 @@ public:
     void sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page);
     void sendRequestBosstiaryInfo();
     void sendRequestBossSlootInfo();
+    void SendStatusTrackerBestiary(const uint16_t raceId, const uint8_t status);
 
     // otclient only
     void sendChangeMapAwareRange(int xrange, int yrange);

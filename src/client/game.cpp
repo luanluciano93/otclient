@@ -1884,3 +1884,11 @@ void Game::requestBossSlootInfo()
 
     m_protocolGame->sendRequestBossSlootInfo();
 }
+
+void Game::sendStatusTrackerBestiary(const uint16_t raceId, const uint8_t status)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->SendStatusTrackerBestiary(raceId, status);
+}

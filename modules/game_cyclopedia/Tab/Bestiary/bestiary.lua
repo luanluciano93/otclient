@@ -615,7 +615,8 @@ function Cyclopedia.setBarPercent(widget, percent)
 end
 
 function Cyclopedia.onBestiaryUpdate(data)
-
+    trackerWindow.contentsPanel.trackerPanel:destroyChildren()
+    if not data then return end
     for i = 1, #data do
 
         local name = RACE[data[i][1]].name
@@ -651,3 +652,5 @@ function Cyclopedia.onBestiaryUpdate(data)
     end
 
 end
+
+--g_game.sendStatusTrackerBestiary(uno,dos)

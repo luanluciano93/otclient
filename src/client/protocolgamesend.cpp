@@ -1020,6 +1020,15 @@ void ProtocolGame::sendRequestBossSlootInfo()
     send(msg);
 }
 
+void ProtocolGame::SendStatusTrackerBestiary(const uint16_t raceId, const uint8_t status)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientStatusTrackerBestiary);
+    msg->addU16(raceId);
+    msg->addU8(status);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();
