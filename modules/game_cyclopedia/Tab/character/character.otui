@@ -1323,9 +1323,10 @@ UIWidget
         text: show as grid
         color: #C0C0C0
         text-offset: 15 0
-        anchors.top: list.top
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: list.right
         margin-left: 20
+        margin-bottom: 3
         @onClick: modules.game_cyclopedia.Cyclopedia.characterItemListFilter(self)
   UIWidget
     id: CharacterAppearances
@@ -1359,7 +1360,8 @@ UIWidget
         text: Mounts
         color: #C0C0C0
         text-offset: 15 0
-        anchors.top: outfits.top
+        margin-bottom: 3
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: outfits.right
         @onClick: modules.game_cyclopedia.Cyclopedia.characterAppearancesFilter(self)
       RoundCheckBox
@@ -1368,15 +1370,16 @@ UIWidget
         text: Familiars
         color: #C0C0C0
         text-offset: 15 0
-        anchors.top: mounts.top
+        anchors.verticalCenter: parent.verticalCenter
+        margin-bottom: 3
         anchors.left: mounts.right
         @onClick: modules.game_cyclopedia.Cyclopedia.characterAppearancesFilter(self)
       ComboBox
         id: show
         size: 222 20
-        anchors.top: familiars.top
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: familiars.right
-        margin-top: -4
+        
         @onSetup: |
           self:addOption("Show All")
           self:addOption("Show Standard Outfits")
