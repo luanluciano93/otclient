@@ -2,7 +2,7 @@
 function showMap()
     UI = g_ui.loadUI("map", contentContainer)
     UI:show()
-	mapControllerCyclopedia:registerEvents(LocalPlayer, {
+	controllerCyclopedia:registerEvents(LocalPlayer, {
 		onPositionChange = Cyclopedia.onUpdateCameraPosition
 	}):execute()
 
@@ -35,27 +35,6 @@ function showMap()
 	
 UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:setValue(150)
 Cyclopedia.loadMap()
-
-end
-
-mapControllerCyclopedia = Controller:new()
-
-function mapControllerCyclopedia:onInit()
-
-
-
-end
-
-function mapControllerCyclopedia:onGameStart()
-
-
-end
-
-function mapControllerCyclopedia:onGameEnd()
-
-end
-
-function mapControllerCyclopedia:onTerminate()
 
 end
 

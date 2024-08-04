@@ -39,12 +39,33 @@ function controllerCyclopedia:onInit()
     bosstiary = buttonSelection:recursiveGetChildById('bosstiary')
     bossSlot = buttonSelection:recursiveGetChildById('bossSlot')
 
-    controllerCyclopedia:registerEvents(g_game, {
-        onGameStart = OnStart,
-        onGameEnd = OnEnd,
-    })
 	g_ui.importStyle("cyclopedia_widgets")
 	g_ui.importStyle("cyclopedia_pages")
+
+    controllerCyclopedia:registerEvents(g_game, {
+        -- bestiary
+        onParseBestiaryRaces = Cyclopedia.LoadBestiaryCategories,
+        onParseBestiaryOverview = Cyclopedia.onParseBestiaryOverview,
+        onParseBestiaryMonster = Cyclopedia.loadBestiarySelectedCreature,
+        onUpdateBestiaryMonsterData = Cyclopedia.loadBestiarySelectedCreature,
+        -- boss_slot
+        onParseBosstiarySlots = Cyclopedia.loadBossSlots,
+        -- Bosstiary
+        onParseSendBosstiary = Cyclopedia.LoadBoostiaryCreatures,
+        -- character
+        onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
+        onParseCyclopediaCharacterCombatStats = Cyclopedia.loadCharacterCombatStats,
+        onParseCyclopediaCharacterBadges = Cyclopedia.loadCharacterBadges,
+        onCyclopediaCharacterRecentDeaths = Cyclopedia.loadCharacterRecentDeaths,
+        onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
+        onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
+        onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances,
+        -- charms
+        onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
+        onParseItemDetail = onParseItemDetail
+    })
+
+
 
 end
 

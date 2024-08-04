@@ -13,29 +13,7 @@ function Cyclopedia.onParseBestiaryOverview(name, creatures)
         Cyclopedia.loadBestiaryCreatures(creatures)
     end
 end
-bestiaryControllerCyclopedia = Controller:new()
 
-function bestiaryControllerCyclopedia:onInit()
-    bestiaryControllerCyclopedia:registerEvents(g_game, {
-        onParseBestiaryRaces = Cyclopedia.LoadBestiaryCategories,
-        onParseBestiaryOverview = Cyclopedia.onParseBestiaryOverview,
-        onParseBestiaryMonster = Cyclopedia.loadBestiarySelectedCreature,
-        onUpdateBestiaryMonsterData = Cyclopedia.loadBestiarySelectedCreature
-    })
-
-end
-
-function bestiaryControllerCyclopedia:onGameStart()
-
-end
-
-function bestiaryControllerCyclopedia:onGameEnd()
-
-end
-
-function bestiaryControllerCyclopedia:onTerminate()
-
-end
 
 function showBestiary()
     UI = g_ui.loadUI("bestiary", contentContainer)

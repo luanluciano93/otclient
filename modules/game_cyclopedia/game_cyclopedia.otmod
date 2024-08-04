@@ -3,24 +3,5 @@ Module
   description: game_cyclopedia
   scripts: [ game_cyclopedia, Tab/*, utils]
   sandboxed: true
-  @onLoad: |
-    controllerCyclopedia:init()
-    itemsControllerCyclopedia:init()
-    bestiaryControllerCyclopedia:init()
-    characterControllerCyclopedia:init()
-    mapControllerCyclopedia:init()
-    charmsControllerCyclopedia:init()
-    houseControllerCyclopedia:init()
-    boss_slotControllerCyclopedia:init()
-    BosstiaryControllerCyclopedia:init()
-
-  @onUnload: |
-    controllerCyclopedia:terminate()
-    itemsControllerCyclopedia:terminate()
-    bestiaryControllerCyclopedia:terminate()
-    characterControllerCyclopedia:terminate()
-    mapControllerCyclopedia:terminate()
-    charmsControllerCyclopedia:terminate()
-    houseControllerCyclopedia:terminate()
-    boss_slotControllerCyclopedia:terminate()
-    BosstiaryControllerCyclopedia:terminate()
+  @onLoad: controllerCyclopedia:init()
+  @onUnload: controllerCyclopedia:terminate()

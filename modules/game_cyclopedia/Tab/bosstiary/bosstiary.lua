@@ -22,26 +22,7 @@ function showBosstiary()
     -- UI.StarBase.Info3:setTooltipAlign(AlignTopLeft)
 end
 
-BosstiaryControllerCyclopedia = Controller:new()
 
-function BosstiaryControllerCyclopedia:onInit()
-    BosstiaryControllerCyclopedia:registerEvents(g_game, {
-        onParseSendBosstiary = Cyclopedia.LoadBoostiaryCreatures
-    })
-
-end
-
-function BosstiaryControllerCyclopedia:onGameStart()
-
-end
-
-function BosstiaryControllerCyclopedia:onGameEnd()
-
-end
-
-function BosstiaryControllerCyclopedia:onTerminate()
-
-end
 
 Cyclopedia.Bosstiary = {}
 

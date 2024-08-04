@@ -45,26 +45,7 @@ local CategoryItems = {
 }
 -- LuaFormatter on
 
-itemsControllerCyclopedia = Controller:new()
 
-function itemsControllerCyclopedia:onInit()
-    itemsControllerCyclopedia:registerEvents(g_game, {
-        onParseItemDetail = onParseItemDetail
-
-    })
-end
-
-function itemsControllerCyclopedia:onGameStart()
-
-end
-
-function itemsControllerCyclopedia:onGameEnd()
-
-end
-
-function itemsControllerCyclopedia:onTerminate()
-
-end
 
 function showItems()
 

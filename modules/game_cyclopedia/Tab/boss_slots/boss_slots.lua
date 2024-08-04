@@ -6,25 +6,7 @@ function showBossSlot()
     g_game.requestBossSlootInfo()
 end
 
-boss_slotControllerCyclopedia = Controller:new()
 
-function boss_slotControllerCyclopedia:onInit()
-    boss_slotControllerCyclopedia:registerEvents(g_game, {
-        onParseBosstiarySlots = Cyclopedia.loadBossSlots
-    })
-end
-
-function boss_slotControllerCyclopedia:onGameStart()
-
-end
-
-function boss_slotControllerCyclopedia:onGameEnd()
-
-end
-
-function boss_slotControllerCyclopedia:onTerminate()
-
-end
 
 local CATEGORY = {
     BANE = 0,

@@ -61,31 +61,7 @@ local function open(parent)
     UI.openedCategory = parent
 end
 
-characterControllerCyclopedia = Controller:new()
 
-function characterControllerCyclopedia:onInit()
-    characterControllerCyclopedia:registerEvents(g_game, {
-        onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
-        onParseCyclopediaCharacterCombatStats = Cyclopedia.loadCharacterCombatStats,
-        onParseCyclopediaCharacterBadges = Cyclopedia.loadCharacterBadges,
-        onCyclopediaCharacterRecentDeaths = Cyclopedia.loadCharacterRecentDeaths,
-        onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
-        onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
-        onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances
-    })
-end
-
-function characterControllerCyclopedia:onGameStart()
-
-end
-
-function characterControllerCyclopedia:onGameEnd()
-
-end
-
-function characterControllerCyclopedia:onTerminate()
-
-end
 
 function showCharacter()
     characterPanel = g_ui.loadUI("character", contentContainer)

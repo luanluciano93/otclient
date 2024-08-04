@@ -5,27 +5,6 @@ function showCharms()
     g_game.requestBestiary()
 end
 
-charmsControllerCyclopedia = Controller:new()
-
-function charmsControllerCyclopedia:onInit()
-
-    charmsControllerCyclopedia:registerEvents(g_game, {
-        onUpdateBestiaryCharmsData = Cyclopedia.loadCharms
-    })
-
-end
-
-function charmsControllerCyclopedia:onGameStart()
-
-end
-
-function charmsControllerCyclopedia:onGameEnd()
-
-end
-
-function charmsControllerCyclopedia:onTerminate()
-
-end
 
 Cyclopedia.Charms = {}
 
