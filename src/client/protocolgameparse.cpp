@@ -3492,8 +3492,9 @@ void ProtocolGame::parseBestiaryTracker(const InputMessagePtr& msg)
         uint8_t status = msg->getU8();
 
         bestiaryTracker.emplace_back(raceID, killCount, firstUnlock, secondUnlock, lastUnlock, status);
-        g_lua.callGlobalField("g_game", "onparseBestiaryTracker", bestiaryTracker);
+     
     }
+    g_lua.callGlobalField("g_game", "onparseBestiaryTracker", bestiaryTracker);
 }
 
 void ProtocolGame::parseTaskHuntingBasicData(const InputMessagePtr& msg)
