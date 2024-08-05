@@ -50,6 +50,7 @@ function controllerCyclopedia:onInit()
         onParseBestiaryOverview = Cyclopedia.onParseBestiaryOverview,
         onParseBestiaryMonster = Cyclopedia.loadBestiarySelectedCreature,
         onUpdateBestiaryMonsterData = Cyclopedia.loadBestiarySelectedCreature,
+        onparseBestiaryTracker = Cyclopedia.onBestiaryUpdate,
         -- boss_slot
         onParseBosstiarySlots = Cyclopedia.loadBossSlots,
         -- Bosstiary
@@ -67,35 +68,60 @@ function controllerCyclopedia:onInit()
         -- items
         onParseItemDetail = onParseItemDetail,
 
-        onparseBestiaryTracker = Cyclopedia.onBestiaryUpdate
     })
     
 --[[
 ===================================================
-=					tracker		  =
+=					tracker                       =
 =================================================== 
 ]]
     trackerButton = modules.game_mainpanel.addToggleButton("trackerButton", tr("Bestiary Tracker"), "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
 
 	trackerButton:setOn(true)
 	
-	trackerMiniWindow = g_ui.loadUI("Tab/Bestiary/bestiary_tracker", modules.game_interface.getRightPanel())
-	
-	trackerMiniWindow.miniwindowScrollBar:mergeStyle({
-		["$!on"] = {}
-	})
-	trackerMiniWindow:setContentMinimumHeight(120)
-	trackerMiniWindow:setup()
-	
+    trackerMiniWindow = g_ui.createWidget('BestiaryTracker', modules.game_interface.getRightPanel())
+
+
+
+    trackerMiniWindow.menuButton.onClick = function(widget, mousePos, mouseButton)
+        local menu = g_ui.createWidget('bestiaryTrackerMenu')
+        menu:setGameMenu(true)
+
+        local shortCreature = UIRadioGroup.create()
+        local shortAlphabets = UIRadioGroup.create()
+        for i, choice in ipairs(menu:getChildren()) do
+            if i >= 1 and i <= 3 then
+                shortCreature:addWidget(choice)
+            elseif i == 5 or i == 6 then
+                shortAlphabets:addWidget(choice)
+            end
+        end
+
+        menu:display(mousePos)
+        return true
+    end
+
+    trackerMiniWindow.cyclopediaButton.onClick = function(widget, mousePos, mouseButton)
+        toggle()
+        SelectWindow("bestiary")
+        return true
+    end
+
+    trackerMiniWindow:moveChildToIndex(trackerMiniWindow.menuButton, 4)
+    trackerMiniWindow:moveChildToIndex(trackerMiniWindow.cyclopediaButton, 5)
+    trackerMiniWindow:setup()
+    trackerMiniWindow:hide()
 end
 
 function controllerCyclopedia:onGameStart()
     trackerMiniWindow:setupOnStart()
+    loadFilters()
 end
 
 function controllerCyclopedia:onGameEnd()
-    trackerMiniWindow.contentsPanel.trackerPanel:destroyChildren()
+    trackerMiniWindow.contentsPanel:destroyChildren()
     hide()
+    saveFilters()
 end
 
 function controllerCyclopedia:onTerminate()

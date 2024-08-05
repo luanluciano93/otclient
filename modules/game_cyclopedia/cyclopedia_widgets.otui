@@ -1177,3 +1177,131 @@ RoundCheckBox < CheckBox
 
   $!first:
     margin-top: 5
+
+TrackerButton < Panel
+  height: 34
+  margin-bottom: 5
+  phantom: false
+  border-width: 1
+  border-color: alpha
+  padding: 1
+
+  $hover:
+    border-color: white
+
+  UICreature
+    id: creature
+    size: 32 32
+    anchors.left: parent.left
+    anchors.top: parent.top
+    phantom: true
+
+  UIWidget
+    id: spacer
+    width: 3
+    anchors.left: creature.right
+    anchors.top: creature.top
+
+  Label
+    id: label
+    anchors.left: spacer.right
+    anchors.top: creature.top
+    text-auto-resize: true
+    color: #888888
+    margin-left: 2
+
+  Label
+    id: kills
+    anchors.right: parent.right
+    anchors.top: creature.top
+    text-align: right
+    text-auto-resize: true
+    color: #888888
+    margin-left: 2
+
+  LifeProgressBar
+    id: killsBar
+    height: 8
+    anchors.left: spacer.right
+    anchors.right: parent.right
+    anchors.top: label.bottom
+    margin-top: 2
+    phantom: true
+
+BestiaryTracker < MiniWindow
+  id: BestiaryTracker
+  !text: tr('Bestiary Tracker')
+  icon: /images/options/bestiaryTracker
+  icon-offset: 4 2
+  icon-size: 12 12
+  @onClose: modules.game_cyclopedia.Cyclopedia.onTrackerClose()
+
+  UIButton
+    id: menuButton
+    anchors.top: prev.top
+    anchors.right: prev.left
+    margin-right: 2
+    size: 14 14
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 112 0 14 14
+
+    $hover:
+      image-clip: 112 14 14 14
+
+    $pressed:
+      image-clip: 112 28 14 14
+
+    $on:
+      image-clip: 112 0 14 14
+
+  UIButton
+    id: cyclopediaButton
+    anchors.top: prev.top
+    anchors.right: prev.left
+    margin-right: 2
+    size: 14 14
+    image-source: /images/ui/miniwindow_buttons
+    image-clip: 126 0 14 14
+
+    $hover:
+      image-clip: 126 14 14 14
+
+    $pressed:
+      image-clip: 126 28 14 14
+
+    $on:
+      image-clip: 126 0 14 14
+
+  MiniWindowContents
+    id: contentsPanel
+    padding-left: 5
+    padding-right: 5
+    padding-bottom: 3
+    layout: verticalBox
+
+
+bestiaryTrackerMenu < PopupMenu
+  id: imbuementTrackerMenu
+  width: 304
+
+  ImbuementTrackerMenuOption
+    id: sortByName
+    !text: tr('sort by name')
+
+  ImbuementTrackerMenuOption
+    id: ShortByPercentage
+    !text: tr('Short by completion percentage')
+
+  ImbuementTrackerMenuOption
+    id: sortByKills
+    !text: tr('sort by remaining kills')
+
+  HorizontalSeparator
+
+  ImbuementTrackerMenuOption
+    id: sortByAscending
+    !text: tr('sort by ascending')
+
+  ImbuementTrackerMenuOption
+    id: sortByDescending
+    !text: tr('sort by descending')

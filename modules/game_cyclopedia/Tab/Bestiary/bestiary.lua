@@ -605,6 +605,7 @@ end
 function Cyclopedia.onTrackerClose()
 	trackerButton:setOn(false)
 end
+
 function Cyclopedia.setBarPercent(widget, percent)
 	if percent > 92 then
 		widget.killsBar:setBackgroundColor("#00BC00")
@@ -624,16 +625,14 @@ function Cyclopedia.setBarPercent(widget, percent)
 end
 
 function Cyclopedia.onBestiaryUpdate(data)
-    trackerMiniWindow.contentsPanel.trackerPanel:destroyChildren()
+    trackerMiniWindow.contentsPanel:destroyChildren()
     if not data then return end
     for i = 1, #data do
-
         local name = RACE[data[i][1]].name
-
-        local widget = trackerMiniWindow.contentsPanel.trackerPanel[tostring(data[i][1])]
+        local widget = trackerMiniWindow.contentsPanel[tostring(data[i][1])]
 	
         if not widget then
-            widget = g_ui.createWidget("TrackerButton", trackerMiniWindow.contentsPanel.trackerPanel)
+            widget = g_ui.createWidget("TrackerButton", trackerMiniWindow.contentsPanel)
 
             widget:setId(data[i][1])
 
@@ -673,4 +672,46 @@ function onTrackerClick(widget, mousePosition, mouseButton)
 	menu:display(menuPosition)
 
 	return true
+end
+
+local BESTIATYTRACKER_FILTERS = {
+    ["sortByName"] = true,
+    ["ShortByPercentage"] = false,
+    ["sortByKills"] = false,
+    ["sortByAscending"] = false,
+    ["sortByDescending"] = false
+}
+
+function loadFilters()
+    local settings = g_settings.getNode("bestiaryTracker")
+    if not settings or not settings['filters'] then
+        return BESTIATYTRACKER_FILTERS
+    end
+    return settings['filters']
+end
+
+function saveFilters()
+    g_settings.mergeNode('bestiaryTracker', { ['filters'] = loadFilters() })
+end
+
+function getFilter(filter)
+    return loadFilters()[filter] or false
+end
+
+function setFilter(filter)
+    local filters = loadFilters()
+    local value = filters[filter]
+    if value == nil then
+        return false
+    end
+
+    filters[filter] = not value
+    g_settings.mergeNode('bestiaryTracker', { ['filters'] = filters })    
+
+end
+
+-- trackerMiniWindow.contentsPanel:moveChildToIndex(battleButton, index)
+
+function test(index)
+    trackerMiniWindow.contentsPanel:moveChildToIndex(trackerMiniWindow.contentsPanel:getLastChild(), index)
 end
