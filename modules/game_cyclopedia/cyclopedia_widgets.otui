@@ -1089,82 +1089,82 @@ CharmCreatureName < UICheckBox
     background-color: #585858
 	
 InventoryItemCyclopedia < Item
-HeadSlot < InventoryItem
+HeadSlot < InventoryItemCyclopedia
   id: slot1
 
   &position: {x=65535, y=1, z=0}
 
-BodySlot < InventoryItem
+BodySlot < InventoryItemCyclopedia
   id: slot4
 
   &position: {x=65535, y=4, z=0}
 
-LegSlot < InventoryItem
+LegSlot < InventoryItemCyclopedia
   id: slot7
 
   &position: {x=65535, y=7, z=0}
 
-FeetSlot < InventoryItem
+FeetSlot < InventoryItemCyclopedia
   id: slot8
 
   &position: {x=65535, y=8, z=0}
 
-NeckSlot < InventoryItem
+NeckSlot < InventoryItemCyclopedia
   id: slot2
 
   &position: {x=65535, y=2, z=0}
 
-LeftSlot < InventoryItem
+LeftSlot < InventoryItemCyclopedia
   id: slot6
 
   &position: {x=65535, y=6, z=0}
 
-FingerSlot < InventoryItem
+FingerSlot < InventoryItemCyclopedia
   id: slot9
 
   &position: {x=65535, y=9, z=0}
 
-BackSlot < InventoryItem
+BackSlot < InventoryItemCyclopedia
   id: slot3
 
   &position: {x=65535, y=3, z=0}
 
-RightSlot < InventoryItem
+RightSlot < InventoryItemCyclopedia
   id: slot5
 
   &position: {x=65535, y=5, z=0}
 
-AmmoSlot < InventoryItem
+AmmoSlot < InventoryItemCyclopedia
   id: slot10
 
   &position: {x=65535, y=10, z=0}
 
-BackSlot2 < InventoryItem
+BackSlot2 < InventoryItemCyclopedia
   id: slot12
   image-source: /images/ui/character/secondary_backpack
   &position: {x=65535, y=12, z=0}
 
-BackSlot3 < InventoryItem
+BackSlot3 < InventoryItemCyclopedia
   id: slot13
   image-source: /images/ui/character/secondary_backpack
   &position: {x=65535, y=13, z=0}
 
-BackSlot4 < InventoryItem
+BackSlot4 < InventoryItemCyclopedia
   id: slot14
 
   &position: {x=65535, y=14, z=0}
 
-BackSlot5 < InventoryItem
+BackSlot5 < InventoryItemCyclopedia
   id: slot15
 
   &position: {x=65535, y=15, z=0}
 
-ArtifactSlot < InventoryItem
+ArtifactSlot < InventoryItemCyclopedia
   id: slot16
 
   &position: {x=65535, y=16, z=0}
 
-RuneSlot < InventoryItem
+RuneSlot < InventoryItemCyclopedia
   id: slot18
 
   &position: {x=65535, y=18, z=0}
