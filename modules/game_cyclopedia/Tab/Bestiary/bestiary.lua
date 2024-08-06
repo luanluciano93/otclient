@@ -14,7 +14,6 @@ function Cyclopedia.onParseBestiaryOverview(name, creatures)
     end
 end
 
-
 function showBestiary()
     UI = g_ui.loadUI("bestiary", contentContainer)
     UI:show()
@@ -28,7 +27,7 @@ function showBestiary()
     controllerCyclopedia.ui.GoldBase:setVisible(true)
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(true)
     g_game.requestBestiary()
-    
+
 end
 
 Cyclopedia.Bestiary = {}
@@ -41,7 +40,7 @@ function Cyclopedia.SetBestiaryProgress(currentValue, maxValue)
         height = 20,
         x = 0,
         y = 0,
-        width = math.min(percent, maxValue),
+        width = math.min(percent, maxValue)
     }
 
     if rect.width < 1 then
@@ -109,7 +108,7 @@ function Cyclopedia.CreateCreatureItems(data)
             end
 
             local price, rarity = ItemsDatabase.getSellValueAndColor(itemWidget.id)
- 
+
             if price > 0 then
                 itemWidget:setImageSource("/images/ui/rarity_" .. rarity)
             end
@@ -145,7 +144,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     Cyclopedia.SetBestiaryProgress(data.killCounter, data.lastProgressKillCount)
 
     if data.killCounter >= data.thirdDifficulty then
-      --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/fill")
+        --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/fill")
         UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter) -- thirdDifficulty
         UI.ListBase.CreatureInfo.ProgressValue:setMarginBottom(10)
     else
@@ -174,9 +173,9 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
             height = 9,
             x = 18,
             y = 0,
-            width = 18 
+            width = 18
         }
-        
+
         UI.ListBase.CreatureInfo.SubTextLabel:setImageSource("/images/icons/icons-skills")
         UI.ListBase.CreatureInfo.SubTextLabel:setImageClip(rect)
         UI.ListBase.CreatureInfo.SubTextLabel:setSize("18 9")
@@ -185,7 +184,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
             height = 9,
             x = 0,
             y = 0,
-            width = 18 
+            width = 18
         }
         UI.ListBase.CreatureInfo.SubTextLabel:setImageSource("/images/icons/icons-skills")
         UI.ListBase.CreatureInfo.SubTextLabel:setImageClip(rect)
@@ -402,15 +401,15 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
         widget.KillsLabel:setVisible(false)
         widget.Sprite:getCreature():setShader("")
     else
-     
+
         if data.currentLevel < 1 then
             widget.KillsLabel:setText("?")
             widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
             widget.Name:setText("Unknown")
         else
-            widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel-1))
+            widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel - 1))
         end
-  
+
     end
 
     function widget.ClassBase:onClick()
@@ -606,9 +605,6 @@ function Cyclopedia.verifyBestiaryButtons()
     end
 end
 
-
-
-
 --[[
 ===================================================
 =					tracker		  =
@@ -616,16 +612,17 @@ end
 ]]
 
 function Cyclopedia.toggleBestiaryTracker()
-	if not trackerMiniWindow then
-		return 
-	end
-	
-	if trackerButton:isOn() then
-		trackerMiniWindow:close()
-		trackerButton:setOn(false)
-	else
+    if not trackerMiniWindow then
+        return
+    end
+
+    if trackerButton:isOn() then
+        trackerMiniWindow:close()
+        trackerButton:setOn(false)
+    else
         if not trackerMiniWindow:getParent() then
-            local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindow, trackerMiniWindow:getMinimumHeight())
+            local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindow,
+                trackerMiniWindow:getMinimumHeight())
             if not panel then
                 return
             end
@@ -634,39 +631,41 @@ function Cyclopedia.toggleBestiaryTracker()
         end
         trackerMiniWindow:open()
         trackerButton:setOn(true)
-	end
+    end
 
 end
 
 function Cyclopedia.onTrackerClose()
-	trackerButton:setOn(false)
+    trackerButton:setOn(false)
 end
 
 function Cyclopedia.setBarPercent(widget, percent)
-	if percent > 92 then
-		widget.killsBar:setBackgroundColor("#00BC00")
-	elseif percent > 60 then
-		widget.killsBar:setBackgroundColor("#50A150")
-	elseif percent > 30 then
-		widget.killsBar:setBackgroundColor("#A1A100")
-	elseif percent > 8 then
-		widget.killsBar:setBackgroundColor("#BF0A0A")
-	elseif percent > 3 then
-		widget.killsBar:setBackgroundColor("#910F0F")
-	else
-		widget.killsBar:setBackgroundColor("#850C0C")
-	end
-	
-	widget.killsBar:setPercent(percent)
+    if percent > 92 then
+        widget.killsBar:setBackgroundColor("#00BC00")
+    elseif percent > 60 then
+        widget.killsBar:setBackgroundColor("#50A150")
+    elseif percent > 30 then
+        widget.killsBar:setBackgroundColor("#A1A100")
+    elseif percent > 8 then
+        widget.killsBar:setBackgroundColor("#BF0A0A")
+    elseif percent > 3 then
+        widget.killsBar:setBackgroundColor("#910F0F")
+    else
+        widget.killsBar:setBackgroundColor("#850C0C")
+    end
+
+    widget.killsBar:setPercent(percent)
 end
 
 function Cyclopedia.onBestiaryUpdate(data)
     trackerMiniWindow.contentsPanel:destroyChildren()
-    if not data then return end
+    if not data then
+        return
+    end
     for i = 1, #data do
         local name = RACE[data[i][1]].name
         local widget = trackerMiniWindow.contentsPanel[tostring(data[i][1])]
-	
+
         if not widget then
             widget = g_ui.createWidget("TrackerButton", trackerMiniWindow.contentsPanel)
 
@@ -684,9 +683,9 @@ function Cyclopedia.onBestiaryUpdate(data)
             end
 
             widget.kills:setText(data[i][2] .. "/" .. data[i][5])
-	
+
             local percent = data[i][2] / data[i][5] * 100
-            
+
             if percent > 100 then
                 percent = 100
             end
@@ -698,16 +697,16 @@ function Cyclopedia.onBestiaryUpdate(data)
 end
 
 function onTrackerClick(widget, mousePosition, mouseButton)
-	local taskId = tonumber(widget:getId())
-	local menu = g_ui.createWidget("PopupMenu")
+    local taskId = tonumber(widget:getId())
+    local menu = g_ui.createWidget("PopupMenu")
 
-	menu:setGameMenu(true)
-	menu:addOption("stop Tracking ".. widget.label:getText(), function ()
-		g_game.sendStatusTrackerBestiary(taskId,0)
-	end)
-	menu:display(menuPosition)
+    menu:setGameMenu(true)
+    menu:addOption("stop Tracking " .. widget.label:getText(), function()
+        g_game.sendStatusTrackerBestiary(taskId, 0)
+    end)
+    menu:display(menuPosition)
 
-	return true
+    return true
 end
 
 local BESTIATYTRACKER_FILTERS = {
@@ -727,7 +726,9 @@ function loadFilters()
 end
 
 function saveFilters()
-    g_settings.mergeNode('bestiaryTracker', { ['filters'] = loadFilters() })
+    g_settings.mergeNode('bestiaryTracker', {
+        ['filters'] = loadFilters()
+    })
 end
 
 function getFilter(filter)
@@ -742,7 +743,9 @@ function setFilter(filter)
     end
 
     filters[filter] = not value
-    g_settings.mergeNode('bestiaryTracker', { ['filters'] = filters })    
+    g_settings.mergeNode('bestiaryTracker', {
+        ['filters'] = filters
+    })
 
 end
 

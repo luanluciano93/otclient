@@ -2717,12 +2717,12 @@ void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
         charm.description = msg->getString();
         msg->getU8();
         charm.unlockPrice = msg->getU16();
-        charm.activated = msg->getU8();
+        charm.unlocked = (msg->getU8() == 1) ? true : false;
         charm.asignedStatus = false;
         charm.raceId = 0;
         charm.removeRuneCost = 0;
 
-        if (charm.activated > 0) {
+        if (charm.unlocked) {
             const bool asigned = msg->getU8() > 0;
             if (asigned) {
                 charm.asignedStatus = asigned;

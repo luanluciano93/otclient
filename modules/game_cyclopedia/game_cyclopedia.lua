@@ -41,8 +41,8 @@ function controllerCyclopedia:onInit()
     bosstiary = buttonSelection:recursiveGetChildById('bosstiary')
     bossSlot = buttonSelection:recursiveGetChildById('bossSlot')
 
-	g_ui.importStyle("cyclopedia_widgets")
-	g_ui.importStyle("cyclopedia_pages")
+    g_ui.importStyle("cyclopedia_widgets")
+    g_ui.importStyle("cyclopedia_pages")
 
     controllerCyclopedia:registerEvents(g_game, {
         -- bestiary
@@ -66,22 +66,21 @@ function controllerCyclopedia:onInit()
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
         -- items
-        onParseItemDetail = onParseItemDetail,
+        onParseItemDetail = onParseItemDetail
 
     })
-    
---[[
+
+    --[[
 ===================================================
 =					tracker                       =
 =================================================== 
 ]]
-    trackerButton = modules.game_mainpanel.addToggleButton("trackerButton", tr("Bestiary Tracker"), "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
+    trackerButton = modules.game_mainpanel.addToggleButton("trackerButton", tr("Bestiary Tracker"),
+        "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
 
-	trackerButton:setOn(true)
-	
+    trackerButton:setOn(true)
+
     trackerMiniWindow = g_ui.createWidget('BestiaryTracker', modules.game_interface.getRightPanel())
-
-
 
     trackerMiniWindow.menuButton.onClick = function(widget, mousePos, mouseButton)
         local menu = g_ui.createWidget('bestiaryTrackerMenu')

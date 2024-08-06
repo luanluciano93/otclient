@@ -108,7 +108,7 @@ struct CharmData
     std::string name;
     std::string description;
     uint16_t unlockPrice;
-    uint8_t activated;
+    bool unlocked;
     bool asignedStatus;
     uint16_t raceId;
     uint32_t removeRuneCost;

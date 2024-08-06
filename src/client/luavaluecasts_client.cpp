@@ -386,8 +386,8 @@ int push_luavalue(const CharmData& charm) {
     g_lua.setField("description");
     g_lua.pushInteger(charm.unlockPrice);
     g_lua.setField("unlockPrice");
-    g_lua.pushInteger(charm.activated);
-    g_lua.setField("activated");
+    g_lua.pushBoolean(charm.unlocked);
+    g_lua.setField("unlocked");
     g_lua.pushBoolean(charm.asignedStatus);
     g_lua.setField("asignedStatus");
     g_lua.pushInteger(charm.raceId);

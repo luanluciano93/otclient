@@ -9,8 +9,6 @@ function showBossSlot()
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
-
-
 local CATEGORY = {
     BANE = 0,
     NEMESIS = 2,
@@ -212,7 +210,7 @@ function Cyclopedia.BossSlotChangeSlot(slot, data, unlockedBosses)
             internalWidget:setId(internalData.bossId)
             internalWidget.Sprite:setOutfit(RACE_Bosstiary[internalData.bossId].outfit)
             internalWidget:setText(format(RACE_Bosstiary[internalData.bossId].name))
-            internalWidget.Sprite:setAnimate(true)
+            internalWidget.Sprite:getCreature():setStaticWalking(1000)
             internalWidget.TypeIcon:setImageSource(ICONS[internalData.category])
 
             local tooltip =
@@ -282,7 +280,7 @@ function Cyclopedia.BossSlotChangeSlot(slot, data, unlockedBosses)
         end
 
         widget.ActivedBoss.Sprite:setOutfit(RACE_Bosstiary[data.bossId].outfit)
-        widget.ActivedBoss.Sprite:setAnimate(true)
+        widget.ActivedBoss.Sprite:getCreature():setStaticWalking(1000)
         widget.ActivedBoss.EquipmentLabel:setText(string.format("Equipment loot bonus: %d%%", data.lootBonus))
         widget.ActivedBoss.Value:setText(comma_value(data.goldToRemove))
 
@@ -389,7 +387,7 @@ function Cyclopedia.readjustSelectBoss()
 
             internalWidget.Sprite:setOutfit(RACE_Bosstiary[internalData.bossId].outfit)
             internalWidget:setText(format(RACE_Bosstiary[internalData.bossId].name))
-            internalWidget.Sprite:setAnimate(true)
+            internalWidget.Sprite:getCreature():setStaticWalking(1000)
             internalWidget.TypeIcon:setImageSource(icons[internalData.category])
 
             local tooltip =
