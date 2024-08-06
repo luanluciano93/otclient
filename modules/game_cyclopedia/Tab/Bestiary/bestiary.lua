@@ -41,15 +41,15 @@ function Cyclopedia.SetBestiaryProgress(currentValue, maxValue)
         height = 20,
         x = 0,
         y = 0,
-        width = percent / 100 * 193
+        width = math.min(percent, maxValue),
     }
 
     if rect.width < 1 then
         rect.width = 1
     end
 
-    UI.ListBase.CreatureInfo.ProgressFill:setImageClip(rect)
-    UI.ListBase.CreatureInfo.ProgressFill:setImageRect(rect)
+    UI.ListBase.CreatureInfo.ProgressBorder1:setImageClip(rect)
+    UI.ListBase.CreatureInfo.ProgressBorder1:setImageRect(rect)
     UI.ListBase.CreatureInfo.ProgressValue:setText(comma_value(tonumber(currentValue)))
 end
 
@@ -107,18 +107,19 @@ function Cyclopedia.CreateCreatureItems(data)
                     itemWidget.Stackable:setText("1")
                 end
             end
-            --[[ 
-            local frame = g_game.getItemFrame(thing:getResultingValue())
 
-            if frame > 0 then
-                itemWidget.Rarity:setImageSource("/images/ui/frames")
-                itemWidget.Rarity:setImageClip(torect(g_game.getRectFrame(frame)))
-            end ]]
+            local price, rarity = ItemsDatabase.getSellValueAndColor(itemWidget.id)
+ 
+            if price > 0 then
+                itemWidget:setImageSource("/images/ui/rarity_" .. rarity)
+            end
+
         end
     end
 end
 
 function Cyclopedia.loadBestiarySelectedCreature(data)
+
     local occurence = {
         [0] = 1,
         2,
@@ -144,7 +145,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     Cyclopedia.SetBestiaryProgress(data.killCounter, data.lastProgressKillCount)
 
     if data.killCounter >= data.thirdDifficulty then
-        --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/fill")
+      --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/fill")
         UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter) -- thirdDifficulty
         UI.ListBase.CreatureInfo.ProgressValue:setMarginBottom(10)
     else
@@ -160,6 +161,35 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         UI.ListBase.CreatureInfo.Value4:setText(data.armor)
         UI.ListBase.CreatureInfo.Value5:setText(data.mitigation .. "%")
         UI.ListBase.CreatureInfo.BonusValue:setText(data.charmValue)
+    else
+        UI.ListBase.CreatureInfo.Value1:setText("?")
+        UI.ListBase.CreatureInfo.Value2:setText("?")
+        UI.ListBase.CreatureInfo.Value3:setText("?")
+        UI.ListBase.CreatureInfo.Value4:setText("?")
+        UI.ListBase.CreatureInfo.Value5:setText("?")
+        UI.ListBase.CreatureInfo.BonusValue:setText("?")
+    end
+    if data.attackMode == 1 then
+        local rect = {
+            height = 9,
+            x = 18,
+            y = 0,
+            width = 18 
+        }
+        
+        UI.ListBase.CreatureInfo.SubTextLabel:setImageSource("/images/icons/icons-skills")
+        UI.ListBase.CreatureInfo.SubTextLabel:setImageClip(rect)
+        UI.ListBase.CreatureInfo.SubTextLabel:setSize("18 9")
+    else
+        local rect = {
+            height = 9,
+            x = 0,
+            y = 0,
+            width = 18 
+        }
+        UI.ListBase.CreatureInfo.SubTextLabel:setImageSource("/images/icons/icons-skills")
+        UI.ListBase.CreatureInfo.SubTextLabel:setImageClip(rect)
+        UI.ListBase.CreatureInfo.SubTextLabel:setSize("18 9")
     end
 
     local resists = {"PhysicalProgress", "FireProgress", "EarthProgress", "EnergyProgress", "IceProgress",
@@ -367,14 +397,20 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
 
     local level = {0, 1, 2}
 
-    if data.currentLevel > 3 then
+    if data.currentLevel >= 3 then
         widget.Finalized:setVisible(true)
         widget.KillsLabel:setVisible(false)
         widget.Sprite:getCreature():setShader("")
     else
-        widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel))
-        widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
-        widget.Name:setText("uknown")
+     
+        if data.currentLevel < 1 then
+            widget.KillsLabel:setText("?")
+            widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
+            widget.Name:setText("Unknown")
+        else
+            widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel-1))
+        end
+  
     end
 
     function widget.ClassBase:onClick()

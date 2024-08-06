@@ -150,10 +150,9 @@ UIWidget
         //image-source: /game_cyclopedia/images/bestiary/progress_bar
       UIWidget
         id: ProgressBorder1
-        anchors.right: ProgressBorder2.left
-        anchors.bottom: ProgressBorder2.bottom
+        anchors.fill: ProgressBack
         margin-right: 1
-        image-source: /game_cyclopedia/images/bestiary/progress_bar
+        image-source: /game_cyclopedia/images/bestiary/fill
         image-offset: 95 0
       UIWidget
         id: ProgressBorder3
@@ -212,7 +211,7 @@ UIWidget
       UIWidget
         id: DiamondBase
         anchors.left: ProgressBack.left
-        anchors.top: StarBase.bottom
+        anchors.top: StarFill.bottom
         margin-top: 5
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-diamond-inactive
         image-repeated: true
@@ -224,14 +223,13 @@ UIWidget
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-diamond-active
         image-repeated: true
         width: 36
-      Label
+      UIWidget
         id: SubTextLabel
         anchors.top: DiamondBase.bottom
         anchors.left: DiamondBase.left
         margin-top: 5
         text-auto-resize: true
-        !text: tr('?')
-        color: #C7C7C7
+ 
       UIWidget
         id: BonusIcon
         anchors.top: SubTextLabel.bottom

@@ -165,7 +165,7 @@ end
 
 -- function Cyclopedia.loadCharms(points, data, monsters)
 function Cyclopedia.loadCharms(data2)
-    controllerCyclopedia.ui.CharmsBase.Value:setText(data2.points)
+    controllerCyclopedia.ui.CharmsBase.Value:setText(Cyclopedia.formatGold(data2.points))
     if UI == nil or UI.CharmList == nil then -- I know, don't change it
         return
     end
