@@ -713,7 +713,7 @@ CharmItem < UICheckBox
     anchors.right: parent.right
     margin-bottom: 5
     margin-right: 5
-    image-source: /images/ui/panel_content_new
+    image-source: /images/ui/panel_flat
     image-border: 10
     size: 66 66
     phantom: true
@@ -755,7 +755,7 @@ CharmItem < UICheckBox
     anchors.bottom: PriceBase.top
     anchors.horizontalCenter: PriceBase.horizontalCenter
     margin-bottom: 7
-    image-source: /images/ui/panel_content_new
+    image-source: /images/ui/panel_flat
     image-border: 10
     size: 37 37
     phantom: true

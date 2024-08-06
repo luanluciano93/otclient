@@ -28,7 +28,7 @@ UIWidget
       anchors.right: parent.right
       margin-top: 140
       margin-right: 7
-      image-source: /images/ui/panel_content
+      image-source: /images/ui/panel_flat
       image-border: 10
       size: 66 66
       phantom: true
@@ -53,7 +53,7 @@ UIWidget
       id: ItemBase
       anchors.top: InfoBase.top
       anchors.horizontalCenter: UnlockButton.horizontalCenter
-      image-source: /images/ui/panel_content
+      image-source: /images/ui/panel_flat
       image-border: 10
       size: 37 37
       phantom: true
@@ -95,9 +95,12 @@ UIWidget
       anchors.right: InfoBase.right
       anchors.top: PriceBase.top
       margin-top: -2
+      size: 26 20
       image-source: /game_cyclopedia/images/button_store
+      image-clip: 0 0 26 20
       $pressed:
-        image-source: /game_cyclopedia/images/button_store_pressed
+        image-source: /game_cyclopedia/images/button_store
+        image-clip: 0 20 26 20
     UIWidget
       id: InfoButton
       anchors.right: StoreButton.left
@@ -129,7 +132,7 @@ UIWidget
       anchors.right: SearchEdit.right
       anchors.left: SearchEdit.left
       margin-bottom: 30
-      image-source: /images/ui/panel_content_new
+      image-source: /images/ui/panel_flat
       image-border: 10
       height: 105
       phantom: true

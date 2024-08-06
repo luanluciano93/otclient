@@ -167,7 +167,7 @@ UIWidget
     id: SearchClearButton
     anchors.right: SearchEdit.right
     anchors.top: SearchEdit.top
-    margin-top: 2
+    margin-top: 1
     margin-right: 2
     image-source: /game_cyclopedia/images/button_clear_search
     image-color: white
