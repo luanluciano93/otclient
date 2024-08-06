@@ -641,7 +641,7 @@ SubPanel < UIWidget
 ItemCategory < UIWidget
   color: #C0C0C0
   text-align: left
-  @onCheckChange: modules.game_cyclopedia.onCategoryChange(self)
+  @onCheckChange: modules.game_cyclopedia.Cyclopedia.onCategoryChange(self)
   $checked:
     color: #F6F6F6
 ItemsListBaseItem < UIWidget

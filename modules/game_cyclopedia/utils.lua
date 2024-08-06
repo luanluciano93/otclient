@@ -1,4 +1,4 @@
-﻿function formatGold(value)
+﻿function Cyclopedia.formatGold(value)
 	local number = tostring(value)
 
 	number = string.reverse(number)
@@ -44,7 +44,7 @@ function calculateCombatValues(percent)
     return values
 end
 
-function formatSaleData(data)
+function Cyclopedia.formatSaleData(data)
 	local s, sell, b, buy = {}, {}, {}, {}
 
 	for i = 0, #data do
@@ -104,14 +104,14 @@ function formatSaleData(data)
 	return sell, buy
 end
 
-function compareItems(item1, item2)
+function Cyclopedia.compareItems(item1, item2)
 	local marketData1 = item1:getMarketData()
 	local marketData2 = item2:getMarketData()
 
 	return marketData1.name:lower() < marketData2.name:lower()
 end
 
-function hasHandedFilter(categoryId)
+function Cyclopedia.hasHandedFilter(categoryId)
 	local ids = {
 		17,
 		18,
@@ -128,7 +128,7 @@ function hasHandedFilter(categoryId)
 	return false
 end
 
-function hasClassificationFilter(categoryId)
+function Cyclopedia.hasClassificationFilter(categoryId)
 	local ids = {
 		1,
 		24,
