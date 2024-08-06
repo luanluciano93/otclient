@@ -2659,7 +2659,9 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
         lootItem.diffculty = msg->getU8();
         lootItem.specialEvent = msg->getU8();
 
-        if (data.currentLevel > 1) {
+        bool shouldAddItem = lootItem.itemId != 0;
+
+        if (shouldAddItem) {
             lootItem.name = msg->getString();
             lootItem.amount = msg->getU8();
         }
@@ -2685,7 +2687,7 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
             data.combat[elementId] = elementValue;
         }
 
-        msg->getU16(); // locations count
+        msg->getU16();
         data.location = msg->getString();
     }
 
