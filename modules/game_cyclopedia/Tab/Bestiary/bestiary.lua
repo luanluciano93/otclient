@@ -5,7 +5,7 @@ local STAGES = {
     CATEGORY = 1,
     CREATURE = 3
 }
-
+local storedRaceIDs = {}
 function Cyclopedia.onParseBestiaryOverview(name, creatures)
     if name == "Result" then
         Cyclopedia.loadBestiarySearchCreatures(creatures)
@@ -113,6 +113,8 @@ function Cyclopedia.CreateCreatureItems(data)
                 itemWidget:setImageSource("/images/ui/rarity_" .. rarity)
             end
 
+            itemWidget.onMouseRelease = onAddLootClick
+
         end
     end
 end
@@ -151,6 +153,21 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/durability_fill")
         UI.ListBase.CreatureInfo.ProgressValue:setText(comma_value(data.killCounter))
         UI.ListBase.CreatureInfo.ProgressValue:setMarginBottom(10)
+    end
+
+    UI.ListBase.CreatureInfo.LeftBase.TrackCheck.raceId = data.id
+    --TODO investigate when it can be track-- idk when
+--[[     if data.currentLevel == 1 then
+        UI.ListBase.CreatureInfo.LeftBase.TrackCheck:enable()
+    else
+        UI.ListBase.CreatureInfo.LeftBase.TrackCheck:disable()
+    end ]]
+
+
+    if table.find(storedRaceIDs, data.id) then
+        UI.ListBase.CreatureInfo.LeftBase.TrackCheck:setChecked(true)
+    else
+        UI.ListBase.CreatureInfo.LeftBase.TrackCheck:setChecked(false)
     end
 
     if data.currentLevel > 1 then
@@ -635,8 +652,38 @@ function Cyclopedia.toggleBestiaryTracker()
 
 end
 
-function Cyclopedia.onTrackerClose()
-    trackerButton:setOn(false)
+function Cyclopedia.toggleBosstiaryTracker()
+    if not trackerMiniWindowBosstiary then
+        return
+    end
+
+    if trackerButtonBosstiary:isOn() then
+        trackerMiniWindowBosstiary:close()
+        trackerButtonBosstiary:setOn(false)
+    else
+        if not trackerMiniWindowBosstiary:getParent() then
+            local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindowBosstiary,
+            trackerMiniWindowBosstiary:getMinimumHeight())
+            if not panel then
+                return
+            end
+
+            panel:addChild(trackerMiniWindowBosstiary)
+        end
+        trackerMiniWindowBosstiary:open()
+        trackerButtonBosstiary:setOn(true)
+    end
+
+end
+
+
+function Cyclopedia.onTrackerClose(temp)
+    if temp == "Boosteary Tracker" then
+        trackerButtonBosstiary:setOn(false)
+    else
+        trackerButton:setOn(false)
+    end
+
 end
 
 function Cyclopedia.setBarPercent(widget, percent)
@@ -657,57 +704,36 @@ function Cyclopedia.setBarPercent(widget, percent)
     widget.killsBar:setPercent(percent)
 end
 
-function Cyclopedia.onBestiaryUpdate(data)
-    trackerMiniWindow.contentsPanel:destroyChildren()
-    if not data then
-        return
+function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
+
+    if not data then return end
+
+    local isBoss = trackerType == 1
+    local window = isBoss and trackerMiniWindowBosstiary or trackerMiniWindow
+    local raceData = isBoss and RACE_Bosstiary or RACE
+
+    window.contentsPanel:destroyChildren()
+    storedRaceIDs = {}
+
+    for _, entry in ipairs(data) do
+        local raceId, kills, _, _, maxKills = unpack(entry)
+        table.insert(storedRaceIDs, raceId) 
+        local raceInfo = raceData[raceId]
+        local name = raceInfo.name
+
+        local widget = g_ui.createWidget("TrackerButton", window.contentsPanel)
+        widget:setId(raceId)
+
+        widget.creature:setOutfit({type = raceInfo.type})
+        widget.label:setText(name:len() > 12 and name:sub(1, 9) .. "..." or name)
+        widget.kills:setText(kills .. "/" .. maxKills)
+        widget.onMouseRelease = onTrackerClick
+
+        local percent = math.min(kills / maxKills * 100, 100)
+        Cyclopedia.setBarPercent(widget, percent)
     end
-    for i = 1, #data do
-        local name = RACE[data[i][1]].name
-        local widget = trackerMiniWindow.contentsPanel[tostring(data[i][1])]
-
-        if not widget then
-            widget = g_ui.createWidget("TrackerButton", trackerMiniWindow.contentsPanel)
-
-            widget:setId(data[i][1])
-
-            local outfit = RACE[data[i][1]].type
-
-            widget.creature:setOutfit({
-                type = outfit
-            })
-            if name:len() > 12 then
-                widget.label:setText(name:sub(1, 9) .. "...")
-            else
-                widget.label:setText(name)
-            end
-
-            widget.kills:setText(data[i][2] .. "/" .. data[i][5])
-
-            local percent = data[i][2] / data[i][5] * 100
-
-            if percent > 100 then
-                percent = 100
-            end
-            widget.onMouseRelease = onTrackerClick
-            Cyclopedia.setBarPercent(widget, percent)
-        end
-    end
-
 end
 
-function onTrackerClick(widget, mousePosition, mouseButton)
-    local taskId = tonumber(widget:getId())
-    local menu = g_ui.createWidget("PopupMenu")
-
-    menu:setGameMenu(true)
-    menu:addOption("stop Tracking " .. widget.label:getText(), function()
-        g_game.sendStatusTrackerBestiary(taskId, 0)
-    end)
-    menu:display(menuPosition)
-
-    return true
-end
 
 local BESTIATYTRACKER_FILTERS = {
     ["sortByName"] = true,
@@ -750,7 +776,42 @@ function setFilter(filter)
 end
 
 -- trackerMiniWindow.contentsPanel:moveChildToIndex(battleButton, index)
-
+-- TODO Add sort by name, kills, percentage, ascending, descending
 function test(index)
     trackerMiniWindow.contentsPanel:moveChildToIndex(trackerMiniWindow.contentsPanel:getLastChild(), index)
+end
+
+-- @ onMouseRelease
+function onTrackerClick(widget, mousePosition, mouseButton)
+    local taskId = tonumber(widget:getId())
+    local menu = g_ui.createWidget("PopupMenu")
+
+    menu:setGameMenu(true)
+    menu:addOption("stop Tracking " .. widget.label:getText(), function()
+        g_game.sendStatusTrackerBestiary(taskId, false)
+    end)
+    menu:display(menuPosition)
+
+    return true
+end
+
+
+function onAddLootClick(widget, mousePosition, mouseButton)
+    local taskId = tonumber(widget:getId())
+    local menu = g_ui.createWidget("PopupMenu")
+
+    menu:setGameMenu(true)
+    if true then -- is in loot list ? 
+        menu:addOption("Add to Loot List", function()
+            print("future")
+        end)
+    else
+        menu:addOption("Remove from Loot List" , function()
+            print("future")
+         end)
+    end
+
+    menu:display(menuPosition)
+
+    return true
 end

@@ -3480,11 +3480,10 @@ void ProtocolGame::parseShowDescription(const InputMessagePtr& msg)
 
 void ProtocolGame::parseBestiaryTracker(const InputMessagePtr& msg)
 {
-    if (g_game.getFeature(Otc::GameBosstiaryTracker)) {
-        msg->getU8(); // is bestiary boolean
-    }
-    std::vector<std::tuple<uint16_t, uint32_t, uint16_t, uint16_t, uint16_t, uint8_t>> bestiaryTracker;
+    uint8_t trackerType = msg->getU8(); // 0x00 para bestiary, 0x01 para boss
+    std::vector<std::tuple<uint16_t, uint32_t, uint16_t, uint16_t, uint16_t, uint8_t>> trackerData;
     const uint8_t size = msg->getU8();
+
     for (auto i = 0; i < size; ++i) {
         uint16_t raceID = msg->getU16();
         uint32_t killCount = msg->getU32();
@@ -3492,11 +3491,12 @@ void ProtocolGame::parseBestiaryTracker(const InputMessagePtr& msg)
         uint16_t secondUnlock = msg->getU16();
         uint16_t lastUnlock = msg->getU16();
         uint8_t status = msg->getU8();
-
-        bestiaryTracker.emplace_back(raceID, killCount, firstUnlock, secondUnlock, lastUnlock, status);
-     
+        trackerData.emplace_back(raceID, killCount, firstUnlock, secondUnlock, lastUnlock, status);
     }
-    g_lua.callGlobalField("g_game", "onparseBestiaryTracker", bestiaryTracker);
+
+
+    g_lua.callGlobalField("g_game", "onParseCyclopediaTracker", trackerType,trackerData);
+
 }
 
 void ProtocolGame::parseTaskHuntingBasicData(const InputMessagePtr& msg)

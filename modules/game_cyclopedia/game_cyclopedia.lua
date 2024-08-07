@@ -1,6 +1,10 @@
 Cyclopedia = {}
-
+trackerButton = nil
+trackerMiniWindow = nil
+trackerButtonBosstiary = nil
+trackerMiniWindowBosstiary = nil
 contentContainer = nil
+
 local buttonSelection = nil
 local items = nil
 local bestiary = nil
@@ -11,8 +15,8 @@ local character = nil
 local CyclopediaButton = nil
 local bosstiary = nil
 local bossSlot = nil
-trackerButton = nil
-trackerMiniWindow = nil
+local ButtonBossSlot = nil
+local ButtonBestiary = nil
 
 function toggle()
     if not controllerCyclopedia.ui then
@@ -23,13 +27,18 @@ function toggle()
     end
     show()
 end
-
 controllerCyclopedia = Controller:new()
 controllerCyclopedia:setUI('game_cyclopedia')
 function controllerCyclopedia:onInit()
+    -- @botones
     CyclopediaButton = modules.game_mainpanel.addToggleButton('CyclopediaButton', tr('Cyclopedia'),
         '/images/options/cooldowns', toggle, false, 7)
+    ButtonBossSlot = modules.game_mainpanel.addToggleButton("bossSlot", tr("Open Boss Slots dialog"),
+        "/images/options/ButtonBossSlot", getBossSlot, false, 20)
     CyclopediaButton:setOn(false)
+    ButtonBestiary = modules.game_mainpanel.addToggleButton("bosstiary", tr("Open Bosstiary dialog"),
+        "/images/options/ButtonBosstiary", getBosstiary, false, 17)
+
     contentContainer = controllerCyclopedia.ui:recursiveGetChildById('contentContainer')
     buttonSelection = controllerCyclopedia.ui:recursiveGetChildById('buttonSelection')
     items = buttonSelection:recursiveGetChildById('items')
@@ -48,13 +57,13 @@ function controllerCyclopedia:onInit()
         -- bestiary
         onParseBestiaryRaces = Cyclopedia.LoadBestiaryCategories,
         onParseBestiaryOverview = Cyclopedia.onParseBestiaryOverview,
-        onParseBestiaryMonster = Cyclopedia.loadBestiarySelectedCreature,
         onUpdateBestiaryMonsterData = Cyclopedia.loadBestiarySelectedCreature,
-        onparseBestiaryTracker = Cyclopedia.onBestiaryUpdate,
-        -- boss_slot
-        onParseBosstiarySlots = Cyclopedia.loadBossSlots,
+        -- Bosstiary // bestiary
+        onParseCyclopediaTracker = Cyclopedia.onParseCyclopediaTracker,
         -- Bosstiary
         onParseSendBosstiary = Cyclopedia.LoadBoostiaryCreatures,
+        -- boss_slot
+        onParseBosstiarySlots = Cyclopedia.loadBossSlots,
         -- character
         onParseCyclopediaCharacterGeneralStats = Cyclopedia.loadCharacterGeneralStats,
         onParseCyclopediaCharacterCombatStats = Cyclopedia.loadCharacterCombatStats,
@@ -72,13 +81,14 @@ function controllerCyclopedia:onInit()
 
     --[[
 ===================================================
-=					tracker                       =
+=					tracker Bestiary                      =
 =================================================== 
 ]]
+
     trackerButton = modules.game_mainpanel.addToggleButton("trackerButton", tr("Bestiary Tracker"),
         "/images/options/bestiaryTracker", Cyclopedia.toggleBestiaryTracker, false, 17)
 
-    trackerButton:setOn(true)
+    trackerButton:setOn(false)
 
     trackerMiniWindow = g_ui.createWidget('BestiaryTracker', modules.game_interface.getRightPanel())
 
@@ -110,21 +120,82 @@ function controllerCyclopedia:onInit()
     trackerMiniWindow:moveChildToIndex(trackerMiniWindow.cyclopediaButton, 5)
     trackerMiniWindow:setup()
     trackerMiniWindow:hide()
+    --[[
+===================================================
+=					tracker Boosteary             =
+=================================================== 
+]]
+
+    trackerButtonBosstiary = modules.game_mainpanel.addToggleButton("bosstiarytrackerButton", tr("bosstiary Tracker"),
+        "/images/options/bosstiaryTracker", Cyclopedia.toggleBosstiaryTracker, false, 17)
+
+    trackerButtonBosstiary:setOn(false)
+
+    trackerMiniWindowBosstiary = g_ui.createWidget('BestiaryTracker', modules.game_interface.getRightPanel())
+    trackerMiniWindowBosstiary:setText("Boosteary Tracker")
+    trackerMiniWindowBosstiary.menuButton.onClick = function(widget, mousePos, mouseButton)
+        local menu = g_ui.createWidget('bestiaryTrackerMenu')
+        menu:setGameMenu(true)
+
+        local shortCreature = UIRadioGroup.create()
+        local shortAlphabets = UIRadioGroup.create()
+        for i, choice in ipairs(menu:getChildren()) do
+            if i >= 1 and i <= 3 then
+                shortCreature:addWidget(choice)
+            elseif i == 5 or i == 6 then
+                shortAlphabets:addWidget(choice)
+            end
+        end
+
+        menu:display(mousePos)
+        return true
+    end
+
+    trackerMiniWindowBosstiary.cyclopediaButton.onClick = function(widget, mousePos, mouseButton)
+        toggle()
+        SelectWindow("bosstiary")
+        return true
+    end
+
+    trackerMiniWindowBosstiary:moveChildToIndex(trackerMiniWindowBosstiary.menuButton, 4)
+    trackerMiniWindowBosstiary:moveChildToIndex(trackerMiniWindowBosstiary.cyclopediaButton, 5)
+    trackerMiniWindowBosstiary:setup()
+    trackerMiniWindowBosstiary:hide()
+
 end
 
 function controllerCyclopedia:onGameStart()
     trackerMiniWindow:setupOnStart()
     loadFilters()
+    Cyclopedia.BossSlots.UnlockBosses = {}
 end
 
 function controllerCyclopedia:onGameEnd()
-    trackerMiniWindow.contentsPanel:destroyChildren()
+    if trackerMiniWindow then
+        trackerMiniWindow.contentsPanel:destroyChildren()
+    end
     hide()
     saveFilters()
 end
 
 function controllerCyclopedia:onTerminate()
-
+    -- @ reload
+    if trackerButton then
+        trackerButton:destroy()
+        trackerButton = nil
+    end
+    if trackerMiniWindow then
+        trackerMiniWindow:destroy()
+        trackerMiniWindow = nil
+    end
+    if trackerButtonBosstiary then
+        trackerButtonBosstiary:destroy()
+        trackerButtonBosstiary = nil
+    end
+    if trackerMiniWindowBosstiary then
+        trackerMiniWindowBosstiary:destroy()
+        trackerMiniWindowBosstiary = nil
+    end
 end
 
 function hide()
@@ -176,3 +247,25 @@ function SelectWindow(type)
     end
 end
 -- LuaFormatter on
+
+function getBosstiary()
+    if not controllerCyclopedia.ui then
+        return
+    end
+    if controllerCyclopedia.ui:isVisible() then
+        return hide()
+    end
+    show()
+    SelectWindow("bosstiary")
+end
+
+function getBossSlot()
+    if not controllerCyclopedia.ui then
+        return
+    end
+    if controllerCyclopedia.ui:isVisible() then
+        return hide()
+    end
+    show()
+    SelectWindow("bossSlot")
+end

@@ -124,6 +124,8 @@ UIWidget
           !text: tr('Track Kills')
           text-auto-resize: true
           color: #C7C7C7
+          @onCheckChange: |
+            g_game.sendStatusTrackerBestiary(self.raceId,self:isChecked())
         UICreature
           id: Sprite
           anchors.top: parent.top

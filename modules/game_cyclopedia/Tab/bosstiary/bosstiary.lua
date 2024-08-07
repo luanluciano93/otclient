@@ -25,8 +25,6 @@ function showBosstiary()
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
-
-
 Cyclopedia.Bosstiary = {}
 
 local CATEGORY = {
@@ -66,24 +64,19 @@ function Cyclopedia.SetBosstiaryProgress(object, value, maxValue)
         object.fill:setVisible(true)
     end
 
-    object.fill:setImageClip(rect)
     object.fill:setImageRect(rect)
     object.ProgressValue:setText(value)
+    object.fill:setImageSource("/game_cyclopedia/images/bestiary/fill")
 
-    if maxValue <= value then
-        object.fill:setImageSource("/mods/game_cyclopedia/images/bestiary/fill_completed")
-    else
-        object.fill:setImageSource("/mods/game_cyclopedia/images/bestiary/fill")
-    end
 end
 
 function Cyclopedia.CreateBosstiaryCreature(data)
-
     if not data.visible then
         return
     end
 
     local widget = g_ui.createWidget("BosstiaryItem", UI.ListBase.BossList)
+    widget:setId(data.raceId)
     local raceData = RACE_Bosstiary[data.raceId]
     local icons = {
         [CATEGORY.BANE] = "/game_cyclopedia/images/boss/icon_bane",
@@ -154,15 +147,26 @@ function Cyclopedia.CreateBosstiaryCreature(data)
         if data.unlocked then
             widget.Sprite:getCreature():setShader("")
             widget:setText(format(data.name))
+            widget.TrackCheck:enable()
+            if data.isTrackerActived == 1 then
+                widget.TrackCheck:setChecked(true)
+            else
+                widget.TrackCheck:setChecked(false)
+            end
         else
             widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
+            widget.TrackCheck:disable()
+
         end
 
     end
+
 end
 
 function Cyclopedia.LoadBoostiaryCreatures(data)
-
+    if not UI then
+        return
+    end
     local maxCategoriesPerPage = 8
 
     Cyclopedia.Bosstiary.Creatures = {}

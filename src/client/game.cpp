@@ -1885,10 +1885,17 @@ void Game::requestBossSlootInfo()
     m_protocolGame->sendRequestBossSlootInfo();
 }
 
-void Game::sendStatusTrackerBestiary(const uint16_t raceId, const uint8_t status)
+void Game::requestBossSlootAction(const uint8_t action, const uint32_t raceId)
 {
     if (!canPerformGameAction())
         return;
 
+    m_protocolGame->sendRequestBossSlootAction(action,raceId);
+
+}
+void Game::sendStatusTrackerBestiary(const uint16_t raceId, bool status)
+{
+    m_denyBotCall = false;
     m_protocolGame->SendStatusTrackerBestiary(raceId, status);
+    m_denyBotCall = true;
 }

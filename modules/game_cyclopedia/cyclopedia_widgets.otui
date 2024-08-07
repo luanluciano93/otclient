@@ -965,6 +965,8 @@ BosstiaryItem < UIWidget
     !text: tr('Track')
     text-auto-resize: true
     color: #C1C1C1
+    @onCheckChange: |
+      g_game.sendStatusTrackerBestiary(self:getParent():getId(),self:isChecked())
   UICreature
     id: Sprite
     anchors.bottom: TrackCheck.top
@@ -1231,10 +1233,10 @@ TrackerButton < Panel
 BestiaryTracker < MiniWindow
   id: BestiaryTracker
   !text: tr('Bestiary Tracker')
-  icon: /images/options/bestiaryTracker
+  icon: /images/topbuttons/bestiaryTracker
   icon-offset: 4 2
   icon-size: 12 12
-  @onClose: modules.game_cyclopedia.Cyclopedia.onTrackerClose()
+  @onClose: modules.game_cyclopedia.Cyclopedia.onTrackerClose(self:getText())
 
   UIButton
     id: menuButton
