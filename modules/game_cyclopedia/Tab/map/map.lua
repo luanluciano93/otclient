@@ -1,46 +1,20 @@
 ﻿local UI = nil
+local virtualFloor = 7
 function showMap()
     UI = g_ui.loadUI("map", contentContainer)
     UI:show()
-	controllerCyclopedia:registerEvents(LocalPlayer, {
-		onPositionChange = Cyclopedia.onUpdateCameraPosition
-	}):execute()
+    controllerCyclopedia:registerEvents(LocalPlayer, {
+        onPositionChange = Cyclopedia.onUpdateCameraPosition
+    }):execute()
 
-	UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar.decrementButton:setVisible(false)
-	UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar.incrementButton:setVisible(false)
-	
-	local LayerSlider = UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar.sliderButton
-	
-	LayerSlider:setImageSource("")
-	g_ui.createWidget("MapLayerSelector", LayerSlider)
-	
-	Cyclopedia.prevFloor = 7
-	function UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:onValueChange(value)
-		local layerIndex = ConvertLayer(value)
-		local rect = {
-			width = 14,
-			height = 67,
-			y = 0,
-			x = layerIndex * 14
-		}
-	
-		UI.InformationBase.InternalBase.NavigationBase.LayerIndicator:setImageClip(rect)
-	
-		if Cyclopedia.prevFloor ~= layerIndex then
-			Cyclopedia.floorScrollBar(Cyclopedia.prevFloor, layerIndex)
-		end
-	
-		Cyclopedia.prevFloor = layerIndex
-	end
-	
-    UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:setValue(150)
+    Cyclopedia.prevFloor = 7
+
     Cyclopedia.loadMap()
 
-    controllerCyclopedia.ui.CharmsBase:setVisible(true)
-    controllerCyclopedia.ui.GoldBase:setVisible(false)
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(true)
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
-
 
 function Cyclopedia.loadMap()
     local clientVersion = g_game.getClientVersion()
@@ -70,21 +44,17 @@ function Cyclopedia.loadMap()
     end
 
     minimapWidget:load()
-    --minimapWidget:hideFlags()
+    -- minimapWidget:hideFlags()
 end
 
 function Cyclopedia.CreateMarkItem(Data)
-    local MarkItem = g_ui.createWidget("MarkListItem",
-        UI.InformationBase.InternalBase.DisplayBase.MarkList)
+    local MarkItem = g_ui.createWidget("MarkListItem", UI.InformationBase.InternalBase.DisplayBase.MarkList)
 
     MarkItem:setIcon("/images/game/minimap/flag" .. Data.flagId)
 end
 
-
-
-
 function Cyclopedia.toggleMapFlag(widget, checked)
-    UI.MapBase.minimap:filterFlag(widget:getId(), checked)
+    --UI.MapBase.minimap:filterFlag(widget:getId(), checked)
 end
 
 function Cyclopedia.showAllFlags(checked)
@@ -146,20 +116,17 @@ function Cyclopedia.floorScrollBar(oldValue, value)
     end
 end
 
-
-
 function ConvertLayer(Value)
-	if Value == 150 then
-		return 7
-	elseif Value == 300 then
-		return 15
-	elseif Value >= 1 and Value <= 300 then
-		return math.floor((Value - 1) / 20)
-	else
-		return 0
-	end
+    if Value == 150 then
+        return 7
+    elseif Value == 300 then
+        return 15
+    elseif Value >= 1 and Value <= 300 then
+        return math.floor((Value - 1) / 20)
+    else
+        return 0
+    end
 end
-
 
 function Cyclopedia.onUpdateCameraPosition()
 	local player = g_game.getLocalPlayer()
@@ -183,5 +150,62 @@ function Cyclopedia.onUpdateCameraPosition()
 		minimapWidget:setCrossPosition(player:getPosition(), true)
 	end
 
-	UI.InformationBase.InternalBase.NavigationBase.LayerScrollbar:setValue(150)
+    virtualFloor = pos.z
+end
+
+
+
+function Cyclopedia.onClickRoseButton(dir)
+    if dir == 'north' then
+        UI.MapBase.minimap:move(0, 1)
+    elseif dir == 'north-east' then
+        UI.MapBase.minimap:move(-1, 1)
+    elseif dir == 'east' then
+        UI.MapBase.minimap:move(-1, 0)
+    elseif dir == 'south-east' then
+        UI.MapBase.minimap:move(-1, -1)
+    elseif dir == 'south' then
+        UI.MapBase.minimap:move(0, -1)
+    elseif dir == 'south-west' then
+        UI.MapBase.minimap:move(1, -1)
+    elseif dir == 'west' then
+        UI.MapBase.minimap:move(1, 0)
+    elseif dir == 'north-west' then
+        UI.MapBase.minimap:move(1, 1)
+    end
+end
+
+function Cyclopedia.setZooom(zoom)
+    if zoom then
+        UI.MapBase.minimap:zoomIn()
+    else
+        UI.MapBase.minimap:zoomOut()
+    end
+end
+
+local function refreshVirtualFloors()
+
+    UI.InformationBase.InternalBase.NavigationBase.layersMark:setMarginTop(((virtualFloor + 1) * 4) - 3)
+    UI.InformationBase.InternalBase.NavigationBase.automapLayers:setImageClip((virtualFloor * 14) .. ' 0 14 67')
+end
+
+function Cyclopedia.downLayer()
+    if virtualFloor == 15 then
+        return
+    end
+
+    UI.MapBase.minimap:floorDown(1)
+    virtualFloor = virtualFloor + 1
+    refreshVirtualFloors()
+end
+
+
+function Cyclopedia.upLayer()
+    if virtualFloor == 0 then
+        return
+    end
+
+    UI.MapBase.minimap:floorUp(1)
+    virtualFloor = virtualFloor - 1
+    refreshVirtualFloors()
 end
