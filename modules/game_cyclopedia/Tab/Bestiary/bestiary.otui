@@ -132,87 +132,97 @@ UIWidget
           anchors.horizontalCenter: parent.horizontalCenter
           margin-top: 30
           size: 96 96
-      UIWidget
-        id: ProgressBack
+      ProgressBackground
+        id: ProgressBorder2
         anchors.left: LeftBase.right
         anchors.top: parent.top
         margin-top: 40
-        margin-left: 7
-        size: 193 20
-        image-source: /images/ui/item
-        image-border: 10
-      UIWidget
-        id: ProgressFill
-        anchors.fill: ProgressBack
-
-      UIWidget
-        id: ProgressBorder2
-        anchors.horizontalCenter: ProgressBack.horizontalCenter
-        anchors.bottom: ProgressBack.bottom
-        //image-source: /game_cyclopedia/images/bestiary/progress_bar
-      UIWidget
+        margin-left: 80
+        size: 60 14
+      ProgressBackground
         id: ProgressBorder1
-        anchors.fill: ProgressBack
-        margin-right: 1
-        image-source: /game_cyclopedia/images/bestiary/fill
-        image-offset: 95 0
-      UIWidget
+        anchors.right: ProgressBorder2.left
+        anchors.bottom: ProgressBorder2.bottom
+        margin-right: 2
+        size: 60 14
+      ProgressBackground
         id: ProgressBorder3
         anchors.left: ProgressBorder2.right
         anchors.bottom: ProgressBorder2.bottom
-        margin-left: 1
-        //image-source: /game_cyclopedia/images/bestiary/progress_bar
+        margin-left: 2
+        size: 60 14
       UIWidget
-        id: Sep1
+        id: ProgressBack
+        anchors.left: ProgressBorder1.left
+        anchors.bottom: ProgressBorder2.bottom
+        height: 12
+ 
+        phantom: true
+
+        image-source: /game_cyclopedia/images/bestiary/fill
+      UIWidget
+        id: ProgressBack33
+        anchors.left: ProgressBorder2.left
+        anchors.bottom: ProgressBorder2.bottom
+        height: 12
+
+        phantom: true
+
+        image-source: /game_cyclopedia/images/bestiary/fill
+      UIWidget
+        id: ProgressBack55
+        anchors.left: ProgressBorder3.left
+        anchors.bottom: ProgressBorder2.bottom
+        height: 12
+
+        phantom: true
+
+        image-source: /game_cyclopedia/images/bestiary/fill
+      UIWidget
+
         anchors.left: ProgressBorder1.right
-        anchors.right: ProgressBorder2.left
         anchors.top: ProgressBorder1.top
-        anchors.bottom: ProgressBorder1.bottom
-        image-source: /images/ui/outfits/minipanel
-        image-rect: 0 0 4 20
-        image-clip: 5 40 4 20
-        margin-right: 2
+        image-source: /images/ui/progress-separator
+
+        phantom: true
       UIWidget
-        id: Sep1
+
         anchors.left: ProgressBorder2.right
-        anchors.right: ProgressBorder3.left
         anchors.top: ProgressBorder1.top
-        anchors.bottom: ProgressBorder1.bottom
-        image-source: /images/ui/outfits/minipanel
-        image-rect: 0 0 4 20
-        image-clip: 5 40 4 20
-        margin-right: 2
+        image-source: /images/ui/progress-separator
+        phantom: true
       Label
         id: ProgressValue
         anchors.centerIn: ProgressBorder2
+
         text-auto-resize: true
         !text: tr('0')
-        color: #C7C7C7
       Label
         id: TotalLabel
-        anchors.bottom: ProgressBack.top
-        anchors.horizontalCenter: ProgressBack.horizontalCenter
+        anchors.bottom: ProgressBorder2.top
+        anchors.left: ProgressBorder1.right
+
         margin-bottom: 2
         !text: tr('Total Kills')
         color: #C7C7C7
       UIWidget
         id: StarBase
-        anchors.left: ProgressBack.left
-        anchors.top: ProgressBack.bottom
+        anchors.left: ProgressBorder1.left
+        anchors.top: ProgressBorder2.bottom
         margin-top: 4
         image-source: /game_cyclopedia/images/boss/icon_star
         image-repeated: true
         width: 45
       UIWidget
         id: StarFill
-        anchors.left: ProgressBack.left
+        anchors.left: ProgressBorder1.left
         anchors.top: StarBase.top
         image-source: /game_cyclopedia/images/boss/icon_star_active
         image-repeated: true
         width: 45
       UIWidget
         id: DiamondBase
-        anchors.left: ProgressBack.left
+        anchors.left: ProgressBorder1.left
         anchors.top: StarFill.bottom
         margin-top: 5
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-diamond-inactive
@@ -220,7 +230,7 @@ UIWidget
         width: 36
       UIWidget
         id: DiamondFill
-        anchors.left: ProgressBack.left
+        anchors.left: ProgressBorder1.left
         anchors.top: DiamondBase.top
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-diamond-active
         image-repeated: true
@@ -266,7 +276,7 @@ UIWidget
       ComboBox
         id: CharmSelector
         anchors.left: SelectButton.left
-        anchors.right: ProgressBack.right
+        anchors.right: ProgressBorder3.right
         anchors.top: CharmBase.top
         text-align: center
         enabled: false
@@ -304,8 +314,8 @@ UIWidget
         color: #C7C7C7
       VerticalSeparator
         id: IconsSep
-        anchors.horizontalCenter: ProgressBack.horizontalCenter
-        anchors.top: ProgressBack.bottom
+        anchors.horizontalCenter: ProgressBorder2.horizontalCenter
+        anchors.top: ProgressBorder2.bottom
         anchors.bottom: CharmLabel.top
         margin-top: 3
         margin-left: 20
@@ -440,7 +450,7 @@ UIWidget
       UIWidget
         id: PhysicalResist
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-physical-resist
-        anchors.left: ProgressBack.right
+        anchors.left: ProgressBorder3.right
         anchors.top: parent.top
         margin-top: 35
         margin-left: 10
@@ -485,7 +495,7 @@ UIWidget
       UIWidget
         id: EnergyResist
         image-source: /game_cyclopedia/images/bestiary/icons/monster-icon-energy-resist
-        anchors.left: ProgressBack.right
+        anchors.left: ProgressBorder3.right
         anchors.top: PhysicalResist.bottom
         margin-top: 10
         margin-left: 10

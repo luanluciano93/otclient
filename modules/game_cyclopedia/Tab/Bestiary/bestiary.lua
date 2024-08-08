@@ -5,6 +5,7 @@ local STAGES = {
     CATEGORY = 1,
     CREATURE = 3
 }
+
 local storedRaceIDs = {}
 function Cyclopedia.onParseBestiaryOverview(name, creatures)
     if name == "Result" then
@@ -34,22 +35,38 @@ Cyclopedia.Bestiary = {}
 
 Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
 
-function Cyclopedia.SetBestiaryProgress(currentValue, maxValue)
-    local percent = currentValue / maxValue * 100
-    local rect = {
-        height = 20,
-        x = 0,
-        y = 0,
-        width = math.min(percent, maxValue)
-    }
-
-    if rect.width < 1 then
-        rect.width = 1
+function Cyclopedia.SetBestiaryProgress(firstBar, secondBar, thirdBar, killCount, firstGoal, secondGoal, thirdGoal)
+    local function calculateWidth(value, max)
+        return math.min(math.floor((value / max) * 66), 66)
     end
 
-    UI.ListBase.CreatureInfo.ProgressBorder1:setImageClip(rect)
-    UI.ListBase.CreatureInfo.ProgressBorder1:setImageRect(rect)
-    UI.ListBase.CreatureInfo.ProgressValue:setText(comma_value(tonumber(currentValue)))
+    local function setBarVisibility(bar, isVisible, width)
+        bar:setVisible(isVisible)
+        if isVisible then
+            bar:setImageRect({
+                height = 12,
+                x = 0,
+                y = 0,
+                width = width
+            })
+            bar:setImageSource("/game_cyclopedia/images/bestiary/fill")
+        end
+    end
+
+    local firstWidth = calculateWidth(math.min(killCount, firstGoal), firstGoal)
+    setBarVisibility(firstBar, killCount > 0, firstWidth)
+
+    local secondWidth = 0
+    if killCount > firstGoal then
+        secondWidth = calculateWidth(math.min(killCount - firstGoal, secondGoal - firstGoal), secondGoal - firstGoal)
+    end
+    setBarVisibility(secondBar, killCount > firstGoal, secondWidth)
+
+    local thirdWidth = 0
+    if killCount > secondGoal then
+        thirdWidth = calculateWidth(math.min(killCount - secondGoal, thirdGoal - secondGoal), thirdGoal - secondGoal)
+    end
+    setBarVisibility(thirdBar, killCount > secondGoal, thirdWidth)
 end
 
 function Cyclopedia.SetBestiaryStars(Value)
@@ -120,7 +137,7 @@ function Cyclopedia.CreateCreatureItems(data)
 end
 
 function Cyclopedia.loadBestiarySelectedCreature(data)
-
+    pdump(data)
     local occurence = {
         [0] = 1,
         2,
@@ -143,26 +160,31 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     })
     UI.ListBase.CreatureInfo.LeftBase.Sprite:getCreature():setStaticWalking(1000)
 
-    Cyclopedia.SetBestiaryProgress(data.killCounter, data.lastProgressKillCount)
+    Cyclopedia.SetBestiaryProgress(UI.ListBase.CreatureInfo.ProgressBack, UI.ListBase.CreatureInfo.ProgressBack33,
+        UI.ListBase.CreatureInfo.ProgressBack55, data.killCounter, data.thirdDifficulty, data.secondUnlock,
+        data.lastProgressKillCount)
 
-    if data.killCounter >= data.thirdDifficulty then
-        --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/fill")
-        UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter) -- thirdDifficulty
-        UI.ListBase.CreatureInfo.ProgressValue:setMarginBottom(10)
-    else
-        --  UI.ListBase.CreatureInfo.ProgressFill:setImageSource("/game_cyclopedia/images/bestiary/durability_fill")
-        UI.ListBase.CreatureInfo.ProgressValue:setText(comma_value(data.killCounter))
-        UI.ListBase.CreatureInfo.ProgressValue:setMarginBottom(10)
+    UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter)
+    local fullText = ""
+
+    if data.killCounter >= CONFIG[data.ocorrence].MASTERY then
+        fullText = "(fully unlocked)"
     end
 
+    UI.ListBase.CreatureInfo.ProgressBorder1:setTooltip(string.format(" %d / %d %s", data.killCounter,
+        data.thirdDifficulty, fullText))
+    UI.ListBase.CreatureInfo.ProgressBorder2:setTooltip(string.format(" %d / %d %s", data.killCounter,
+        data.secondUnlock, fullText))
+    UI.ListBase.CreatureInfo.ProgressBorder3:setTooltip(string.format(" %d / %d %s", data.killCounter,
+        data.lastProgressKillCount, fullText))
+
     UI.ListBase.CreatureInfo.LeftBase.TrackCheck.raceId = data.id
-    --TODO investigate when it can be track-- idk when
---[[     if data.currentLevel == 1 then
+    -- TODO investigate when it can be track-- idk when
+    --[[     if data.currentLevel == 1 then
         UI.ListBase.CreatureInfo.LeftBase.TrackCheck:enable()
     else
         UI.ListBase.CreatureInfo.LeftBase.TrackCheck:disable()
     end ]]
-
 
     if table.find(storedRaceIDs, data.id) then
         UI.ListBase.CreatureInfo.LeftBase.TrackCheck:setChecked(true)
@@ -663,7 +685,7 @@ function Cyclopedia.toggleBosstiaryTracker()
     else
         if not trackerMiniWindowBosstiary:getParent() then
             local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindowBosstiary,
-            trackerMiniWindowBosstiary:getMinimumHeight())
+                trackerMiniWindowBosstiary:getMinimumHeight())
             if not panel then
                 return
             end
@@ -675,7 +697,6 @@ function Cyclopedia.toggleBosstiaryTracker()
     end
 
 end
-
 
 function Cyclopedia.onTrackerClose(temp)
     if temp == "Boosteary Tracker" then
@@ -706,7 +727,9 @@ end
 
 function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
 
-    if not data then return end
+    if not data then
+        return
+    end
 
     local isBoss = trackerType == 1
     local window = isBoss and trackerMiniWindowBosstiary or trackerMiniWindow
@@ -717,14 +740,16 @@ function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
 
     for _, entry in ipairs(data) do
         local raceId, kills, _, _, maxKills = unpack(entry)
-        table.insert(storedRaceIDs, raceId) 
+        table.insert(storedRaceIDs, raceId)
         local raceInfo = raceData[raceId]
         local name = raceInfo.name
 
         local widget = g_ui.createWidget("TrackerButton", window.contentsPanel)
         widget:setId(raceId)
 
-        widget.creature:setOutfit({type = raceInfo.type})
+        widget.creature:setOutfit({
+            type = raceInfo.type
+        })
         widget.label:setText(name:len() > 12 and name:sub(1, 9) .. "..." or name)
         widget.kills:setText(kills .. "/" .. maxKills)
         widget.onMouseRelease = onTrackerClick
@@ -733,7 +758,6 @@ function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
         Cyclopedia.setBarPercent(widget, percent)
     end
 end
-
 
 local BESTIATYTRACKER_FILTERS = {
     ["sortByName"] = true,
@@ -795,7 +819,6 @@ function onTrackerClick(widget, mousePosition, mouseButton)
     return true
 end
 
-
 function onAddLootClick(widget, mousePosition, mouseButton)
     local taskId = tonumber(widget:getId())
     local menu = g_ui.createWidget("PopupMenu")
@@ -806,9 +829,9 @@ function onAddLootClick(widget, mousePosition, mouseButton)
             print("future")
         end)
     else
-        menu:addOption("Remove from Loot List" , function()
+        menu:addOption("Remove from Loot List", function()
             print("future")
-         end)
+        end)
     end
 
     menu:display(menuPosition)
