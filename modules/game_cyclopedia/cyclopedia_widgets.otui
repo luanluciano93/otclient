@@ -1307,3 +1307,85 @@ bestiaryTrackerMenu < PopupMenu
   ImbuementTrackerMenuOption
     id: sortByDescending
     !text: tr('sort by descending')
+StoreFlatPanel < UIWidget
+  phantom: true
+  auto-focus: first
+  image-source: /game_store/images/panel
+  image-border: 3
+Box < UIWidget
+  border-width-top: 1
+  border-color-top: black
+  border-width-left: 1
+  border-color-left: black
+  border-width-bottom: 1
+  border-color-bottom: gray
+  border-width-right: 1
+  border-color-right: gray
+  image-smooth: true
+  image-fixed-ratio: false
+RowStore2 < UIWidget
+  height: 78
+  margin: 2
+  border: 0 white
+
+  $focus:
+    border: 2 white
+
+  Box
+    id: image
+    size: 64 64
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin: 5 0 0 5
+
+  Label
+    id: lblName
+    anchors.top: parent.top
+    anchors.left: prev.right
+    anchors.right: parent.right
+    margin: 8 0 0 8
+    text-auto-resize: true
+    text-wrap: true
+  Label
+    id: count
+    anchors.bottom: parent.bottom
+    anchors.left: image.right
+    margin: 0 5 5 0
+    margin-left:22
+    text-align: center
+
+  StoreFlatPanel
+    id: lblPrice
+    size: 104 20
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    margin: 0 5 5 0
+    text-align: center
+    text-offset: 15 0
+    image-color: #1111118c
+    icon: images/tibiaCoin
+    icon-align: right
+    icon-offset: -2 0
+
+BlessCreate < UIWidget
+  background-color: alpha
+  text-offset: 35 1
+  focusable: true
+  font: verdana-11px-rounded
+  text-align: left
+
+  Label
+    id: text2
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 15
+    height: 15
+    margin-top: 2
+    margin-left: 3
+
+  Label
+    id: text1
+    margin-left: 8
+    anchors.left: prev.right
+    anchors.verticalCenter: parent.verticalCenter
+    focusable: false

@@ -4142,6 +4142,40 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_STORESUMMARY:
         {
+            uint32_t xpBoostTime = msg->getU32();  
+            uint32_t dailyRewardXpBoostTime = msg->getU32();  
+
+            std::vector<std::tuple<std::string, uint8_t>> blessings;
+            uint8_t blessingCount = msg->getU8();
+            for (uint8_t i = 0; i < blessingCount; ++i) {
+                std::string blessingName = msg->getString();
+                uint8_t blessingObtained = msg->getU8();
+                blessings.emplace_back(std::make_tuple(blessingName, blessingObtained));
+            }
+
+            uint8_t preySlotsUnlocked = msg->getU8();
+            uint8_t preyWildcards = msg->getU8();
+            uint8_t instantRewards = msg->getU8();
+            bool hasCharmExpansion = msg->getU8() == 0x01;
+            uint8_t hirelingsObtained = msg->getU8();
+
+            std::vector<uint16_t> hirelingSkills;
+            uint8_t hirelingSkillsCount = msg->getU8();
+            for (uint8_t i = 0; i < hirelingSkillsCount; ++i) {
+                hirelingSkills.emplace_back(msg->getU8() + 1000);
+            }
+
+            msg->getU8();
+
+            std::vector<std::tuple<uint16_t, std::string, uint8_t>> houseItems;
+            uint16_t houseItemsCount = msg->getU16();
+            for (uint16_t i = 0; i < houseItemsCount; ++i) {
+                uint16_t itemId = msg->getU16();
+                std::string itemName = msg->getString();
+                uint8_t count = msg->getU8();
+                houseItems.emplace_back(std::make_tuple(itemId, itemName, count));
+            }
+            g_lua.callGlobalField("g_game", "onParseCyclopediaStoreSummary", xpBoostTime, dailyRewardXpBoostTime, blessings, preySlotsUnlocked, preyWildcards, instantRewards, hasCharmExpansion, hirelingsObtained, hirelingSkills, houseItems);
             break;
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_INSPECTION:

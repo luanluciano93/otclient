@@ -72,6 +72,8 @@ function controllerCyclopedia:onInit()
         onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
         onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
         onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances,
+
+        onParseCyclopediaStoreSummary = Cyclopedia.onParseCyclopediaStoreSummary,
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
         -- items

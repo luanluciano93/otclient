@@ -1411,3 +1411,290 @@ UIWidget
         margin-top: 0
         step: 80
         pixel-scroll: true
+  UIWidget
+    id: StoreSummary
+    anchors.top: CharacterBase.top
+    anchors.left: CharacterBase.right
+    anchors.bottom: OptionsBase.bottom
+    anchors.right: parent.right
+    margin-left: 10
+    visible: false
+    BorderBox
+      id: ListBase
+      size: 494 380
+      anchors.top: parent.top
+      anchors.left: parent.left
+      UIScrollArea
+        id: List
+        vertical-scrollbar: ListScrollbar
+        anchors.fill: parent
+        margin: 1
+
+        padding-right: 15
+        background-color: #404040
+        layout:
+          type: verticalBox
+          spacing: 3
+
+        MiniPanel
+          id:XPBoosts
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          height: 66
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: XP Boosts
+
+          Label
+            id: RemainingStoreXPBoostTime
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Remaining Store XP Boost Time:
+
+          Label
+            id: RemainingStoreXPBoostTimeValue
+            anchors.top: parent.top
+            anchors.left: parent.right
+            margin-left: -32
+            margin-top: 2
+            text: 00:00222222222
+
+          Label
+            id: RemainingDailyRewardXPBoostTime
+            text-auto-resize: true
+            color: #909090
+            anchors.top: RemainingStoreXPBoostTime.bottom
+            anchors.left: RemainingStoreXPBoostTime.left
+            margin-top: 2
+            text: Remaining Daily Reward XP Boost Time:
+
+          Label
+            id: RemainingDailyRewardXPBoostTimeValue
+            anchors.top: RemainingStoreXPBoostTimeValue.bottom
+            anchors.left: parent.right
+            margin-left: -30
+            margin-top: 2
+            text: 00:00222222222
+
+        MiniPanel
+          id:Blessings
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: Blessings
+          size: 225 130
+
+          Label
+            id: AvailableBlessings
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Available Blessings:
+
+
+          Panel
+            id: PurchasedHouseItems
+            size: 225 100
+            margin-top: 15
+            shader: Map - Party
+            anchors.fill: parent
+            image-source: images/panel
+            image-border: 3
+            layout:
+              type: grid
+              cell-size: 224 20
+              flow: true
+
+
+        MiniPanel
+          id: preyPanel
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          height: 66
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: Prey
+
+          Label
+            id: PermanentPreySlots
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Permanent Prey Slots:
+
+          Label
+            id: PermanentPreySlotsValue
+            anchors.top: parent.top
+            anchors.left: parent.right
+            margin-left: -30
+            margin-top: 2
+            text: 1x
+
+          Label
+            id: PreyWildcards
+            text-auto-resize: true
+            color: #909090
+            anchors.top: PermanentPreySlots.bottom
+            anchors.left: parent.left
+            margin-top: 2
+            text: Prey Wildcards:
+
+          Label
+            id: PreyWildcardsValue
+            anchors.top: PermanentPreySlotsValue.bottom
+            anchors.left: parent.right
+            margin-left: -30
+            margin-top: 2
+            text: 20x
+
+        MiniPanel
+          id: dailyReward
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          height: 66
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: Daily Reward
+
+          Label
+            id: InstantRewardAccess
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Instant Reward Access:
+
+          Label
+            id: InstantRewardAccessValue
+            anchors.top: parent.top
+            anchors.left: parent.right
+            margin-left: -30
+            text: 0x
+
+        MiniPanel
+          id: CharmPanel
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          height: 66
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: Charm
+
+          Label
+            id: CharmExpansion
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Charm Expansion:
+
+          Label
+            id: CharmExpansionValue
+            anchors.top: parent.top
+            anchors.left: parent.right
+            margin-left: -30
+            text: Nooooo
+
+        MiniPanel
+          id: hirelings
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          text: hirelings
+
+          Label
+            id: PurchasedHireLings
+            text-auto-resize: true
+            color: #909090
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-top: 2
+            text: Purchased Hirelngs:
+
+          Label
+            id: PurchasedHirelingsValue
+            anchors.top: parent.top
+            anchors.left: parent.right
+            margin-left: -30
+            text: 0x
+            
+
+          Label
+            id: hirelingjobs
+            text-auto-resize: true
+            color: #909090
+            anchors.top: PurchasedHireLings.bottom
+            anchors.left: parent.left
+            margin-top: 2
+            text: hireling jobs:
+
+          Label
+            id: hirelingOutfits
+            text-auto-resize: true
+            color: #909090
+            anchors.top: prev.bottom
+            anchors.left: parent.left
+            margin-top: 2
+            text: hirelingOutfits:
+
+        MiniPanel
+          id: houseItems
+          image-source: /images/ui/outfits/minipanel
+          image-border: 5
+          color: #C0C0C0
+          height: 66
+          padding-bottom: 5
+          margin: 5
+          margin-bottom: 1
+          size: 530 407
+          text: Purchased House Items
+
+          Panel
+            id: PurchasedHouseItems
+            size: 225 74
+            anchors.fill: parent
+            image-source: images/panel
+            image-border: 3
+            layout:
+              type: grid
+              cell-size: 224 74
+              flow: true
+
+
+
+      VerticalScrollBar
+        id: ListScrollbar
+        anchors.top: List.top
+        anchors.right: List.right
+        anchors.bottom: List.bottom
+        margin: 1
+
+        step: 80
+        pixel-scroll: true
+
+
+  

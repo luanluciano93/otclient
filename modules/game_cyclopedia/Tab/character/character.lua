@@ -61,8 +61,6 @@ local function open(parent)
     UI.openedCategory = parent
 end
 
-
-
 function showCharacter()
     characterPanel = g_ui.loadUI("character", contentContainer)
     UI = characterPanel
@@ -290,7 +288,7 @@ function Cyclopedia.reloadCharacterItems()
 
         if data.visible then
             local listItem = g_ui.createWidget("CharacterListItem", UI.CharacterItems.ListBase.list)
-            --local frame = g_game.getItemFrame(data.value)
+            -- local frame = g_game.getItemFrame(data.value)
 
             listItem.item:setItemId(itemId)
             listItem.name:setText(data.name)
@@ -302,7 +300,7 @@ function Cyclopedia.reloadCharacterItems()
             gridItem.item:setItemId(itemId)
             gridItem.amount:setText(data.amount)
 
---[[             if frame > 0 then
+            --[[             if frame > 0 then
                 listItem.rarity:setImageSource("/images/ui/frames")
                 listItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
                 gridItem.rarity:setImageSource("/images/ui/frames")
@@ -339,8 +337,8 @@ function Cyclopedia.loadCharacterItems(data)
             visible = false,
             name = name,
             amount = data.amount,
-            type = type,
-           -- value = thing:getResultingValue()
+            type = type
+            -- value = thing:getResultingValue()
         }
 
         local insertedItem = Cyclopedia.Character.Items[data.itemId]
@@ -591,7 +589,8 @@ function Cyclopedia.loadCharacterRecentDeaths(data)
     end
 end
 
-function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRanges, combatsArray, concoctionsArray)
+function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray,
+    perfectShotDamageRanges, combatsArray, concoctionsArray)
     UI.CombatStats.attack.icon:setImageSource(ICONS[data.weaponElement].icon)
     UI.CombatStats.attack.icon:setImageClip(ICONS[data.weaponElement].clip)
     UI.CombatStats.attack.value:setText(data.weaponMaxHitChance)
@@ -700,7 +699,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         UI.CombatStats.manaLeech.value:setText(string.format("%d%%", skill))
     end
 
-
     for i = 1, #forgeSkillsArray do
         local skillId = forgeSkillsArray[i][1]
         local id = "special_" .. skillId
@@ -714,19 +712,19 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
     for i = 1, #forgeSkillsArray do
         local skillId = forgeSkillsArray[i][1]
         local percent = forgeSkillsArray[i][2]
-        
+
         if percent > 0 then
             local widget = g_ui.createWidget("CharacterSkillBase", UI.CombatStats)
-    
+
             widget:setId("special_" .. skillId)
-    
+
             local specialName = {
                 [13] = "Onslaught",
                 [14] = "Ruse",
                 [15] = "Momentum",
                 [16] = "Transcendence"
             }
-    
+
             if firstSpecial then
                 widget:addAnchor(AnchorTop, "manaLeech", AnchorBottom)
                 widget:addAnchor(AnchorLeft, "criticalHit", AnchorLeft)
@@ -738,24 +736,24 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
                 widget:addAnchor(AnchorRight, "parent", AnchorRight)
                 widget:setMarginTop(0)
             end
-    
+
             widget:setMarginLeft(0)
-    
+
             local name = g_ui.createWidget("SkillNameLabel", widget)
             name:setText(specialName[skillId])
             name:setColor("#C0C0C0")
-    
+
             local value = g_ui.createWidget("SkillValueLabel", widget)
             value:setText(string.format("%.2f%%", percent / 100))
             value:setColor("#C0C0C0")
             value:setMarginRight(2)
-    
+
             if percent > 0 then
                 value:setColor("#44AD25")
             else
                 value:setColor("#C0C0C0")
             end
-    
+
             firstSpecial = firstSpecial and false
         end
     end
@@ -803,8 +801,8 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         expGainRate, data.baseExpGain)
 
     expGainRateTooltip = hasStoreExpBonus and expGainRateTooltip ..
-                             string.format("\n- XP boost: %d%% (%s h remaining).", data.XpBoostPercent, storeExpBonusTime) or
-                             expGainRateTooltip
+                             string.format("\n- XP boost: %d%% (%s h remaining).", data.XpBoostPercent,
+            storeExpBonusTime) or expGainRateTooltip
     expGainRateTooltip = hasStaminaBonus and expGainRateTooltip ..
                              string.format("\n- Stamina bonus: x1.5 (%s h remaining).", staminaBonusTime) or
                              expGainRateTooltip
@@ -1013,6 +1011,14 @@ function Cyclopedia.configureCharacterCategories()
         text = "Appearances",
         icon = "/game_cyclopedia/images/character_icons/icon_outfitsmounts",
         open = "CharacterAppearances"
+    }, {
+        text = "Store Summary",
+        icon = "/game_cyclopedia/images/character_icons/icon-character-store",
+        open = "StoreSummary"
+    }, {
+        text = "Character Titles",
+        icon = "/game_cyclopedia/images/character_icons/icon-character-titles",
+        open = "CharacterTitles"
     }}
 
     for id, button in ipairs(buttons) do
@@ -1096,6 +1102,8 @@ function Cyclopedia.configureCharacterCategories()
                 Cyclopedia.characterItemListFilter(UI.CharacterItems.listFilter.list)
             elseif widget.open == "CharacterAppearances" then
                 g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.OutfitsAndMounts)
+            elseif widget.open == "StoreSummary" then
+                g_game.requestCharacterInfo(0, CyclopediaCharacterInfoTypes.StoreSummary)
             end
 
             local parent = this:getParent()
@@ -1187,8 +1195,53 @@ end
 function getImageClip(elementIndex)
     local elementSize = 64
     local elementsPerRow = 21
-    local y = 0 
+    local y = 0
     local x = (elementIndex - 1) * elementSize
     local imageClip = string.format("%d %d %d %d", x, y, elementSize, elementSize)
     return imageClip
+end
+
+function Cyclopedia.onParseCyclopediaStoreSummary(xpBoostTime, dailyRewardXpBoostTime, blessings, preySlotsUnlocked,
+    preyWildcards, instantRewards, hasCharmExpansion, hirelingsObtained, hirelingSkills, houseItems)
+
+    UI.StoreSummary.ListBase.List.XPBoosts.RemainingStoreXPBoostTimeValue:setText(string.format("%02d:%02d",
+        math.floor(xpBoostTime / 3600), math.floor((xpBoostTime % 3600) / 60)))
+    UI.StoreSummary.ListBase.List.XPBoosts.RemainingDailyRewardXPBoostTimeValue:setText(string.format("%02d:%02d",
+        math.floor(dailyRewardXpBoostTime / 3600), math.floor((dailyRewardXpBoostTime % 3600) / 60)))
+
+    local panel = UI.StoreSummary.ListBase.List.Blessings.PurchasedHouseItems
+    for _, blessing in ipairs(blessings) do
+        local row = g_ui.createWidget('BlessCreate', panel)
+        row.text1:setText(blessing[1])
+        row.text2:setText("x" .. blessing[2])
+
+    end
+
+    UI.StoreSummary.ListBase.List.preyPanel.PermanentPreySlotsValue:setText(preySlotsUnlocked)
+    UI.StoreSummary.ListBase.List.preyPanel.PreyWildcardsValue:setText(preyWildcards)
+
+    UI.StoreSummary.ListBase.List.dailyReward.InstantRewardAccessValue:setText(instantRewards)
+    if hasCharmExpansion then
+        UI.StoreSummary.ListBase.List.CharmPanel.CharmExpansionValue:setText("Yes")
+    else
+        UI.StoreSummary.ListBase.List.CharmPanel.CharmExpansionValue:setText("No")
+    end
+    UI.StoreSummary.ListBase.List.hirelings.PurchasedHirelingsValue:setText(hirelingsObtained)
+    local rowHeight = 130
+    local maxVisibleRows = 1.6
+    local itemCount = #houseItems
+    UI.StoreSummary.ListBase.List.houseItems:setHeight(math.min(itemCount, maxVisibleRows) * rowHeight)
+    for _, item in ipairs(houseItems) do
+        local row = g_ui.createWidget('RowStore2', UI.StoreSummary.ListBase.List.houseItems.PurchasedHouseItems)
+        local nameLabel = row:getChildById('lblName')
+        nameLabel:setText(item[2])
+        nameLabel:setTextAlign(AlignCenter)
+        nameLabel:setMarginRight(10)
+        row:getChildById('lblPrice'):setText(item[3])
+        local itemWidget = g_ui.createWidget('Item', row:getChildById('image'))
+        itemWidget:setId(item[1])
+        itemWidget:setItemId(item[1])
+        itemWidget:fill('parent')
+    end
+
 end
