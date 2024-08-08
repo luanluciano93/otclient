@@ -1119,6 +1119,12 @@ ICONS ={
 	}
 }
 
+Cyclopedia.House.Data = {
+    {id = 1001, name = "Cozy Cottage", description = "A small, charming house perfect for new adventurers.", rent = 1000, beds = 1, sqm = 25, gh = false, shop = false, visible = true, state = 0, owner = "?", isYourBid = false, hasBid = true, bidEnd = 1628097600, hightestBid = 50000, bidName = "Explorer123", bidHolderLimit = nil, canBid = 1, rented = false, paidUntil = nil, isYourOwner = false, inTransfer = false, transferName = nil, transferTime = 0, transferValue = 0, isTransferOwner = false, canAcceptTransfer = 0},
+    {id = 1002, name = "Merchant's Haven", description = "A spacious house with room for a shop.", rent = 5000, beds = 4, sqm = 100, gh = false, shop = true, visible = true, state = 2, owner = "Trader_Joe", isYourBid = false, hasBid = false, bidEnd = nil, hightestBid = nil, bidName = nil, bidHolderLimit = nil, canBid = 0, rented = true, paidUntil = 1630689600, isYourOwner = false, inTransfer = false, transferName = nil, transferTime = 0, transferValue = 0, isTransferOwner = false, canAcceptTransfer = 0}
+}
+
+
 ACHIEVEMENTS = {
 	[1] = { name = "Castlemania", grade = 2, points = 5, secret = true, description = "You have an eye for suspicious places and love to read other people's diaries, especially those with vampire stories in it. You're also a dedicated token collector and explorer. Respect!" },
 	[2] = { name = "Chorister", grade = 1, points = 1, description = "Lalalala... you now know the cult's hymn sung in Liberty Bay by heart. Not that hard, considering that it mainly consists of two notes and repetitive lyrics." },

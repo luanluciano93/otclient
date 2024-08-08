@@ -46,7 +46,7 @@ UIWidget
       !text: tr('Guildhalls')
       color: #C0C0C0
       text-auto-resize: true
-      @onClick: Cyclopedia.houseFilter(self)
+      @onClick: modules.game_cyclopedia.Cyclopedia.houseFilter(self)
     CheckBox
       id: HousesCheck
       anchors.bottom: GuildhallsCheck.bottom
@@ -57,7 +57,7 @@ UIWidget
       !text: tr('Houses and Flats')
       color: #C0C0C0
       text-auto-resize: true
-      @onClick: Cyclopedia.houseFilter(self)
+      @onClick: modules.game_cyclopedia.Cyclopedia.houseFilter(self)
   UIWidget
     id: LateralBase
     size: 250 358
