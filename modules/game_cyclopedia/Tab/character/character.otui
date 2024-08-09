@@ -1493,7 +1493,7 @@ UIWidget
           margin: 5
           margin-bottom: 1
           text: Blessings
-          size: 225 130
+          size: 225 135
 
           Label
             id: AvailableBlessings
@@ -1504,13 +1504,11 @@ UIWidget
             margin-top: 2
             text: Available Blessings:
 
-
           Panel
             id: PurchasedHouseItems
             size: 225 100
             margin-top: 15
             anchors.fill: parent
-
             image-border: 3
             layout:
               type: grid
