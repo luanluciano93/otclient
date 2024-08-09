@@ -1170,13 +1170,8 @@ void ProtocolGame::parseOpenContainer(const InputMessagePtr& msg)
         }
     }
     if (g_game.getClientVersion() >= 1340) {
-        if (containerItem->isMoveable()) {
             msg->getU8();
-        }else{
             msg->getU8();
-        }
-        
-        msg->getU8(); // // if (container->getHoldingPlayer()) { // Player holding the item (?)
     }
 
     g_game.processOpenContainer(containerId, containerItem, name, capacity, hasParent, items, isUnlocked, hasPages, containerSize, firstIndex);
@@ -1342,8 +1337,12 @@ void ProtocolGame::parsePlayerGoods(const InputMessagePtr& msg) const
             money = msg->getU32();
         }
     }
-
-    const uint8_t size = msg->getU8();
+    uint16_t size = 0; 
+    if (g_game.getClientVersion() >= 1340) {
+        size = msg->getU16(); 
+    } else {
+        size = msg->getU8(); 
+    }
     for (auto i = -1; ++i < size;) {
         const uint16_t itemId = msg->getU16();
 
@@ -2637,7 +2636,7 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
             occurrence = msg->getU8();
         }
         if (g_game.getClientVersion() >= 1340) {
-            msg->getU16();
+            msg->getU16(); // Creature Animous Bonus
         }
         BestiaryOverviewMonsters monster;
         monster.id = raceId;
@@ -2647,7 +2646,7 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
         data.emplace_back(monster);
     }
     if (g_game.getClientVersion() >= 1340) {
-        msg->getU16();
+        msg->getU16(); // Animus Mastery Points
     }
     g_game.processParseBestiaryOverview(raceName, data);
 }
@@ -2660,8 +2659,8 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
     data.currentLevel = msg->getU8();
 
     if (g_game.getClientVersion() >= 1340) {
-        msg->getU16();
-        msg->getU16();
+        msg->getU16();// Animus Mastery Bonus
+        msg->getU16();// Animus Mastery Points
     }
 
     data.killCounter = msg->getU32();
