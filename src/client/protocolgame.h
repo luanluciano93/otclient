@@ -142,7 +142,7 @@ public:
     void sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page);
     void sendRequestBosstiaryInfo();
     void sendRequestBossSlootInfo();
-    void sendRequestBossSlootAction(const uint8_t action, const uint32_t raceId);
+    void sendRequestBossSlotAction(const uint8_t action, const uint32_t raceId);
     void SendStatusTrackerBestiary(const uint16_t raceId,  bool status);
 
     // otclient only

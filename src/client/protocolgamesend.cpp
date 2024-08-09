@@ -1020,10 +1020,10 @@ void ProtocolGame::sendRequestBossSlootInfo()
     send(msg);
 }
 
-void ProtocolGame::sendRequestBossSlootAction(const uint8_t action, const uint32_t raceId)
+void ProtocolGame::sendRequestBossSlotAction(const uint8_t action, const uint32_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBossSlootAction);
+    msg->addU8(Proto::ClientRequestBossSlotAction);
     msg->addU8(action);
     msg->addU32(raceId);
     send(msg);

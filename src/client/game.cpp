@@ -1885,12 +1885,12 @@ void Game::requestBossSlootInfo()
     m_protocolGame->sendRequestBossSlootInfo();
 }
 
-void Game::requestBossSlootAction(const uint8_t action, const uint32_t raceId)
+void Game::requestBossSlotAction(const uint8_t action, const uint32_t raceId)
 {
     if (!canPerformGameAction())
         return;
 
-    m_protocolGame->sendRequestBossSlootAction(action,raceId);
+    m_protocolGame->sendRequestBossSlotAction(action,raceId);
 
 }
 void Game::sendStatusTrackerBestiary(const uint16_t raceId, bool status)

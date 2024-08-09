@@ -1429,7 +1429,7 @@ UIWidget
       anchors.left: parent.left
       UIScrollArea
         id: List
-        vertical-scrollbar: ListScrollbar
+        vertical-scrollbar: ListScrollbarStoreSummary
         anchors.fill: parent
         margin: 1
 
@@ -1509,9 +1509,8 @@ UIWidget
             id: PurchasedHouseItems
             size: 225 100
             margin-top: 15
-            shader: Map - Party
             anchors.fill: parent
-            image-source: images/panel
+
             image-border: 3
             layout:
               type: grid
@@ -1680,13 +1679,21 @@ UIWidget
             id: PurchasedHouseItems
             size: 225 74
             anchors.fill: parent
-            image-source: images/panel
+
             image-border: 3
             layout:
               type: grid
               cell-size: 224 74
               flow: true
+      VerticalScrollBar
+        id: ListScrollbarStoreSummary
+        anchors.top: List.top
+        anchors.right: List.right
+        anchors.bottom: List.bottom
+        margin: 1
 
+        step: 80
+        pixel-scroll: true
   UIWidget
     id: CharacterTitles
     anchors.top: CharacterBase.top

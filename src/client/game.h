@@ -657,7 +657,7 @@ public:
     void requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage = 0, const uint16_t page = 0);
     void requestBosstiaryInfo();
     void requestBossSlootInfo();
-    void requestBossSlootAction(const uint8_t action, const uint32_t raceId);
+    void requestBossSlotAction(const uint8_t action, const uint32_t raceId);
     void sendStatusTrackerBestiary(const uint16_t raceId,  bool status);
 
     // imbuement related

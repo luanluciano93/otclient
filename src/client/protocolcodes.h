@@ -302,7 +302,7 @@ namespace Proto
         ClientExcludeFromOwnChannel = 172,
         ClientRequestBosstiaryInfo = 174,
         ClientRequestBossSlootInfo = 175,
-        ClientRequestBossSlootAction = 176,
+        ClientRequestBossSlotAction = 176,
         ClientRequestHighscore = 177,
         ClientCancelAttackAndFollow = 190,
         ClientUpdateTile = 201,

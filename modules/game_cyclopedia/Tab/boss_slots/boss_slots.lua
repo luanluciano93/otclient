@@ -236,7 +236,7 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
 
     widget.SelectBoss.SelectButton:setEnabled(false)
     widget.SelectBoss.SelectButton.onClick = function()
-        g_game.requestBossSlootAction(slot, Cyclopedia.BossSlots.lastSelected:getId())
+        g_game.requestBossSlotAction(slot, Cyclopedia.BossSlots.lastSelected:getId())
     end
 end
 
@@ -301,7 +301,7 @@ function Cyclopedia.setActiveSlot(widget, slot, slotData, data, bossId)
     end
 
     widget.ActivedBoss.RemoveButton.onClick = function()
-        g_game.requestBossSlootAction(slot, 0)
+        g_game.requestBossSlotAction(slot, 0)
 
     end
 
