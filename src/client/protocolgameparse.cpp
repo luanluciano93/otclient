@@ -2636,7 +2636,9 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
         if (progress > 0) {
             occurrence = msg->getU8();
         }
-
+        if (g_game.getClientVersion() >= 1340) {
+            msg->getU16();
+        }
         BestiaryOverviewMonsters monster;
         monster.id = raceId;
         monster.currentLevel = progress;
@@ -2644,7 +2646,9 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
 
         data.emplace_back(monster);
     }
-
+    if (g_game.getClientVersion() >= 1340) {
+        msg->getU16();
+    }
     g_game.processParseBestiaryOverview(raceName, data);
 }
 
@@ -2654,6 +2658,12 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
     data.id = msg->getU16();
     data.bestClass = msg->getString();
     data.currentLevel = msg->getU8();
+
+    if (g_game.getClientVersion() >= 1340) {
+        msg->getU16();
+        msg->getU16();
+    }
+
     data.killCounter = msg->getU32();
     data.thirdDifficulty = msg->getU16();
     data.secondUnlock = msg->getU16();
