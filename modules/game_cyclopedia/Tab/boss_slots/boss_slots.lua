@@ -7,6 +7,7 @@ function showBossSlot()
     controllerCyclopedia.ui.CharmsBase:setVisible(false)
     controllerCyclopedia.ui.GoldBase:setVisible(true)
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
+    Cyclopedia.BossSlots.UnlockBosses = {}
 end
 
 local CATEGORY = {
@@ -51,13 +52,11 @@ local CONFIG = {
 }
 
 Cyclopedia.BossSlots = {}
-
 function Cyclopedia.loadBossSlots(data)
 
     if not UI then
         return
     end
-
     local raceData = RACE_Bosstiary[data.boostedBossId]
 
     UI.Sprite:setOutfit({
@@ -172,11 +171,11 @@ function Cyclopedia.BossSlotChangeSlot(data, unlockedBosses)
     }}
 
     for _, slotInfo in ipairs(slots) do
+
         if slotInfo.isUnlocked then
             local widget = UI[SLOTS[slotInfo.slotNumber]]
 
             if slotInfo.slotData then
-
                 Cyclopedia.setActiveSlot(widget, slotInfo.slotNumber, slotInfo.slotData, data, slotInfo.bossId)
             elseif data.bossesUnlocked and #data.bossesUnlockedData > 0 then
 
@@ -213,6 +212,8 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
     end
 
     for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
+
+        print(internalData.bossId)
         local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
         internalWidget:setId(internalData.bossId)
         internalWidget.Sprite:setOutfit({
@@ -237,7 +238,9 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
     widget.SelectBoss.SelectButton:setEnabled(false)
     widget.SelectBoss.SelectButton.onClick = function()
         g_game.requestBossSlotAction(slot, Cyclopedia.BossSlots.lastSelected:getId())
+        Cyclopedia.BossSlots.UnlockBosses = {}
     end
+
 end
 
 function Cyclopedia.setActiveSlot(widget, slot, slotData, data, bossId)

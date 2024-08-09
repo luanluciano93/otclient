@@ -54,7 +54,7 @@ function Cyclopedia.CreateMarkItem(Data)
 end
 
 function Cyclopedia.toggleMapFlag(widget, checked)
-    --UI.MapBase.minimap:filterFlag(widget:getId(), checked)
+    -- UI.MapBase.minimap:filterFlag(widget:getId(), checked)
 end
 
 function Cyclopedia.showAllFlags(checked)
@@ -129,31 +129,29 @@ function ConvertLayer(Value)
 end
 
 function Cyclopedia.onUpdateCameraPosition()
-	local player = g_game.getLocalPlayer()
-	local minimapWidget =  UI.MapBase.minimap
+    local player = g_game.getLocalPlayer()
+    local minimapWidget = UI.MapBase.minimap
 
-	if not player then
-		return
-	end
+    if not player then
+        return
+    end
 
-	local pos = player:getPosition()
+    local pos = player:getPosition()
 
-	if not pos then
-		return
-	end
+    if not pos then
+        return
+    end
 
-	if not minimapWidget:isDragging() then
-		if not fullmapView then
-			minimapWidget:setCameraPosition(player:getPosition())
-		end
+    if not minimapWidget:isDragging() then
+        if not fullmapView then
+            minimapWidget:setCameraPosition(player:getPosition())
+        end
 
-		minimapWidget:setCrossPosition(player:getPosition(), true)
-	end
+        minimapWidget:setCrossPosition(player:getPosition(), true)
+    end
 
     virtualFloor = pos.z
 end
-
-
 
 function Cyclopedia.onClickRoseButton(dir)
     if dir == 'north' then
@@ -198,7 +196,6 @@ function Cyclopedia.downLayer()
     virtualFloor = virtualFloor + 1
     refreshVirtualFloors()
 end
-
 
 function Cyclopedia.upLayer()
     if virtualFloor == 0 then

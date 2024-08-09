@@ -116,7 +116,6 @@ function Cyclopedia.loadCharms(data2)
     local data = data2.charms
     UI.CharmsPoints = points
 
-
     local raceIdNamePairs = {}
 
     for _, raceId in ipairs(monsters) do

@@ -31,7 +31,7 @@ end
 controllerCyclopedia = Controller:new()
 controllerCyclopedia:setUI('game_cyclopedia')
 function controllerCyclopedia:onInit()
-    -- @botones
+
     CyclopediaButton = modules.game_mainpanel.addToggleButton('CyclopediaButton', tr('Cyclopedia'),
         '/images/options/cooldowns', toggle, false, 7)
     ButtonBossSlot = modules.game_mainpanel.addToggleButton("bossSlot", tr("Open Boss Slots dialog"),
@@ -180,7 +180,7 @@ function controllerCyclopedia:onGameEnd()
 end
 
 function controllerCyclopedia:onTerminate()
-    -- @ reload
+    -- @ fix reload
     if trackerButton then
         trackerButton:destroy()
         trackerButton = nil
