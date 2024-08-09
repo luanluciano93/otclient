@@ -10,8 +10,8 @@ UIWidget
     margin-bottom: 8
     margin-top: 10
     width: 180
-    image-source: /game_cyclopedia/images/panel_texture
-    image-border: 10
+
+
     UIScrollArea
       id: InternalBase
       anchors.fill: parent

@@ -1182,7 +1182,7 @@ function Cyclopedia.reloadHouseList()
                 if data.description ~= "" then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
 
-                    icon:setImageSource("/game_cyclopedia/images/house-description")
+                    --icon:setImageSource("/game_cyclopedia/images/house-description")
                     icon:setTooltip(data.description)
                 end
 
@@ -1210,7 +1210,7 @@ function Cyclopedia.reloadHouseList()
                 if data.isYourOwner then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
 
-                    icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
+                    --icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
                 end
 
                 if widget.data.isTransferOwner then
@@ -1228,7 +1228,7 @@ function Cyclopedia.reloadHouseList()
                 if data.shop then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
 
-                    icon:setImageSource("/game_cyclopedia/images/house-shop")
+                    --icon:setImageSource("/game_cyclopedia/images/house-shop")
                     icon:setTooltip("This house is a shop.")
                 end
             end
@@ -1359,7 +1359,7 @@ function Cyclopedia.selectHouse(widget)
     if widget.data.isYourOwner then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
 
-        icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
+        --icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
     end
 
     if widget.data.isYourOwner and widget.data.inTransfer then
@@ -1377,14 +1377,14 @@ function Cyclopedia.selectHouse(widget)
     if widget.data.shop then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
 
-        icon:setImageSource("/game_cyclopedia/images/house-shop")
+       -- icon:setImageSource("/game_cyclopedia/images/house-shop")
         icon:setTooltip("This house is a shop.")
     end
 
     if widget.data.description ~= "" then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
 
-        icon:setImageSource("/game_cyclopedia/images/house-description")
+        --icon:setImageSource("/game_cyclopedia/images/house-description")
         icon:setTooltip(widget.data.description)
     end
 

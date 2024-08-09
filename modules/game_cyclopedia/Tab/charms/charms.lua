@@ -12,10 +12,10 @@ Cyclopedia.Charms = {}
 -- LuaFormatter off
 local CHARMS = {
     { ID = 9, IMAGE = "/game_cyclopedia/images/charms/9", TYPE = 1 },
-    { ID = 11, IMAGE = "/game_cyclopedia/images/charms/11", TYPE = 1 },
-    { ID = 10, IMAGE = "/game_cyclopedia/images/charms/10", TYPE = 1 },
+    { ID = 11, IMAGE = "/game_cyclopedia/images/charms/11", TYPE = 2 },
+    { ID = 10, IMAGE = "/game_cyclopedia/images/charms/10", TYPE = 3 },
     { ID = 6, IMAGE = "/game_cyclopedia/images/charms/6", TYPE = 2 },
-    { ID = 8, IMAGE = "/game_cyclopedia/images/charms/8", TYPE = 3 },
+    { ID = 8, IMAGE = "/game_cyclopedia/images/charms/8", TYPE = 2 },
     { ID = 7, IMAGE = "/game_cyclopedia/images/charms/7", TYPE = 3 },
     { ID = 5, IMAGE = "/game_cyclopedia/images/charms/5", TYPE = 4 },
     { ID = 1, IMAGE = "/game_cyclopedia/images/charms/1", TYPE = 4 },
@@ -26,11 +26,11 @@ local CHARMS = {
     { ID = 16, IMAGE = "/game_cyclopedia/images/charms/16", TYPE = 5 },
     { ID = 15, IMAGE = "/game_cyclopedia/images/charms/15", TYPE = 6 },
     { ID = 17, IMAGE = "/game_cyclopedia/images/charms/17", TYPE = 6 },
+    { ID = 13, IMAGE = "/game_cyclopedia/images/charms/13", TYPE = 6 },
+    { ID = 12, IMAGE = "/game_cyclopedia/images/charms/12", TYPE = 6 },
+    { ID = 14, IMAGE = "/game_cyclopedia/images/charms/14", TYPE = 6 },
     { ID = 18, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 },
-    { ID = 19, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 },
-    { ID = 20, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 },
-    { ID = 21, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 },
-    { ID = 0, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 }
+
 }
 -- LuaFormatter on
 
@@ -43,14 +43,14 @@ function Cyclopedia.UpdateCharmsBalance(Value)
 end
 
 function Cyclopedia.CreateCharmItem(data)
+
     local widget = g_ui.createWidget("CharmItem", UI.CharmList)
     local value = widget.PriceBase.Value
 
     widget:setId(data.id)
 
-    -- Verificar que data.id no sea nil y que CHARMS[data.id] exista
-    if data.id ~= nil and CHARMS[data.id + 1] then
-        widget.charmBase.image:setImageSource(CHARMS[data.id + 1].IMAGE)
+    if data.id ~= nil then
+        widget.charmBase.image:setImageSource("/game_cyclopedia/images/charms/" .. data.id)
     else
         print("Error: CHARMS[" .. tostring(data.id) .. "] is nil")
         return
@@ -59,10 +59,12 @@ function Cyclopedia.CreateCharmItem(data)
     widget:setText(data.name)
     widget.data = data
 
-    if data.hasCurrentCreature then
-        -- Verificar que data.raceId no sea nil y que RACE[data.raceId] exista
+    if data.asignedStatus then
         if data.raceId and RACE[data.raceId] then
-            widget.InfoBase.Sprite:setOutfit(RACE[data.raceId].outfit)
+            widget.InfoBase.Sprite:setOutfit({
+                type = safeOutfit(RACE[data.raceId].type)
+            })
+
             widget.InfoBase.Sprite:getCreature():setStaticWalking(1000)
         else
             print("Error: RACE[" .. tostring(data.raceId) .. "] es nil")
@@ -74,7 +76,7 @@ function Cyclopedia.CreateCharmItem(data)
         widget.PriceBase.Gold:setVisible(true)
         widget.charmBase.lockedMask:setVisible(false)
         widget.icon = 1
-        if data.hasCurrentCreature then
+        if data.asignedStatus then
             widget.PriceBase.Value:setText(comma_value(data.removeRuneCost))
         else
             widget.PriceBase.Value:setText(0)
@@ -87,8 +89,8 @@ function Cyclopedia.CreateCharmItem(data)
         widget.icon = 0
     end
 
-    if widget.icon == 1 and UI.Balance then
-        if data.removeRuneCost > UI.Balance then
+    if widget.icon == 1 and g_game.getLocalPlayer():getResourceBalance(1) then
+        if data.removeRuneCost > g_game.getLocalPlayer():getResourceBalance(1) then
             value:setColor("#D33C3C")
         else
             value:setColor("#C0C0C0")
@@ -104,9 +106,7 @@ function Cyclopedia.CreateCharmItem(data)
     end
 end
 
--- function Cyclopedia.loadCharms(points, data, monsters)
 function Cyclopedia.loadCharms(data2)
-
     controllerCyclopedia.ui.CharmsBase.Value:setText(Cyclopedia.formatGold(data2.points))
     if UI == nil or UI.CharmList == nil then -- I know, don't change it
         return
@@ -116,9 +116,6 @@ function Cyclopedia.loadCharms(data2)
     local data = data2.charms
     UI.CharmsPoints = points
 
-    -- UI.CharmsBase.Value:setText(comma_value(points))
-    -- UI.Bottombase.Cat3.CharmsBase.Value:setText(comma_value(points))
-    -- UI.Bottombase.Cat6.CharmsBase.Value:setText(comma_value(points))
 
     local raceIdNamePairs = {}
 
@@ -144,19 +141,8 @@ function Cyclopedia.loadCharms(data2)
     UI.CharmList:destroyChildren()
 
     local formatedData = {}
-
-    local function verify(id)
-        for index, charm in ipairs(CHARMS) do
-            if id == charm.ID then
-                return index
-            end
-        end
-
-        return nil
-    end
-
     for _, charmData in pairs(data) do
-        local internalId = verify(charmData.raceId)
+        local internalId = (charmData.id)
 
         if internalId then
             charmData.internalId = internalId
@@ -190,7 +176,6 @@ function Cyclopedia.loadCharms(data2)
     else
         Cyclopedia.selectCharm(UI.CharmList:getChildByIndex(1), UI.CharmList:getChildByIndex(1):isChecked())
     end
-
 end
 
 function Cyclopedia.selectCharm(widget, isChecked)
@@ -229,10 +214,13 @@ function Cyclopedia.selectCharm(widget, isChecked)
     UI.InformationBase.TextBase:setText(widget.data.description)
     UI.InformationBase.ItemBase.image:setImageSource(widget.charmBase.image:getImageSource())
 
-    if widget.data.hasCurrentCreature then
+    if widget.data.asignedStatus then
         UI.InformationBase.InfoBase.sprite:setVisible(true)
-        UI.InformationBase.InfoBase.sprite:setOutfit(RACE[widget.data.raceId].outfit)
+        UI.InformationBase.InfoBase.sprite:setOutfit({
+            type = safeOutfit(RACE[widget.data.raceId].type)
+        })
         UI.InformationBase.InfoBase.sprite:getCreature():setStaticWalking(1000)
+
         UI.InformationBase.InfoBase.sprite:setOpacity(1)
     else
         UI.InformationBase.InfoBase.sprite:setVisible(false)
@@ -246,8 +234,8 @@ function Cyclopedia.selectCharm(widget, isChecked)
         UI.InformationBase.PriceBase.Charm:setVisible(true)
     end
 
-    if widget.icon == 1 and UI.Balance then
-        if widget.data.removeRuneCost > UI.Balance then
+    if widget.icon == 1 and g_game.getLocalPlayer():getResourceBalance(1) then
+        if widget.data.removeRuneCost > g_game.getLocalPlayer():getResourceBalance(1) then
             value:setColor("#D33C3C")
             button:setEnabled(false)
         else
@@ -255,7 +243,7 @@ function Cyclopedia.selectCharm(widget, isChecked)
             button:setEnabled(true)
         end
 
-        if widget.data.unlocked and not widget.data.hasCurrentCreature then
+        if widget.data.unlocked and not widget.data.asignedStatus then
             value:setText(0)
         else
             value:setText(comma_value(widget.data.removeRuneCost))
@@ -274,7 +262,7 @@ function Cyclopedia.selectCharm(widget, isChecked)
         value:setText(widget.data.unlockPrice)
     end
 
-    if widget.data.unlocked and not widget.data.hasCurrentCreature then
+    if widget.data.unlocked and not widget.data.asignedStatus then
         button:setText("Select")
 
         local color = "#484848"
@@ -299,7 +287,7 @@ function Cyclopedia.selectCharm(widget, isChecked)
         UI.InformationBase.CreaturesLabel:setEnabled(true)
     end
 
-    if widget.data.hasCurrentCreature then
+    if widget.data.asignedStatus then
         button:setText("Remove")
 
         local internalWidget = g_ui.createWidget("CharmCreatureName", UI.InformationBase.CreaturesBase.CreatureList)
@@ -409,7 +397,7 @@ function Cyclopedia.actionCharmButton(widget)
                 confirmWindow:destroy()
 
                 confirmWindow = nil
-                toggle()
+
                 -- Cyclopedia.Toggle(true, false, 3)
             end
 
@@ -422,7 +410,6 @@ function Cyclopedia.actionCharmButton(widget)
 
                 confirmWindow = nil
 
-                toggle()
             end
         end
 
@@ -441,20 +428,19 @@ function Cyclopedia.actionCharmButton(widget)
                     anchor = AnchorHorizontalCenter
                 }, yesCallback, noCallback)
 
-            toggle()
         end
     end
 
     if type == "Select" then
         local function yesCallback()
-            g_game.requestSelectCharm(data.id, Cyclopedia.Charms.SelectedCreature)
+
+            g_game.BuyCharmRune(data.id, 1, Cyclopedia.Charms.SelectedCreature)
 
             if confirmWindow then
                 confirmWindow:destroy()
 
                 confirmWindow = nil
 
-                Cyclopedia.Toggle(true, false, 3)
             end
 
             Cyclopedia.Charms.redirect = data.id
@@ -466,7 +452,6 @@ function Cyclopedia.actionCharmButton(widget)
 
                 confirmWindow = nil
 
-                Cyclopedia.Toggle(true, false, 3)
             end
         end
 
@@ -484,20 +469,18 @@ function Cyclopedia.actionCharmButton(widget)
                     anchor = AnchorHorizontalCenter
                 }, yesCallback, noCallback)
 
-            Cyclopedia.Toggle(true, false)
         end
     end
 
     if type == "Remove" then
         local function yesCallback()
-            g_game.requestRemoveCharm(data.id)
 
+            g_game.BuyCharmRune(data.id, 2)
             if confirmWindow then
                 confirmWindow:destroy()
 
                 confirmWindow = nil
 
-                Cyclopedia.Toggle(true, false, 3)
             end
 
             Cyclopedia.Charms.redirect = data.id
@@ -509,7 +492,6 @@ function Cyclopedia.actionCharmButton(widget)
 
                 confirmWindow = nil
 
-                Cyclopedia.Toggle(true, false, 3)
             end
         end
 
@@ -528,8 +510,6 @@ function Cyclopedia.actionCharmButton(widget)
                     anchor = AnchorHorizontalCenter
                 }, yesCallback, noCallback)
 
-            Cyclopedia.Toggle(true, false)
         end
     end
 end
-

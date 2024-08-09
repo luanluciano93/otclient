@@ -40,9 +40,12 @@ UIWidget
     anchors.bottom: parent.bottom
     margin-top: 10
     margin-bottom: 30
-    image-source: /game_cyclopedia/images/panel_dark
+    image-source: /images/ui/2pixel_up_frame_borderimage_dark
+    image-size: 170 270
     image-border: 10
+
     width: 170
+
   BorderBox
     id: InfoBase
     anchors.top: CharacterBase.top
@@ -1684,7 +1687,14 @@ UIWidget
               cell-size: 224 74
               flow: true
 
-
+  UIWidget
+    id: CharacterTitles
+    anchors.top: CharacterBase.top
+    anchors.left: CharacterBase.right
+    anchors.bottom: OptionsBase.bottom
+    anchors.right: parent.right
+    margin-left: 10
+    visible: false
 
       VerticalScrollBar
         id: ListScrollbar

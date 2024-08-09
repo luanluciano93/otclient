@@ -1,5 +1,5 @@
 HouseIcon < UIWidget
-  image-source: /game_cyclopedia/images/house-owner-icon
+  //image-source: /game_cyclopedia/images/house-owner-icon
   margin-left: 1
 HouseBidArea < UIWidget
   height: 100
@@ -102,7 +102,7 @@ House < UICheckBox
       flow: true
   UIWidget
     id: description
-    image-source: /game_cyclopedia/images/house-description
+    //image-source: /game_cyclopedia/images/house-description
     anchors.top: sold.top
     anchors.left: sold.left
     visible: false

@@ -27,6 +27,7 @@ function toggle()
     end
     show()
 end
+
 controllerCyclopedia = Controller:new()
 controllerCyclopedia:setUI('game_cyclopedia')
 function controllerCyclopedia:onInit()
@@ -72,13 +73,11 @@ function controllerCyclopedia:onInit()
         onCyclopediaCharacterRecentKills = Cyclopedia.loadCharacterRecentKills,
         onUpdateCyclopediaCharacterItemSummary = Cyclopedia.loadCharacterItems,
         onParseCyclopediaCharacterAppearances = Cyclopedia.loadCharacterAppearances,
-
         onParseCyclopediaStoreSummary = Cyclopedia.onParseCyclopediaStoreSummary,
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
         -- items
         onParseItemDetail = Cyclopedia.onParseItemDetail
-
     })
 
     --[[

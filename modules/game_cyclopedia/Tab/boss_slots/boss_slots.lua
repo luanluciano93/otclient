@@ -315,8 +315,8 @@ function Cyclopedia.setActiveSlot(widget, slot, slotData, data)
     widget.ActivedBoss.EquipmentLabel:setText(string.format("Equipment loot bonus: %d%%", data.lootBonus))
     widget.ActivedBoss.Value:setText(comma_value(data.goldToRemove))
 
-    if Cyclopedia.UI.Balance ~= nil then
-        if data.goldToRemove > Cyclopedia.UI.Balance then
+    if g_game.getLocalPlayer():getResourceBalance(1) ~= nil then
+        if data.goldToRemove > g_game.getLocalPlayer():getResourceBalance(1) then
             widget.ActivedBoss.Value:setColor("#D33C3C")
             widget.ActivedBoss.RemoveButton:setEnabled(false)
         else
