@@ -137,7 +137,7 @@ function Cyclopedia.CreateCreatureItems(data)
 end
 
 function Cyclopedia.loadBestiarySelectedCreature(data)
-    pdump(data)
+
     local occurence = {
         [0] = 1,
         2,

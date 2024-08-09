@@ -839,10 +839,10 @@ BestiaryCategory < UIWidget
     anchors.horizontalCenter: parent.horizontalCenter
     margin-top: 22
     size: 64 64
-    image-source: images/panel_texture2
+    image-source: /images/ui/2pixel_up_frame_borderimage
     image-border: 10
     $pressed:
-      image-source: /images/ui/panel_flat
+      image-source: /images/ui/2pixel_up_frame_borderimage_dark_reversed
   UIWidget
     id: ClassIcon
     anchors.centerIn: ClassBase
@@ -993,10 +993,10 @@ BestiaryCreature < UIWidget
     anchors.horizontalCenter: parent.horizontalCenter
     margin-top: 22
     size: 64 64
-    image-source: images/panel_texture2
+    image-source: /images/ui/2pixel_up_frame_borderimage
     image-border: 10
     $pressed:
-      image-source: /images/ui/panel_flat
+      image-source: /images/ui/2pixel_up_frame_borderimage_dark_reversed
   UICreature
     id: Sprite
     anchors.fill: ClassBase
@@ -1021,7 +1021,7 @@ BestiaryCreature < UIWidget
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.bottom: parent.bottom
     margin-bottom: 15
-    image-source: images/bestiary/complete_icon
+    image-source: images/checkmark-icon
     visible: false
 BestiaryResistProgress < UIWidget
   image-source: /game_cyclopedia/images/bestiary/barra
@@ -1040,7 +1040,7 @@ BestiaryResistProgress < UIWidget
     image-source: /game_cyclopedia/images/bestiary/barra
     phantom: true
 BestiaryItem < UIItem
-  image-source: /game_cyclopedia/images/bestiary/panel_texture2
+  image-source: /images/ui/2pixel_up_frame_borderimage
   image-border: 10
   size: 34 34
   anchors.verticalCenter: parent.verticalCenter

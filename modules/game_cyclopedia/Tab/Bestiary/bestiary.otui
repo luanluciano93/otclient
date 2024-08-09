@@ -9,7 +9,7 @@ UIWidget
     anchors.right: parent.right
     margin-bottom: 35
     !text: tr('Search')
-    //font: verdana-bold-8px-antialiased
+    font: small-9px
     text-offset: 0 -1
     color: #C0C0C0
     @onClick:  modules.game_cyclopedia.Cyclopedia.BestiarySearch(self:getText())
