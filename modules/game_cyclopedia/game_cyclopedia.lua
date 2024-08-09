@@ -77,7 +77,7 @@ function controllerCyclopedia:onInit()
         -- charms
         onUpdateBestiaryCharmsData = Cyclopedia.loadCharms,
         -- items
-        onParseItemDetail = onParseItemDetail
+        onParseItemDetail = Cyclopedia.onParseItemDetail
 
     })
 
@@ -198,6 +198,18 @@ function controllerCyclopedia:onTerminate()
         trackerMiniWindowBosstiary:destroy()
         trackerMiniWindowBosstiary = nil
     end
+    if focusCategoryList then
+        disconnect(focusCategoryList, {
+            onChildFocusChange = function(self, focusedChild)
+                if focusedChild == nil then
+                    return
+                end
+                focusedChild:onClick()
+            end
+        })
+
+    end
+
 end
 
 function hide()
@@ -205,6 +217,17 @@ function hide()
         return
     end
     controllerCyclopedia.ui:hide()
+    if focusCategoryList then
+
+        disconnect(focusCategoryList, {
+            onChildFocusChange = function(self, focusedChild)
+                if focusedChild == nil then
+                    return
+                end
+                focusedChild:onClick()
+            end
+        })
+    end
 end
 
 function show()

@@ -13,10 +13,11 @@ Cyclopedia.CategoryItems = {
     { id = 8, name = "Legs" },
     { id = 9, name = "Others" },
     { id = 10, name = "Potions" },
-    { id = 254, name = "Quivers" },
+    { id = 25, name = "Quivers" },
     { id = 11, name = "Rings" },
     { id = 12, name = "Runes" },
     { id = 13, name = "Shields" },
+    { id = 26, name = "Soul Cores" },
     { id = 14, name = "Tools" },
     { id = 31, name = "Unsorted" },
     { id = 15, name = "Valuables" },
@@ -31,6 +32,7 @@ Cyclopedia.CategoryItems = {
 -- LuaFormatter on
 
 local UI = nil
+focusCategoryList = nil
 function Cyclopedia.ResetItemCategorySelection(list)
     for i, child in pairs(list:getChildren()) do
         child:setChecked(false)
@@ -63,7 +65,7 @@ function showItems()
         ItemCat:setId(data.id)
         ItemCat:setText(data.name)
         ItemCat:setBackgroundColor(CategoryColor)
-
+        ItemCat:setPhantom(false)
         ItemCat.BaseColor = CategoryColor
 
         function ItemCat:onClick()
@@ -78,9 +80,27 @@ function showItems()
     Cyclopedia.ItemList = {}
     Cyclopedia.AllItemList = {}
     Cyclopedia.loadItemsCategories()
+
+    focusCategoryList = UI.CategoryList
+
+    g_keyboard.bindKeyPress('Down', function()
+        focusCategoryList:focusNextChild(KeyboardFocusReason)
+    end, focusCategoryList:getParent())
+    g_keyboard.bindKeyPress('Up', function()
+        focusCategoryList:focusPreviousChild(KeyboardFocusReason)
+    end, focusCategoryList:getParent())
+    connect(focusCategoryList, {
+        onChildFocusChange = function(self, focusedChild)
+            if focusedChild == nil then
+                return
+            end
+            focusedChild:onClick()
+        end
+    })
 end
 
 function Cyclopedia.onCategoryChange(widget)
+
     if widget:isChecked() then
         Cyclopedia.selectItemCategory(tonumber(widget:getId()))
 
@@ -162,6 +182,11 @@ function Cyclopedia.applyFilters()
 end
 
 function Cyclopedia.internalCreateItem(data)
+    -- temp fix 13.40
+    if data:getId() > 47381 and data:getId() < 80909 then
+        return
+    end
+
     local player = g_game.getLocalPlayer()
     local vocation = player:getVocation()
     local level = player:getLevel()
@@ -298,8 +323,9 @@ function Cyclopedia.internalCreateItem(data)
 end
 
 function Cyclopedia.ItemSearch(text, clearTextEdit)
+    UI.ItemListBase.List:destroyChildren()
     if text ~= "" then
-        UI.ItemListBase.List:destroyChildren()
+
         UI.SelectedItem.Sprite:setItemId(0)
         UI.SelectedItem.Rarity:setImageSource("")
 
@@ -327,7 +353,7 @@ function Cyclopedia.ItemSearch(text, clearTextEdit)
             local item = Cyclopedia.internalCreateItem(data)
         end
     else
-        UI.ItemListBase.List:destroyChildren()
+
         UI.SelectedItem.Sprite:setItemId(0)
         UI.SelectedItem.Rarity:setImageSource("")
     end
@@ -360,9 +386,19 @@ function Cyclopedia.selectItemCategory(id)
         Cyclopedia.Items.ClassificationFilter = 0
     end
 
-    if not table.empty(Cyclopedia.ItemList[id]) then
-        for _, data in pairs(Cyclopedia.ItemList[id]) do
-            local item = Cyclopedia.internalCreateItem(data)
+    local idsToProcess = {}
+
+    if id == 1000 then
+        idsToProcess = {16, 17, 18, 19, 20, 21}
+    else
+        idsToProcess = {id}
+    end
+
+    for _, idToProcess in pairs(idsToProcess) do
+        if not table.empty(Cyclopedia.ItemList[idToProcess]) then
+            for _, data in pairs(Cyclopedia.ItemList[idToProcess]) do
+                local item = Cyclopedia.internalCreateItem(data)
+            end
         end
     end
 
@@ -427,7 +463,7 @@ function Cyclopedia.FillItemList()
     end
 end
 
-function onParseItemDetail(itemId, descriptions)
+function Cyclopedia.onParseItemDetail(itemId, descriptions)
     UI.InfoBase.DetailsBase.List:destroyChildren()
     local internalData = g_things.getThingType(itemId, ThingCategoryItem)
     local classification = internalData:getClassification()

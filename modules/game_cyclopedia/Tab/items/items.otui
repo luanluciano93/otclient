@@ -11,7 +11,7 @@ UIWidget
     !text: tr('Categories') .. ':'
     text-auto-resize: true
     color: #BDBDBD
-  UIScrollArea
+  TextList
     id: CategoryList
     vertical-scrollbar: CategoryScrollbar
     anchors.left: parent.left
@@ -23,17 +23,15 @@ UIWidget
     padding-left: 2
     padding-top: 2
     padding-bottom: 2
-    layout:
-      type: grid
-      cell-size: 200 16
-      flow: true
+    focusable: false
+
   VerticalScrollBar
     id: CategoryScrollbar
     anchors.top: CategoryList.top
     anchors.right: CategoryList.right
     anchors.bottom: CategoryList.bottom
-    step: 80
-    pixel-scroll: true
+    step: 10
+    pixels-scroll: true
   VerticalSeparator
     id: MidSep
     anchors.left: parent.left
@@ -127,7 +125,7 @@ UIWidget
       anchors.top: List.top
       anchors.right: List.right
       anchors.bottom: List.bottom
-      step: 80
+      step: 30
       pixel-scroll: true
   UIWidget
     size: 32 32
