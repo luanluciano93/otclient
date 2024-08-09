@@ -114,6 +114,8 @@ public:
     void sendAnswerModalDialog(uint32_t dialog, int button, int choice);
     void sendBrowseField(const Position& position);
     void sendSeekInContainer(int cid, int index);
+    void sendInspectionNormalObject(const Position& position);
+    void sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
     void sendBuyStoreOffer(int offerId, int productType, const std::string_view name);
     void sendRequestTransactionHistory(int page, int entriesPerPage);
     void sendRequestStoreOffers(const std::string_view categoryName, int serviceType);
@@ -133,6 +135,15 @@ public:
     void sendStashWithdraw(uint16_t itemId, uint32_t count, uint8_t stackpos);
     void sendHighscoreInfo(uint8_t action, uint8_t category, uint32_t vocation, const std::string& world, uint8_t worldType, uint8_t battlEye, uint16_t page, uint8_t totalPages);
     void sendImbuementDurations(bool isOpen = false);
+    void sendRequestBestiary();
+    void sendRequestBestiaryOverview(const std::string_view catName);
+    void sendRequestBestiarySearch(const uint16_t raceId);
+    void sendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId);
+    void sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page);
+    void sendRequestBosstiaryInfo();
+    void sendRequestBossSlootInfo();
+    void sendRequestBossSlootAction(const uint8_t action, const uint32_t raceId);
+    void SendStatusTrackerBestiary(const uint16_t raceId,  bool status);
 
     // otclient only
     void sendChangeMapAwareRange(int xrange, int yrange);
@@ -198,6 +209,9 @@ private:
     void parseContainerAddItem(const InputMessagePtr& msg);
     void parseContainerUpdateItem(const InputMessagePtr& msg);
     void parseContainerRemoveItem(const InputMessagePtr& msg);
+    void parseBosstiaryInfo(const InputMessagePtr& msg);
+    void parseTakeScreenshot(const InputMessagePtr& msg);
+    void parseCyclopediaItemDetail(const InputMessagePtr& msg);
     void parseAddInventoryItem(const InputMessagePtr& msg);
     void parseRemoveInventoryItem(const InputMessagePtr& msg);
     void parseOpenNpcTrade(const InputMessagePtr& msg);
@@ -287,6 +301,7 @@ private:
     void parseUpdateSupplyTracker(const InputMessagePtr& msg);
     void parseUpdateLootTracker(const InputMessagePtr& msg);
     void parseBestiaryEntryChanged(const InputMessagePtr& msg);
+    void parseCyclopediaCharacterInfo(const InputMessagePtr& msg);
     void parseDailyRewardCollectionState(const InputMessagePtr& msg);
     void parseOpenRewardWall(const InputMessagePtr& msg);
     void parseDailyReward(const InputMessagePtr& msg);
@@ -308,9 +323,13 @@ private:
     void parseBosstiarySlots(const InputMessagePtr& msg);
     void parseBosstiaryCooldownTimer(const InputMessagePtr& msg);
     void parseBosstiaryEntryChanged(const InputMessagePtr& msg);
-    void parseTakeScreenshot(const InputMessagePtr& msg);
-    void parseHighscores(const InputMessagePtr& msg);
+    void parseBestiaryRaces(const InputMessagePtr& msg);
+    void parseBestiaryOverview(const InputMessagePtr& msg);
+    void parseBestiaryMonsterData(const InputMessagePtr& msg);
+    void parseBestiaryCharmsData(const InputMessagePtr& msg);
 
+
+    void parseHighscores(const InputMessagePtr& msg);
     void parseAttachedEffect(const InputMessagePtr& msg);
     void parseDetachEffect(const InputMessagePtr& msg);
     void parseCreatureShader(const InputMessagePtr& msg);

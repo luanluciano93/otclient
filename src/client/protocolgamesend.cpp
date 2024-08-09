@@ -934,6 +934,110 @@ void ProtocolGame::sendSeekInContainer(int cid, int index)
     send(msg);
 }
 
+void ProtocolGame::sendInspectionNormalObject(const Position& position)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientInspectionObject);
+    msg->addU8(Otc::INSPECT_NORMALOBJECT);
+    addPosition(msg, position);
+    send(msg);
+}
+
+void ProtocolGame::sendInspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
+{
+    if (inspectionType != Otc::INSPECT_NPCTRADE && inspectionType != Otc::INSPECT_CYCLOPEDIA) {
+        return;
+    }
+
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientInspectionObject);
+    msg->addU8(inspectionType);
+    msg->addU16(itemId);
+    msg->addU8(itemCount);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBestiary()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientBestiaryRequest);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBestiaryOverview(const std::string_view catName)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientBestiaryRequestOverview);
+    msg->addU8(0x02);
+    msg->addString(catName);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBestiarySearch(const uint16_t raceId)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientBestiaryRequestSearch);
+    msg->addU16(raceId);
+    send(msg);
+}
+
+void ProtocolGame::sendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientSendBuyCharmRune);
+    msg->addU8(runeId);
+    msg->addU8(action);
+    msg->addU16(raceId);
+    send(msg);
+}
+
+void ProtocolGame::sendCyclopediaRequestCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientCyclopediaRequestCharacterInfo);
+    msg->addU32(playerId);
+    msg->addU8(characterInfoType);
+
+    if (characterInfoType == Otc::CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS || characterInfoType == Otc::CYCLOPEDIA_CHARACTERINFO_RECENTPVPKILLS) {
+        msg->addU16(entriesPerPage);
+        msg->addU16(page);
+    }
+
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBosstiaryInfo()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBosstiaryInfo);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBossSlootInfo()
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBossSlootInfo);
+    send(msg);
+}
+
+void ProtocolGame::sendRequestBossSlootAction(const uint8_t action, const uint32_t raceId)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientRequestBossSlootAction);
+    msg->addU8(action);
+    msg->addU32(raceId);
+    send(msg);
+}
+
+void ProtocolGame::SendStatusTrackerBestiary(const uint16_t raceId, bool status)
+{
+    const auto& msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientStatusTrackerBestiary);
+    msg->addU16(raceId);
+    msg->addU8(status ? 1 : 0);
+    send(msg);
+}
+
 void ProtocolGame::sendBuyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     const auto& msg = std::make_shared<OutputMessage>();

@@ -324,6 +324,66 @@ void Game::processContainerRemoveItem(int containerId, int slot, const ItemPtr& 
         container->onRemoveItem(slot, lastItem);
 }
 
+void Game::processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions)
+{
+    g_lua.callGlobalField("g_game", "onParseItemDetail", item->getId(), descriptions);
+}
+
+void Game::processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryRaces);
+}
+
+void Game::processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, 
+                                                const std::vector<std::tuple<uint8_t, uint16_t>>& combats)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterGeneralStats", stats, skills, combats);
+}
+
+void Game::processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation, const std::vector<std::vector<uint16_t>>& additionalSkillsArray,
+                                                const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
+                                                const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterCombatStats", data, mitigation, additionalSkillsArray, forgeSkillsArray, perfectShotDamageRangesArray, combatsArray, concoctionsArray);
+}
+
+void Game::processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, 
+                                                const std::string_view loyaltyTitle, const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterBadges", showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector);
+}
+
+void Game::processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data)
+{
+    g_lua.callGlobalField("g_game", "onUpdateCyclopediaCharacterItemSummary", data);
+}
+
+void Game::processCyclopediaCharacterAppearances(const OutfitColorStruct& currentOutfit, const std::vector<CharacterInfoOutfits>& outfits, 
+                                                const std::vector<CharacterInfoMounts>& mounts, std::vector<CharacterInfoFamiliar>& familiars)
+{
+    g_lua.callGlobalField("g_game", "onParseCyclopediaCharacterAppearances", currentOutfit, outfits, mounts, familiars);
+}
+
+void Game::processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data)
+{
+    g_lua.callGlobalField("g_game", "onCyclopediaCharacterRecentDeaths", data);
+}
+
+void Game::processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data)
+{
+    g_lua.callGlobalField("g_game", "onCyclopediaCharacterRecentKills", data);
+}
+
+void Game::processBosstiaryInfo(const std::vector<BosstiaryData>& boss)
+{
+    g_lua.callGlobalField("g_game", "onParseSendBosstiary", boss);
+}
+
+void Game::processBosstiarySlots(const BosstiarySlotsData& data)
+{
+    g_lua.callGlobalField("g_game", "onParseBosstiarySlots", data);
+}
+
 void Game::processInventoryChange(int slot, const ItemPtr& item)
 {
     if (item)
@@ -387,6 +447,26 @@ void Game::processVipStateChange(uint32_t id, uint32_t status)
 {
     std::get<1>(m_vips[id]) = status;
     g_lua.callGlobalField("g_game", "onVipStateChange", id, status);
+}
+
+void Game::processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryData);
+}
+
+void Game::processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data)
+{
+    g_lua.callGlobalField("g_game", "onParseBestiaryOverview", raceName, data);
+}
+
+void Game::processUpdateBestiaryMonsterData(const BestiaryMonsterData& data)
+{
+    g_lua.callGlobalField("g_game", "onUpdateBestiaryMonsterData", data);
+}
+
+void Game::processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData)
+{
+    g_lua.callGlobalField("g_game", "onUpdateBestiaryCharmsData", charmData);
 }
 
 void Game::processTutorialHint(int id)
@@ -1437,6 +1517,22 @@ void Game::seekInContainer(int cid, int index)
     m_protocolGame->sendSeekInContainer(cid, index);
 }
 
+void Game::inspectionNormalObject(const Position& position)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendInspectionNormalObject(position);
+}
+
+void Game::inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendInspectionObject(inspectionType , itemId, itemCount);
+}
+
 void Game::buyStoreOffer(int offerId, int productType, const std::string_view name)
 {
     if (!canPerformGameAction())
@@ -1680,6 +1776,7 @@ void Game::applyImbuement(uint8_t slot, uint32_t imbuementId, bool protectionCha
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendApplyImbuement(slot, imbuementId, protectionCharm);
 }
 
@@ -1687,6 +1784,7 @@ void Game::clearImbuement(uint8_t slot)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendClearImbuement(slot);
 }
 
@@ -1694,6 +1792,7 @@ void Game::closeImbuingWindow()
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendCloseImbuingWindow();
 }
 
@@ -1701,6 +1800,7 @@ void Game::stashWithdraw(uint16_t itemId, uint32_t count, uint8_t stackpos)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendStashWithdraw(itemId, count, stackpos);
 }
 
@@ -1708,6 +1808,7 @@ void Game::requestHighscore(uint8_t action, uint8_t category, uint32_t vocation,
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendHighscoreInfo(action, category, vocation, world, worldType, battlEye, page, totalPages);
 }
 
@@ -1724,5 +1825,77 @@ void Game::imbuementDurations(bool isOpen)
 {
     if (!canPerformGameAction())
         return;
+
     m_protocolGame->sendImbuementDurations(isOpen);
+}
+
+void Game::requestBestiary()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBestiary();
+}
+
+void Game::requestBestiaryOverview(const std::string_view catName)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBestiaryOverview(catName);
+}
+
+void Game::requestBestiarySearch(const uint16_t raceId)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBestiarySearch(raceId);
+}
+
+void Game::requestSendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendBuyCharmRune(runeId, action, raceId);
+}
+
+void Game::requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage, const uint16_t page)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendCyclopediaRequestCharacterInfo(playerId, characterInfoType, entriesPerPage, page);
+}
+
+void Game::requestBosstiaryInfo()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBosstiaryInfo();
+}
+
+void Game::requestBossSlootInfo()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBossSlootInfo();
+}
+
+void Game::requestBossSlootAction(const uint8_t action, const uint32_t raceId)
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBossSlootAction(action,raceId);
+
+}
+void Game::sendStatusTrackerBestiary(const uint16_t raceId, bool status)
+{
+    m_denyBotCall = false;
+    m_protocolGame->SendStatusTrackerBestiary(raceId, status);
+    m_denyBotCall = true;
 }

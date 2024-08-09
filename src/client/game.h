@@ -53,6 +53,233 @@ struct UnjustifiedPoints
     uint8_t skullTime;
 };
 
+struct CyclopediaCharacterGeneralStats
+{
+    uint64_t experience;
+    uint16_t level;
+    uint8_t levelPercent;
+    uint16_t baseExpGain;
+    uint16_t lowLevelExpBonus;
+    uint16_t XpBoostPercent;
+    uint16_t staminaExpBonus;
+    uint16_t XpBoostBonusRemainingTime;
+    uint8_t canBuyXpBoost;
+    uint32_t health;
+    uint32_t maxHealth;
+    uint32_t mana;
+    uint32_t maxMana;
+    uint8_t soul;
+    uint16_t staminaMinutes;
+    uint16_t regenerationCondition;
+    uint16_t offlineTrainingTime;
+    uint16_t speed;
+    uint16_t baseSpeed;
+    uint32_t capacity;
+    uint32_t baseCapacity;
+    uint32_t freeCapacity;
+    uint16_t magicLevel;
+    uint16_t baseMagicLevel;
+    uint16_t loyaltyMagicLevel;
+    uint16_t magicLevelPercent;
+};
+
+struct CyclopediaCharacterCombatStats
+{
+    uint8_t weaponElement;
+    uint16_t weaponMaxHitChance;
+    uint8_t weaponElementDamage;
+    uint8_t weaponElementType;
+    uint16_t defense;
+    uint16_t armor;
+    uint8_t haveBlessings;
+};
+
+struct CyclopediaBestiaryRace
+{
+    uint8_t race;
+    std::string bestClass;
+    uint16_t count;
+    uint16_t unlockedCount;
+};
+
+struct CharmData
+{
+    uint8_t id;
+    std::string name;
+    std::string description;
+    uint16_t unlockPrice;
+    bool unlocked;
+    bool asignedStatus;
+    uint16_t raceId;
+    uint32_t removeRuneCost;
+};
+
+struct BestiaryCharmsData
+{
+    uint32_t points;
+    std::vector<CharmData> charms;
+    std::vector<uint16_t> finishedMonsters;
+};
+
+struct BestiaryOverviewMonsters
+{
+    uint16_t id;
+    uint8_t currentLevel;
+    uint8_t occurrence;
+};
+
+struct LootItem
+{
+    uint16_t itemId;
+    uint8_t diffculty;
+    uint8_t specialEvent;
+    std::string name;
+    uint8_t amount;
+};
+
+struct BestiaryMonsterData
+{
+    uint16_t id;
+    std::string bestClass;
+    uint8_t currentLevel;
+    uint32_t killCounter;
+    uint16_t thirdDifficulty;
+    uint16_t secondUnlock;
+    uint16_t lastProgressKillCount;
+    uint8_t difficulty;
+    uint8_t ocorrence;
+    std::vector<LootItem> loot;
+    uint16_t charmValue;
+    uint8_t attackMode;
+    uint32_t maxHealth;
+    uint32_t experience;
+    uint16_t speed;
+    uint16_t armor;
+    double mitigation;
+    std::map<uint8_t, uint16_t> combat;
+    std::string location;
+};
+
+struct BosstiaryData
+{
+    uint32_t raceId;
+    uint8_t category;
+    uint32_t kills;
+    uint8_t isTrackerActived;
+};
+
+struct BosstiarySlot
+{
+    uint8_t bossRace;
+    uint32_t killCount;
+    uint16_t lootBonus;
+    uint8_t killBonus;
+    uint8_t bossRaceRepeat;
+    uint32_t removePrice;
+    uint8_t inactive;
+};
+
+struct BossUnlocked
+{
+    uint32_t bossId;
+    uint8_t bossRace;
+};
+
+struct BosstiarySlotsData
+{
+    uint32_t playerPoints;
+    uint32_t totalPointsNextBonus;
+    uint16_t currentBonus;
+    uint16_t nextBonus;
+    bool isSlotOneUnlocked;
+    uint32_t bossIdSlotOne;
+    std::optional<BosstiarySlot> slotOneData;
+    bool isSlotTwoUnlocked;
+    uint32_t bossIdSlotTwo;
+    std::optional<BosstiarySlot> slotTwoData;
+    bool isTodaySlotUnlocked;
+    uint32_t boostedBossId;
+    std::optional<BosstiarySlot> todaySlotData;
+    bool bossesUnlocked;
+    std::vector<BossUnlocked> bossesUnlockedData;
+};
+
+struct ItemSummary
+{
+    uint16_t itemId;
+    uint8_t classification;
+    uint32_t amount;
+};
+
+struct CyclopediaCharacterItemSummary
+{
+    std::vector<ItemSummary> inventory;
+    std::vector<ItemSummary> store;
+    std::vector<ItemSummary> stash;
+    std::vector<ItemSummary> depot;
+    std::vector<ItemSummary> inbox;
+};
+
+struct RecentPvPKillEntry
+{
+    uint32_t timestamp;
+    std::string description;
+    uint8_t status;
+};
+
+struct CyclopediaCharacterRecentPvPKills
+{
+    std::vector<RecentPvPKillEntry> entries;
+};
+
+struct RecentDeathEntry
+{
+    uint32_t timestamp;
+    std::string cause;
+};
+
+struct CyclopediaCharacterRecentDeaths
+{
+    std::vector<RecentDeathEntry> entries;
+};
+
+struct OutfitColorStruct
+{
+    uint8_t lookHead;
+    uint8_t lookBody;
+    uint8_t lookLegs;
+    uint8_t lookFeet;
+    uint8_t lookMountHead;
+    uint8_t lookMountBody;
+    uint8_t lookMountLegs;
+    uint8_t lookMountFeet;
+};
+
+struct CharacterInfoOutfits
+{
+    uint16_t lookType;
+    std::string name;
+    uint8_t addons;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
+struct CharacterInfoMounts
+{
+    uint16_t mountId;
+    std::string name;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
+struct CharacterInfoFamiliar
+{
+    uint16_t lookType;
+    std::string name;
+    uint8_t type;
+    uint32_t isCurrent;
+};
+
 using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
 
 //@bindsingleton g_game
@@ -155,6 +382,31 @@ protected:
     static void processModalDialog(uint32_t id, const std::string_view title, const std::string_view message, const std::vector<std::tuple<int, std::string> >
                                    & buttonList, int enterButton, int escapeButton, const std::vector<std::tuple<int, std::string> >
                                    & choiceList, bool priority);
+
+    // cyclopedia
+    static void processItemDetail(const ItemPtr& item, const std::vector<std::tuple<std::string, std::string>>& descriptions);
+    static void processBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryRaces);
+    static void processCyclopediaCharacterGeneralStats(const CyclopediaCharacterGeneralStats& stats, const std::vector<std::vector<uint16_t>>& skills, 
+                                                    const std::vector<std::tuple<uint8_t, uint16_t>>& combats);
+    static void processCyclopediaCharacterCombatStats(const CyclopediaCharacterCombatStats& data, const double mitigation, 
+                                                    const std::vector<std::vector<uint16_t>>& additionalSkillsArray,
+                                                    const std::vector<std::vector<uint16_t>>& forgeSkillsArray, const std::vector<uint16_t>& perfectShotDamageRangesArray,
+                                                    const std::vector<std::tuple<uint8_t, uint16_t>>& combatsArray, 
+                                                    const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray);
+    static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, 
+                                                    const std::string_view loyaltyTitle,
+                                                    const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
+    static void processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data);
+    static void processCyclopediaCharacterAppearances(const OutfitColorStruct& currentOutfit, const std::vector<CharacterInfoOutfits>& outfits, 
+                                                    const std::vector<CharacterInfoMounts>& mounts, std::vector<CharacterInfoFamiliar>& familiars);
+    static void processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data);
+    static void processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data);
+    static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
+    static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
+    static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
+    static void processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData);
+    static void processBosstiaryInfo(const std::vector<BosstiaryData>& boss);
+    static void processBosstiarySlots(const BosstiarySlotsData& data);
 
     friend class ProtocolGame;
     friend class Map;
@@ -384,15 +636,31 @@ public:
     void enableTileThingLuaCallback(bool value) { m_tileThingsLuaCallback = value; }
     bool isTileThingLuaCallbackEnabled() { return m_tileThingsLuaCallback; }
 
+    // stash related
     void stashWithdraw(uint16_t itemId, uint32_t count, uint8_t stackpos);
-    // Highscore related
+
+    // highscore related
     void requestHighscore(uint8_t action, uint8_t category, uint32_t vocation, const std::string& world, uint8_t worldType, uint8_t battlEye, uint16_t page, uint8_t totalPages);
     void processHighscore(const std::string& serverName, const std::string& world, uint8_t worldType, uint8_t battlEye,
                             const std::vector<std::tuple<uint32_t, std::string>>& vocations,
                             const std::vector<std::tuple<uint8_t, std::string>>& categories,
                             uint16_t page, uint16_t totalPages,
                             const std::vector<std::tuple<uint32_t, std::string, std::string, uint8_t, std::string, uint16_t, uint8_t, uint64_t>>& highscores, uint32_t entriesTs);
+    
+    // cyclopedia related
+    void inspectionNormalObject(const Position& position);
+    void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
+    void requestBestiary();
+    void requestBestiaryOverview(const std::string_view catName);
+    void requestBestiarySearch(const uint16_t raceId);
+    void requestSendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId);
+    void requestSendCharacterInfo(const uint32_t playerId, const Otc::CyclopediaCharacterInfoType_t characterInfoType, const uint16_t entriesPerPage = 0, const uint16_t page = 0);
+    void requestBosstiaryInfo();
+    void requestBossSlootInfo();
+    void requestBossSlootAction(const uint8_t action, const uint32_t raceId);
+    void sendStatusTrackerBestiary(const uint16_t raceId,  bool status);
 
+    // imbuement related
     void imbuementDurations(bool isOpen = false);
 
 protected:

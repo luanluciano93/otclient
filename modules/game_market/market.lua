@@ -1330,6 +1330,9 @@ function Market.loadMarketItems(category)
             end
         end
     else
+        if not marketItems[category] then
+            return
+        end
         -- loop specific category
         for i = 1, #marketItems[category] do
             local item = marketItems[category][i]
