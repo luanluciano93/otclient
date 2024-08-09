@@ -167,7 +167,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter)
     local fullText = ""
 
-    if data.killCounter >= CONFIG[data.ocorrence].MASTERY then
+    if data.killCounter >= data.lastProgressKillCount then
         fullText = "(fully unlocked)"
     end
 
