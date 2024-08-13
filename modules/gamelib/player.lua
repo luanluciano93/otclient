@@ -55,6 +55,18 @@ InventorySlotPurse = 11
 InventorySlotFirst = 1
 InventorySlotLast = 10
 
+vocationNames = {
+    [0] = "No Vocation",
+    [1] = "Sorcerer",
+    [2] = "Druid",
+    [3] = "Paladin",
+    [4] = "Knight",
+    [5] = "Master Sorcerer",
+    [6] = "Elder Druid",
+    [7] = "Royal Paladin",
+    [8] = "Elite Knight"
+  }
+
 function Player:isPartyLeader()
     local shield = self:getShield()
     return (shield == ShieldWhiteYellow or shield == ShieldYellow or shield == ShieldYellowSharedExp or shield ==
@@ -158,4 +170,8 @@ function Player:hasState(state, states)
         end
     end
     return false
+end
+
+function Player:getVocationName()
+    return vocationNames[self:getVocation()] or "Unknown Vocation"
 end

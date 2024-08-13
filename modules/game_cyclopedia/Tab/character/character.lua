@@ -69,11 +69,11 @@ function showCharacter()
     if g_game.isOnline() then
         local player = g_game.getLocalPlayer()
         UI.CharacterBase:setText(player:getName())
-        UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocation()))
+        UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocationName()))
         UI.CharacterBase.Outfit:setOutfit(player:getOutfit())
-        UI.CharacterBase.Outfit:getCreature():setStaticWalking(1000)
+
         UI.InfoBase.outfitPanel.Sprite:setOutfit(player:getOutfit())
-        UI.InfoBase.outfitPanel.Sprite:getCreature():setStaticWalking(1000)
+    
         UI.InfoBase.InspectLabel:setText(tr("You are inspecting") .. ": " .. player:getName())
 
         for i = InventorySlotFirst, InventorySlotPurse do
@@ -1168,9 +1168,14 @@ function Cyclopedia.createCharacterDescription()
     local descriptions = {{
         Level = player:getLevel()
     }, {
-        Vocation = player:getVocation()
+        Vocation =player:getVocationName()
+    }, {
+        loyaltyTitle = "?"
+    }, {
+        Prey = "?"
     }, {
         Outfit = "?"
+    }, {
     }}
 
     for _, description in ipairs(descriptions) do
