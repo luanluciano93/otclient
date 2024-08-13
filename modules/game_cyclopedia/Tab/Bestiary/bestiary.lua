@@ -1,4 +1,5 @@
 local UI = nil
+
 local STAGES = {
     CREATURES = 2,
     SEARCH = 4,
@@ -7,6 +8,7 @@ local STAGES = {
 }
 
 local storedRaceIDs = {}
+
 function Cyclopedia.onParseBestiaryOverview(name, creatures)
     if name == "Result" then
         Cyclopedia.loadBestiarySearchCreatures(creatures)
@@ -32,10 +34,9 @@ function showBestiary()
 end
 
 Cyclopedia.Bestiary = {}
-
 Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
 
-function Cyclopedia.SetBestiaryProgress(fit,firstBar, secondBar, thirdBar, killCount, firstGoal, secondGoal, thirdGoal)
+function Cyclopedia.SetBestiaryProgress(fit, firstBar, secondBar, thirdBar, killCount, firstGoal, secondGoal, thirdGoal)
     local function calculateWidth(value, max)
         return math.min(math.floor((value / max) * fit), fit)
     end
@@ -69,12 +70,12 @@ function Cyclopedia.SetBestiaryProgress(fit,firstBar, secondBar, thirdBar, killC
     setBarVisibility(thirdBar, killCount > secondGoal, thirdWidth)
 end
 
-function Cyclopedia.SetBestiaryStars(Value)
-    UI.ListBase.CreatureInfo.StarFill:setWidth(Value * 9)
+function Cyclopedia.SetBestiaryStars(value)
+    UI.ListBase.CreatureInfo.StarFill:setWidth(value * 9)
 end
 
-function Cyclopedia.SetBestiaryDiamonds(Value)
-    UI.ListBase.CreatureInfo.DiamondFill:setWidth(Value * 9)
+function Cyclopedia.SetBestiaryDiamonds(value)
+    UI.ListBase.CreatureInfo.DiamondFill:setWidth(value * 9)
 end
 
 function Cyclopedia.CreateCreatureItems(data)
@@ -82,7 +83,6 @@ function Cyclopedia.CreateCreatureItems(data)
 
     for index, _ in pairs(data) do
         local widget = g_ui.createWidget("BestiaryItemGroup", UI.ListBase.CreatureInfo.ItemsBase.Itemlist)
-
         widget:setId(index)
 
         if index == 0 then
@@ -99,16 +99,13 @@ function Cyclopedia.CreateCreatureItems(data)
 
         for i = 1, 15 do
             local item = g_ui.createWidget("BestiaryItem", widget.Items)
-
             item:setId(i)
         end
 
         for itemIndex, itemData in ipairs(data[index]) do
             local thing = g_things.getThingType(itemData.id, ThingCategoryItem)
             local itemWidget = UI.ListBase.CreatureInfo.ItemsBase.Itemlist[index].Items[itemIndex]
-
             itemWidget:setItemId(itemData.id)
-
             itemWidget.id = itemData.id
             itemWidget.classification = thing:getClassification()
 
@@ -125,25 +122,23 @@ function Cyclopedia.CreateCreatureItems(data)
             end
 
             local price, rarity = ItemsDatabase.getSellValueAndColor(itemWidget.id)
-
             if price > 0 then
                 itemWidget:setImageSource("/images/ui/rarity_" .. rarity)
             end
 
             itemWidget.onMouseRelease = onAddLootClick
-
         end
     end
 end
 
 function Cyclopedia.loadBestiarySelectedCreature(data)
-
     local occurence = {
         [0] = 1,
         2,
         3,
         4
     }
+
     local formattedName = "BUSCAR__" .. data.id
     local outfit = 22
     if RACE[data.id] then
@@ -152,6 +147,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         end)
         outfit = RACE[data.id].type
     end
+
     UI.ListBase.CreatureInfo:setText(formattedName)
     Cyclopedia.SetBestiaryDiamonds(occurence[data.ocorrence])
     Cyclopedia.SetBestiaryStars(data.difficulty)
@@ -160,13 +156,13 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     })
     UI.ListBase.CreatureInfo.LeftBase.Sprite:getCreature():setStaticWalking(1000)
 
-    Cyclopedia.SetBestiaryProgress(60,UI.ListBase.CreatureInfo.ProgressBack, UI.ListBase.CreatureInfo.ProgressBack33,
+    Cyclopedia.SetBestiaryProgress(60, UI.ListBase.CreatureInfo.ProgressBack, UI.ListBase.CreatureInfo.ProgressBack33,
         UI.ListBase.CreatureInfo.ProgressBack55, data.killCounter, data.thirdDifficulty, data.secondUnlock,
         data.lastProgressKillCount)
 
     UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter)
-    local fullText = ""
 
+	local fullText = ""
     if data.killCounter >= data.lastProgressKillCount then
         fullText = "(fully unlocked)"
     end
@@ -177,9 +173,9 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         data.secondUnlock, fullText))
     UI.ListBase.CreatureInfo.ProgressBorder3:setTooltip(string.format(" %d / %d %s", data.killCounter,
         data.lastProgressKillCount, fullText))
-
     UI.ListBase.CreatureInfo.LeftBase.TrackCheck.raceId = data.id
-    -- TODO investigate when it can be track-- idk when
+
+	-- TODO investigate when it can be track-- idk when
     --[[     if data.currentLevel == 1 then
         UI.ListBase.CreatureInfo.LeftBase.TrackCheck:enable()
     else
@@ -207,6 +203,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         UI.ListBase.CreatureInfo.Value5:setText("?")
         UI.ListBase.CreatureInfo.BonusValue:setText("?")
     end
+
     if data.attackMode == 1 then
         local rect = {
             height = 9,
@@ -236,7 +233,6 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     if not table.empty(data.combat) then
         for i = 1, 8 do
             local combat = calculateCombatValues(data.combat[i])
-
             UI.ListBase.CreatureInfo[resists[i]].Fill:setMarginRight(combat.margin)
             UI.ListBase.CreatureInfo[resists[i]].Fill:setBackgroundColor(combat.color)
             UI.ListBase.CreatureInfo[resists[i]]:setTooltip(string.format("Sensitive to %s : %s", string.gsub(
@@ -249,7 +245,6 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     end
 
     local lootData = {}
-
     for _, value in ipairs(data.loot) do
         local loot = {
             name = value.name,
@@ -272,7 +267,6 @@ end
 
 function Cyclopedia.ShowBestiaryCreature()
     Cyclopedia.Bestiary.Stage = STAGES.CREATURE
-
     Cyclopedia.onStageChange()
 end
 
@@ -285,16 +279,12 @@ function Cyclopedia.ShowBestiaryCreatures(Category)
 end
 
 function Cyclopedia.CreateBestiaryCategoryItem(Data)
-
     UI.BackPageButton:setEnabled(false)
 
     local widget = g_ui.createWidget("BestiaryCategory", UI.ListBase.CategoryList)
-
     widget:setText(Data.name)
     widget.ClassIcon:setImageSource("/game_cyclopedia/images/bestiary/creatures/" .. Data.name:lower():gsub(" ", "_"))
-
     widget.Category = Data.name
-
     widget:setColor("#C0C0C0")
     widget.TotalValue:setText(string.format("Total: %d", Data.amount))
     widget.KnownValue:setText(string.format("Known: %d", Data.know))
@@ -302,9 +292,7 @@ function Cyclopedia.CreateBestiaryCategoryItem(Data)
     function widget.ClassBase:onClick()
         UI.BackPageButton:setEnabled(true)
         Cyclopedia.ShowBestiaryCreatures(self:getParent().Category)
-
         Cyclopedia.Bestiary.Stage = STAGES.CREATURES
-
         Cyclopedia.onStageChange()
     end
 end
@@ -316,19 +304,16 @@ function Cyclopedia.loadBestiarySearchCreatures(data)
     UI.BackPageButton:setEnabled(true)
 
     Cyclopedia.Bestiary.Stage = STAGES.SEARCH
-
     Cyclopedia.onStageChange()
-
-    local maxCategoriesPerPage = 15
-
     Cyclopedia.Bestiary.Search = {}
     Cyclopedia.Bestiary.Page = 1
+
+    local maxCategoriesPerPage = 15
     Cyclopedia.Bestiary.TotalSearchPages = math.ceil(#data / maxCategoriesPerPage)
 
     UI.PageValue:setText(string.format("%d / %d", Cyclopedia.Bestiary.Page, Cyclopedia.Bestiary.TotalSearchPages))
 
     local page = 1
-
     Cyclopedia.Bestiary.Search[page] = {}
 
     for i = 0, #data do
@@ -346,22 +331,20 @@ function Cyclopedia.loadBestiarySearchCreatures(data)
     end
 
     Cyclopedia.Bestiary.Stage = STAGES.SEARCH
-
     Cyclopedia.loadBestiaryCreature(Cyclopedia.Bestiary.Page, true)
     Cyclopedia.verifyBestiaryButtons()
 end
 
 function Cyclopedia.loadBestiaryCreatures(data)
-    local maxCategoriesPerPage = 15
-
     Cyclopedia.Bestiary.Creatures = {}
     Cyclopedia.Bestiary.Page = 1
+
+    local maxCategoriesPerPage = 15
     Cyclopedia.Bestiary.TotalCreaturesPages = math.ceil(#data / maxCategoriesPerPage)
 
     UI.PageValue:setText(string.format("%d / %d", Cyclopedia.Bestiary.Page, Cyclopedia.Bestiary.TotalCreaturesPages))
 
     local page = 1
-
     Cyclopedia.Bestiary.Creatures[page] = {}
 
     for i = 1, #data do
@@ -418,29 +401,27 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     end
 
     local widget = g_ui.createWidget("BestiaryCreature", UI.ListBase.CreatureList)
-
     widget:setId(data.id)
-    local formattedName = "BUSCAR__" .. data.id
 
+    local formattedName = "BUSCAR__" .. data.id
     if RACE[data.id] then
         formattedName = RACE[data.id].name:gsub("(%l)(%w*)", function(first, rest)
             return first:upper() .. rest
         end)
     end
+
     widget.Name:setText(verify(formattedName))
     widget.Sprite:setOutfit({
         type = safeOutfit(RACE[data.id].type)
     })
     widget.Sprite:getCreature():setStaticWalking(1000)
 
-    local level = {0, 1, 2}
-
+    -- local level = {0, 1, 2} -- ??????
     if data.currentLevel >= 3 then
         widget.Finalized:setVisible(true)
         widget.KillsLabel:setVisible(false)
         widget.Sprite:getCreature():setShader("")
     else
-
         if data.currentLevel < 1 then
             widget.KillsLabel:setText("?")
             widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
@@ -460,7 +441,6 @@ end
 
 function Cyclopedia.loadBestiaryCreature(page, search)
     local state = "Creatures"
-
     if search then
         state = "Search"
     end
@@ -477,18 +457,19 @@ function Cyclopedia.loadBestiaryCreature(page, search)
 end
 
 function Cyclopedia.LoadBestiaryCategories(data)
-    local maxCategoriesPerPage = 15
-
     Cyclopedia.Bestiary.Categories = {}
     Cyclopedia.Bestiary.Page = 1
+
+    local maxCategoriesPerPage = 15
     Cyclopedia.Bestiary.TotalCategoriesPages = math.ceil(#data / maxCategoriesPerPage)
+
     if UI == nil or UI.PageValue == nil then -- I know, don't change it
         return
     end
+
     UI.PageValue:setText(string.format("%d / %d", Cyclopedia.Bestiary.Page, Cyclopedia.Bestiary.TotalCategoriesPages))
 
     local page = 1
-
     Cyclopedia.Bestiary.Categories[page] = {}
 
     for i = 1, #data do
@@ -540,7 +521,6 @@ function Cyclopedia.onStageChange()
 
         function UI.BackPageButton.onClick()
             Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
-
             Cyclopedia.onStageChange()
         end
     end
@@ -553,7 +533,6 @@ function Cyclopedia.onStageChange()
 
         function UI.BackPageButton.onClick()
             Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
-
             Cyclopedia.onStageChange()
         end
     end
@@ -566,7 +545,6 @@ function Cyclopedia.onStageChange()
 
         function UI.BackPageButton.onClick()
             Cyclopedia.Bestiary.Stage = STAGES.CREATURES
-
             Cyclopedia.onStageChange()
         end
     end
@@ -575,8 +553,6 @@ function Cyclopedia.onStageChange()
 end
 
 function Cyclopedia.changeBestiaryPage(prev, next)
-    local stage = Cyclopedia.Bestiary.Stage
-
     if next then
         Cyclopedia.Bestiary.Page = Cyclopedia.Bestiary.Page + 1
     end
@@ -585,6 +561,7 @@ function Cyclopedia.changeBestiaryPage(prev, next)
         Cyclopedia.Bestiary.Page = Cyclopedia.Bestiary.Page - 1
     end
 
+    local stage = Cyclopedia.Bestiary.Stage
     if stage == STAGES.CATEGORY then
         Cyclopedia.loadBestiaryCategory(Cyclopedia.Bestiary.Page)
     elseif stage == STAGES.CREATURES then
@@ -597,12 +574,6 @@ function Cyclopedia.changeBestiaryPage(prev, next)
 end
 
 function Cyclopedia.verifyBestiaryButtons()
-    local page = Cyclopedia.Bestiary.Page
-    local totalCategoriesPages = Cyclopedia.Bestiary.TotalCategoriesPages
-    local totalCreaturesPages = Cyclopedia.Bestiary.TotalCreaturesPages
-    local totalSearchPages = Cyclopedia.Bestiary.TotalSearchPages
-    local stage = Cyclopedia.Bestiary.Stage
-
     local function updateButtonState(button, condition)
         if condition then
             button:enable()
@@ -617,13 +588,14 @@ function Cyclopedia.verifyBestiaryButtons()
 
     updateButtonState(UI.SearchButton, UI.SearchEdit:getText() ~= "")
 
+    local stage = Cyclopedia.Bestiary.Stage
+    local totalSearchPages = Cyclopedia.Bestiary.TotalSearchPages
+    local page = Cyclopedia.Bestiary.Page
     if stage == STAGES.SEARCH and totalSearchPages then
         local totalPages = totalSearchPages
-
         updateButtonState(UI.PrevPageButton, page > 1)
         updateButtonState(UI.NextPageButton, page < totalPages)
         updatePageValue(page, totalPages)
-
         return
     end
 
@@ -631,13 +603,13 @@ function Cyclopedia.verifyBestiaryButtons()
         UI.PrevPageButton:disable()
         UI.NextPageButton:disable()
         updatePageValue(1, 1)
-
         return
     end
 
+    local totalCategoriesPages = Cyclopedia.Bestiary.TotalCategoriesPages
+    local totalCreaturesPages = Cyclopedia.Bestiary.TotalCreaturesPages
     if stage == STAGES.CATEGORY and totalCategoriesPages or stage == STAGES.CREATURES and totalCreaturesPages then
         local totalPages = stage == STAGES.CATEGORY and totalCategoriesPages or totalCreaturesPages
-
         updateButtonState(UI.PrevPageButton, page > 1)
         updateButtonState(UI.NextPageButton, page < totalPages)
         updatePageValue(page, totalPages)
@@ -647,7 +619,7 @@ end
 --[[
 ===================================================
 =					tracker		  =
-=================================================== 
+===================================================
 ]]
 
 function Cyclopedia.toggleBestiaryTracker()
@@ -661,17 +633,15 @@ function Cyclopedia.toggleBestiaryTracker()
     else
         if not trackerMiniWindow:getParent() then
             local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindow,
-                trackerMiniWindow:getMinimumHeight())
+            trackerMiniWindow:getMinimumHeight())
             if not panel then
                 return
             end
-
             panel:addChild(trackerMiniWindow)
         end
         trackerMiniWindow:open()
         trackerButton:setOn(true)
     end
-
 end
 
 function Cyclopedia.toggleBosstiaryTracker()
@@ -685,17 +655,15 @@ function Cyclopedia.toggleBosstiaryTracker()
     else
         if not trackerMiniWindowBosstiary:getParent() then
             local panel = modules.game_interface.findContentPanelAvailable(trackerMiniWindowBosstiary,
-                trackerMiniWindowBosstiary:getMinimumHeight())
+            trackerMiniWindowBosstiary:getMinimumHeight())
             if not panel then
                 return
             end
-
             panel:addChild(trackerMiniWindowBosstiary)
         end
         trackerMiniWindowBosstiary:open()
         trackerButtonBosstiary:setOn(true)
     end
-
 end
 
 function Cyclopedia.onTrackerClose(temp)
@@ -704,7 +672,6 @@ function Cyclopedia.onTrackerClose(temp)
     else
         trackerButton:setOn(false)
     end
-
 end
 
 function Cyclopedia.setBarPercent(widget, percent)
@@ -726,7 +693,6 @@ function Cyclopedia.setBarPercent(widget, percent)
 end
 
 function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
-
     if not data then
         return
     end
@@ -746,14 +712,13 @@ function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
 
         local widget = g_ui.createWidget("TrackerButton", window.contentsPanel)
         widget:setId(raceId)
-
         widget.creature:setOutfit({
             type = raceInfo.type
         })
         widget.label:setText(name:len() > 12 and name:sub(1, 9) .. "..." or name)
         widget.kills:setText(kills .. "/" .. maxKills)
         widget.onMouseRelease = onTrackerClick
-       
+
         Cyclopedia.SetBestiaryProgress(54,widget.killsBar2, widget.ProgressBack33, widget.ProgressBack55, kills, uno, dos, maxKills)
     end
 end
@@ -795,7 +760,6 @@ function setFilter(filter)
     g_settings.mergeNode('bestiaryTracker', {
         ['filters'] = filters
     })
-
 end
 
 -- trackerMiniWindow.contentsPanel:moveChildToIndex(battleButton, index)
@@ -804,7 +768,6 @@ function test(index)
     trackerMiniWindow.contentsPanel:moveChildToIndex(trackerMiniWindow.contentsPanel:getLastChild(), index)
 end
 
--- @ onMouseRelease
 function onTrackerClick(widget, mousePosition, mouseButton)
     local taskId = tonumber(widget:getId())
     local menu = g_ui.createWidget("PopupMenu")
@@ -823,7 +786,7 @@ function onAddLootClick(widget, mousePosition, mouseButton)
     local menu = g_ui.createWidget("PopupMenu")
 
     menu:setGameMenu(true)
-    if true then -- is in loot list ? 
+    if true then -- is in loot list ?
         menu:addOption("Add to Loot List", function()
             print("future")
         end)
