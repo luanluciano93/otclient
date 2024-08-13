@@ -880,12 +880,32 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         Cyclopedia.onSkillChange(player, i - 1, skillLevel, skillPercent)
         Cyclopedia.onBaseCharacterSkillChange(player, i - 1, baseSkill)
     end
+
+    local accountStatus = ""
+    local color = "#00ff00"
+    if g_game.getLocalPlayer():isPremium() then
+        accountStatus = "Premium"
+        color = "#00ff00"
+    else
+        accountStatus = "no Premium"
+        color = "#ff0000"
+    end
+-- TODO g_game.getLocalPlayer():getTitle()
+    local title = "None"
+    if true then
+        title = "none"
+    end
+    Cyclopedia.setCharacterSkillValue("accountStatus", accountStatus, color)
+    Cyclopedia.setCharacterSkillValue("accountOnline", "Online","#00ff00")
+    Cyclopedia.setCharacterSkillValue("loyaltyTitle", title)
+        
 end
 
-function Cyclopedia.setCharacterSkillValue(id, value)
+function Cyclopedia.setCharacterSkillValue(id, value,color)
     local skill = UI.CharacterStats:recursiveGetChildById(id)
     local widget = skill:getChildById("value")
     widget:setText(value)
+    widget:setColor(color)
 end
 
 function Cyclopedia.setCharacterSkillPercent(id, percent, tooltip, color)
@@ -1184,6 +1204,7 @@ end
 function Cyclopedia.loadCharacterBadges(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector)
     UI.CharacterStats.ListBadge:destroyChildren()
     for _, badge in ipairs(badgesVector) do
+
         local cell = g_ui.createWidget("CharacterBadge", UI.CharacterStats.ListBadge)
         if cell then
             cell:setImageClip(getImageClip(badge[1]))

@@ -336,6 +336,52 @@ UIWidget
         color: #C0C0C0
       SkillCharacterPercentPanel
         background-color: #C00000
+
+    HorizontalSeparator
+      id: leftSeparator2
+      anchors.top: trainer.bottom
+      anchors.left: parent.left
+      anchors.right: separator.right
+      margin-top: 5
+      margin-left: 5
+
+    CharacterSkillBase
+      id: accountStatus
+      anchors.top: leftSeparator2.bottom
+      anchors.left: parent.left
+      anchors.right: separator.right
+      margin-top: 10
+      SkillNameLabel
+        !text: tr('Account Status')
+        color: #C0C0C0
+      SkillValueLabel
+        !text: tr('33')
+        color: #C0C0C0
+    CharacterSkillBase
+      id: accountOnline
+      anchors.top: accountStatus.bottom
+      anchors.left: parent.left
+      anchors.right: separator.right
+      margin-top: 5
+      SkillNameLabel
+        !text: tr('Account Premium')
+        color: #C0C0C0
+      SkillValueLabel
+        !text: tr('33')
+        color: #C0C0C0
+    CharacterSkillBase
+      id: loyaltyTitle
+      anchors.top: accountOnline.bottom
+      anchors.left: parent.left
+      anchors.right: separator.right
+      margin-top: 5
+      SkillNameLabel
+        !text: tr('Loyalty Title')
+        color: #C0C0C0
+      SkillValueLabel
+        !text: tr('33')
+        color: #C0C0C0
+
     Label
       id: skillsLabel
       !text: tr('Skills')
@@ -493,6 +539,7 @@ UIWidget
       anchors.top: skillId6.bottom
       anchors.left: separator.left
       anchors.right: parent.right
+      margin-left: 75
 
     UIScrollArea
       id: ListBadge
@@ -501,13 +548,17 @@ UIWidget
       anchors.left: separator.left
       anchors.right: parent.right
       height: 140
-      background-color: #404040
+      border-width: 1
+      border-color: #00000077
+      background-color: #ffffff11
       layout:
         type: grid
         cell-size: 64 64
-        cell-spacing: 2
+        cell-spacing: 5
         flow: true
-        fit-children: true
+        fit-children: false
+      padding-left: 20
+
         
     VerticalScrollBar
       id: ListBadgeScrollbar
@@ -515,7 +566,8 @@ UIWidget
       anchors.right: ListBadge.right
       anchors.bottom: ListBadge.bottom
       margin: 1
-      margin-top: -15
+      margin-bottom: 10
+
       step: 5
       pixel-scroll: true
 
@@ -1233,7 +1285,7 @@ UIWidget
         pixel-scroll: true
     UIWidget
       id: filters
-      height: 45
+      height: 55
       anchors.top: parent.top
       anchors.left: parent.left
       anchors.right: ListBase.right
