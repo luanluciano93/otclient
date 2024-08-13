@@ -442,3 +442,6 @@ UIWidget
     //font: verdana-bold-8px-antialiased
     text-offset: 0 -1
     color: #C0C0C0
+    @onClick: |
+      modules.game_cyclopedia.toggle()
+      modules.game_quickloot.QuickLoot.toggle()

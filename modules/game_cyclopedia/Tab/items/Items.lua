@@ -57,6 +57,9 @@ function showItems()
     UI.H1Button:disable()
     UI.H2Button:disable()
     UI.ItemFilter:disable()
+    controllerCyclopedia.ui.CharmsBase:setVisible(false)
+    controllerCyclopedia.ui.GoldBase:setVisible(false)
+    controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
     local CategoryColor = "#484848"
 
     for _, data in ipairs(Cyclopedia.CategoryItems) do
