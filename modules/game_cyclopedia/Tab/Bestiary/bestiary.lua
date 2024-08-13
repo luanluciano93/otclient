@@ -296,8 +296,8 @@ function Cyclopedia.CreateBestiaryCategoryItem(Data)
     widget.Category = Data.name
 
     widget:setColor("#C0C0C0")
-    widget.TotalValue:setText(string.format("Total: %d", Data.amount))
-    widget.KnownValue:setText(string.format("Known: %d", Data.know))
+    widget.TotalValue:setText(string.format("Total: %d", Data.know))
+    widget.KnownValue:setText(string.format("Known: %d", Data.amount))
 
     function widget.ClassBase:onClick()
         UI.BackPageButton:setEnabled(true)
