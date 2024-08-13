@@ -77,3 +77,11 @@ int push_luavalue(const OutfitColorStruct& currentOutfit);
 int push_luavalue(const CharacterInfoOutfits& outfit);
 int push_luavalue(const CharacterInfoMounts& mount);
 int push_luavalue(const CharacterInfoFamiliar& familiar);
+
+// shop
+int push_luavalue(const StoreCategory& category);
+int push_luavalue(const SubOffer& subOffer);
+int push_luavalue(const StoreOffer& offer);
+int push_luavalue(const HomeOffer& homeOffer);
+int push_luavalue(const Banner& banner);
+int push_luavalue(const StoreData& storeData);

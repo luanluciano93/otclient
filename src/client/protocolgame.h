@@ -144,6 +144,8 @@ public:
     void sendRequestBossSlootInfo();
     void sendRequestBossSlotAction(const uint8_t action, const uint32_t raceId);
     void SendStatusTrackerBestiary(const uint16_t raceId,  bool status);
+    void requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems);
+    void openContainerQuickLoot(uint8_t action, uint8_t category, const Position& pos, uint16_t itemId, uint8_t stackpos, bool useMainAsFallback);
 
     // otclient only
     void sendChangeMapAwareRange(int xrange, int yrange);
