@@ -205,28 +205,6 @@ int push_luavalue(const UnjustifiedPoints& unjustifiedPoints)
     return 1;
 }
 
-bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints)
-{
-    if (!g_lua.isTable(index))
-        return false;
-
-    g_lua.getField("killsDay", index);
-    unjustifiedPoints.killsDay = g_lua.popInteger();
-    g_lua.getField("killsDayRemaining", index);
-    unjustifiedPoints.killsDayRemaining = g_lua.popInteger();
-    g_lua.getField("killsWeek", index);
-    unjustifiedPoints.killsWeek = g_lua.popInteger();
-    g_lua.getField("killsWeekRemaining", index);
-    unjustifiedPoints.killsWeekRemaining = g_lua.popInteger();
-    g_lua.getField("killsMonth", index);
-    unjustifiedPoints.killsMonth = g_lua.popInteger();
-    g_lua.getField("killsMonthRemaining", index);
-    unjustifiedPoints.killsMonthRemaining = g_lua.popInteger();
-    g_lua.getField("skullTime", index);
-    unjustifiedPoints.skullTime = g_lua.popInteger();
-    return true;
-}
-
 int push_luavalue(const Imbuement& i)
 {
     g_lua.createTable(0, 11);
@@ -289,93 +267,27 @@ int push_luavalue(const ImbuementTrackerItem& i)
     return 1;
 }
 
-int push_luavalue(const CyclopediaBestiaryRace& race) {
-    g_lua.createTable(0, 4);
-    g_lua.pushInteger(race.race);
-    g_lua.setField("race");
-    g_lua.pushString(race.bestClass);
-    g_lua.setField("bestClass");
-    g_lua.pushInteger(race.count);
-    g_lua.setField("count");
-    g_lua.pushInteger(race.unlockedCount);
-    g_lua.setField("unlockedCount");
-    return 1;
+bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints)
+{
+    if (!g_lua.isTable(index))
+        return false;
+
+    g_lua.getField("killsDay", index);
+    unjustifiedPoints.killsDay = g_lua.popInteger();
+    g_lua.getField("killsDayRemaining", index);
+    unjustifiedPoints.killsDayRemaining = g_lua.popInteger();
+    g_lua.getField("killsWeek", index);
+    unjustifiedPoints.killsWeek = g_lua.popInteger();
+    g_lua.getField("killsWeekRemaining", index);
+    unjustifiedPoints.killsWeekRemaining = g_lua.popInteger();
+    g_lua.getField("killsMonth", index);
+    unjustifiedPoints.killsMonth = g_lua.popInteger();
+    g_lua.getField("killsMonthRemaining", index);
+    unjustifiedPoints.killsMonthRemaining = g_lua.popInteger();
+    g_lua.getField("skullTime", index);
+    unjustifiedPoints.skullTime = g_lua.popInteger();
+    return true;
 }
-
-int push_luavalue(const LootItem& lootItem) {
-    g_lua.createTable(0, 5);
-    g_lua.pushInteger(lootItem.itemId);
-    g_lua.setField("itemId");
-    g_lua.pushInteger(lootItem.diffculty);
-    g_lua.setField("diffculty");
-    g_lua.pushInteger(lootItem.specialEvent);
-    g_lua.setField("specialEvent");
-    g_lua.pushString(lootItem.name);
-    g_lua.setField("name");
-    g_lua.pushInteger(lootItem.amount);
-    g_lua.setField("amount");
-    return 1;
-}
-
-int push_luavalue(const BestiaryMonsterData& data) {
-    g_lua.createTable(0, 16);
-    g_lua.pushInteger(data.id);
-    g_lua.setField("id");
-    g_lua.pushString(data.bestClass);
-    g_lua.setField("class");
-    g_lua.pushInteger(data.currentLevel);
-    g_lua.setField("currentLevel");
-    g_lua.pushInteger(data.killCounter);
-    g_lua.setField("killCounter");
-    g_lua.pushInteger(data.thirdDifficulty);
-    g_lua.setField("thirdDifficulty");
-    g_lua.pushInteger(data.secondUnlock);
-    g_lua.setField("secondUnlock");
-    g_lua.pushInteger(data.lastProgressKillCount);
-    g_lua.setField("lastProgressKillCount");
-    g_lua.pushInteger(data.difficulty);
-    g_lua.setField("difficulty");
-    g_lua.pushInteger(data.ocorrence);
-    g_lua.setField("ocorrence");
-
-    g_lua.createTable(data.loot.size(), 0);
-    for (size_t i = 0; i < data.loot.size(); ++i) {
-        push_luavalue(data.loot[i]);
-        g_lua.rawSeti(i + 1);
-    }
-    g_lua.setField("loot");
-
-    if (data.currentLevel > 1) {
-        g_lua.pushInteger(data.charmValue);
-        g_lua.setField("charmValue");
-        g_lua.pushInteger(data.attackMode);
-        g_lua.setField("attackMode");
-        g_lua.pushInteger(data.maxHealth);
-        g_lua.setField("maxHealth");
-        g_lua.pushInteger(data.experience);
-        g_lua.setField("experience");
-        g_lua.pushInteger(data.speed);
-        g_lua.setField("speed");
-        g_lua.pushInteger(data.armor);
-        g_lua.setField("armor");
-        g_lua.pushNumber(data.mitigation);
-        g_lua.setField("mitigation");
-    }
-
-    if (data.currentLevel > 2) {
-        g_lua.createTable(data.combat.size(), 0);
-        for (const auto& [elementId, elementValue] : data.combat) {
-            g_lua.pushInteger(elementValue);
-            g_lua.rawSeti(elementId + 1);
-        }
-        g_lua.setField("combat");
-        g_lua.pushString(data.location);
-        g_lua.setField("location");
-    }
-
-    return 1;
-}       
-
 
 int push_luavalue(const StoreCategory& category) {
     g_lua.createTable(0, 5);
@@ -412,47 +324,6 @@ int push_luavalue(const StoreCategory& category) {
     return 1;
 }
 
-int push_luavalue(const CharmData& charm) {
-    g_lua.createTable(0, 7);
-    g_lua.pushInteger(charm.id);
-    g_lua.setField("id");
-    g_lua.pushString(charm.name);
-    g_lua.setField("name");
-    g_lua.pushString(charm.description);
-    g_lua.setField("description");
-    g_lua.pushInteger(charm.unlockPrice);
-    g_lua.setField("unlockPrice");
-    g_lua.pushBoolean(charm.unlocked);
-    g_lua.setField("unlocked");
-    g_lua.pushBoolean(charm.asignedStatus);
-    g_lua.setField("asignedStatus");
-    g_lua.pushInteger(charm.raceId);
-    g_lua.setField("raceId");
-    g_lua.pushInteger(charm.removeRuneCost);
-    g_lua.setField("removeRuneCost");
-    return 1;
-}
-
-int push_luavalue(const BestiaryCharmsData& charmData) {
-    g_lua.createTable(0, 3);
-    g_lua.pushInteger(charmData.points);
-    g_lua.setField("points");
-
-    g_lua.createTable(charmData.charms.size(), 0);
-    for (size_t i = 0; i < charmData.charms.size(); ++i) {
-        push_luavalue(charmData.charms[i]);
-        g_lua.rawSeti(i + 1);
-    }
-    g_lua.setField("charms");
-
-    g_lua.createTable(charmData.finishedMonsters.size(), 0);
-    for (size_t i = 0; i < charmData.finishedMonsters.size(); ++i) {
-        g_lua.pushInteger(charmData.finishedMonsters[i]);
-        g_lua.rawSeti(i + 1);
-    }
-    g_lua.setField("finishedMonsters");
-    return 1;
-}
 int push_luavalue(const SubOffer& subOffer) {
     g_lua.createTable(0, 9);
     g_lua.pushInteger(subOffer.id);
@@ -551,6 +422,263 @@ int push_luavalue(const StoreOffer& offer) {
 
     return 1;
 }
+
+int push_luavalue(const HomeOffer& homeOffer) {
+    g_lua.createTable(0, 16);
+    g_lua.pushString(homeOffer.name);
+    g_lua.setField("name");
+    g_lua.pushInteger(homeOffer.unknownByte);
+    g_lua.setField("unknownByte");
+    g_lua.pushInteger(homeOffer.id);
+    g_lua.setField("id");
+    g_lua.pushInteger(homeOffer.unknownU16);
+    g_lua.setField("unknownU16");
+    g_lua.pushInteger(homeOffer.price);
+    g_lua.setField("price");
+    g_lua.pushInteger(homeOffer.coinType);
+    g_lua.setField("coinType");
+    g_lua.pushInteger(homeOffer.disabledReasonIndex);
+    g_lua.setField("disabledReasonIndex");
+    g_lua.pushInteger(homeOffer.unknownByte2);
+    g_lua.setField("unknownByte2");
+    g_lua.pushInteger(homeOffer.type);
+    g_lua.setField("type");
+
+    if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_NONE) {
+        g_lua.pushString(homeOffer.icon);
+        g_lua.setField("icon");
+    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_MOUNT) {
+        g_lua.pushInteger(homeOffer.mountClientId);
+        g_lua.setField("mountClientId");
+    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_ITEM) {
+        g_lua.pushInteger(homeOffer.itemType);
+        g_lua.setField("itemType");
+    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_OUTFIT) {
+        g_lua.pushInteger(homeOffer.sexId);
+        g_lua.setField("sexId");
+        g_lua.createTable(0, 4);
+        g_lua.pushInteger(homeOffer.outfit.lookHead);
+        g_lua.setField("lookHead");
+        g_lua.pushInteger(homeOffer.outfit.lookBody);
+        g_lua.setField("lookBody");
+        g_lua.pushInteger(homeOffer.outfit.lookLegs);
+        g_lua.setField("lookLegs");
+        g_lua.pushInteger(homeOffer.outfit.lookFeet);
+        g_lua.setField("lookFeet");
+        g_lua.setField("outfit");
+    }
+
+    g_lua.pushInteger(homeOffer.tryOnType);
+    g_lua.setField("tryOnType");
+    g_lua.pushInteger(homeOffer.collection);
+    g_lua.setField("collection");
+    g_lua.pushInteger(homeOffer.popularityScore);
+    g_lua.setField("popularityScore");
+    g_lua.pushInteger(homeOffer.stateNewUntil);
+    g_lua.setField("stateNewUntil");
+    g_lua.pushInteger(homeOffer.userConfiguration);
+    g_lua.setField("userConfiguration");
+    g_lua.pushInteger(homeOffer.productsCapacity);
+    g_lua.setField("productsCapacity");
+
+    return 1;
+}
+
+int push_luavalue(const Banner& banner) {
+    g_lua.createTable(0, 5);
+    g_lua.pushString(banner.image);
+    g_lua.setField("image");
+    g_lua.pushInteger(banner.bannerType);
+    g_lua.setField("bannerType");
+    g_lua.pushInteger(banner.offerId);
+    g_lua.setField("offerId");
+    g_lua.pushInteger(banner.unknownByte1);
+    g_lua.setField("unknownByte1");
+    g_lua.pushInteger(banner.unknownByte2);
+    g_lua.setField("unknownByte2");
+    return 1;
+}
+
+int push_luavalue(const StoreData& storeData) {
+    g_lua.createTable(0, 7);
+    g_lua.pushString(storeData.categoryName);
+    g_lua.setField("categoryName");
+    g_lua.pushInteger(storeData.redirectId);
+    g_lua.setField("redirectId");
+
+    g_lua.createTable(0, storeData.disableReasons.size());
+    for (size_t i = 0; i < storeData.disableReasons.size(); ++i) {
+        g_lua.pushString(storeData.disableReasons[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("disableReasons");
+
+    if (storeData.categoryName == "Home") {
+        g_lua.createTable(0, storeData.homeOffers.size());
+        for (size_t i = 0; i < storeData.homeOffers.size(); ++i) {
+            push_luavalue(storeData.homeOffers[i]);
+            g_lua.rawSeti(i + 1);
+        }
+    } else {
+        g_lua.createTable(0, storeData.storeOffers.size());
+        for (size_t i = 0; i < storeData.storeOffers.size(); ++i) {
+            push_luavalue(storeData.storeOffers[i]);
+            g_lua.rawSeti(i + 1);
+        }
+    }
+    g_lua.setField("offers");
+
+    if (storeData.categoryName == "Home") {
+        g_lua.createTable(0, storeData.banners.size());
+        for (size_t i = 0; i < storeData.banners.size(); ++i) {
+            push_luavalue(storeData.banners[i]);
+            g_lua.rawSeti(i + 1);
+        }
+        g_lua.setField("banners");
+
+        g_lua.pushInteger(storeData.bannerDelay);
+        g_lua.setField("bannerDelay");
+    }
+
+    if (storeData.categoryName == "Search") {
+        g_lua.pushBoolean(storeData.tooManyResults);
+        g_lua.setField("tooManyResults");
+    }
+
+    return 1;
+}
+
+// cyclopedia
+int push_luavalue(const CyclopediaBestiaryRace& race) {
+    g_lua.createTable(0, 4);
+    g_lua.pushInteger(race.race);
+    g_lua.setField("race");
+    g_lua.pushString(race.bestClass);
+    g_lua.setField("bestClass");
+    g_lua.pushInteger(race.count);
+    g_lua.setField("count");
+    g_lua.pushInteger(race.unlockedCount);
+    g_lua.setField("unlockedCount");
+    return 1;
+}
+
+int push_luavalue(const LootItem& lootItem) {
+    g_lua.createTable(0, 5);
+    g_lua.pushInteger(lootItem.itemId);
+    g_lua.setField("itemId");
+    g_lua.pushInteger(lootItem.diffculty);
+    g_lua.setField("diffculty");
+    g_lua.pushInteger(lootItem.specialEvent);
+    g_lua.setField("specialEvent");
+    g_lua.pushString(lootItem.name);
+    g_lua.setField("name");
+    g_lua.pushInteger(lootItem.amount);
+    g_lua.setField("amount");
+    return 1;
+}
+
+int push_luavalue(const BestiaryMonsterData& data) {
+    g_lua.createTable(0, 16);
+    g_lua.pushInteger(data.id);
+    g_lua.setField("id");
+    g_lua.pushString(data.bestClass);
+    g_lua.setField("class");
+    g_lua.pushInteger(data.currentLevel);
+    g_lua.setField("currentLevel");
+    g_lua.pushInteger(data.killCounter);
+    g_lua.setField("killCounter");
+    g_lua.pushInteger(data.thirdDifficulty);
+    g_lua.setField("thirdDifficulty");
+    g_lua.pushInteger(data.secondUnlock);
+    g_lua.setField("secondUnlock");
+    g_lua.pushInteger(data.lastProgressKillCount);
+    g_lua.setField("lastProgressKillCount");
+    g_lua.pushInteger(data.difficulty);
+    g_lua.setField("difficulty");
+    g_lua.pushInteger(data.ocorrence);
+    g_lua.setField("ocorrence");
+
+    g_lua.createTable(data.loot.size(), 0);
+    for (size_t i = 0; i < data.loot.size(); ++i) {
+        push_luavalue(data.loot[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("loot");
+
+    if (data.currentLevel > 1) {
+        g_lua.pushInteger(data.charmValue);
+        g_lua.setField("charmValue");
+        g_lua.pushInteger(data.attackMode);
+        g_lua.setField("attackMode");
+        g_lua.pushInteger(data.maxHealth);
+        g_lua.setField("maxHealth");
+        g_lua.pushInteger(data.experience);
+        g_lua.setField("experience");
+        g_lua.pushInteger(data.speed);
+        g_lua.setField("speed");
+        g_lua.pushInteger(data.armor);
+        g_lua.setField("armor");
+        g_lua.pushNumber(data.mitigation);
+        g_lua.setField("mitigation");
+    }
+
+    if (data.currentLevel > 2) {
+        g_lua.createTable(data.combat.size(), 0);
+        for (const auto& [elementId, elementValue] : data.combat) {
+            g_lua.pushInteger(elementValue);
+            g_lua.rawSeti(elementId + 1);
+        }
+        g_lua.setField("combat");
+        g_lua.pushString(data.location);
+        g_lua.setField("location");
+    }
+
+    return 1;
+}       
+
+int push_luavalue(const CharmData& charm) {
+    g_lua.createTable(0, 7);
+    g_lua.pushInteger(charm.id);
+    g_lua.setField("id");
+    g_lua.pushString(charm.name);
+    g_lua.setField("name");
+    g_lua.pushString(charm.description);
+    g_lua.setField("description");
+    g_lua.pushInteger(charm.unlockPrice);
+    g_lua.setField("unlockPrice");
+    g_lua.pushBoolean(charm.unlocked);
+    g_lua.setField("unlocked");
+    g_lua.pushBoolean(charm.asignedStatus);
+    g_lua.setField("asignedStatus");
+    g_lua.pushInteger(charm.raceId);
+    g_lua.setField("raceId");
+    g_lua.pushInteger(charm.removeRuneCost);
+    g_lua.setField("removeRuneCost");
+    return 1;
+}
+
+int push_luavalue(const BestiaryCharmsData& charmData) {
+    g_lua.createTable(0, 3);
+    g_lua.pushInteger(charmData.points);
+    g_lua.setField("points");
+
+    g_lua.createTable(charmData.charms.size(), 0);
+    for (size_t i = 0; i < charmData.charms.size(); ++i) {
+        push_luavalue(charmData.charms[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("charms");
+
+    g_lua.createTable(charmData.finishedMonsters.size(), 0);
+    for (size_t i = 0; i < charmData.finishedMonsters.size(); ++i) {
+        g_lua.pushInteger(charmData.finishedMonsters[i]);
+        g_lua.rawSeti(i + 1);
+    }
+    g_lua.setField("finishedMonsters");
+    return 1;
+}
+
+
 
 int push_luavalue(const BestiaryOverviewMonsters& monster) {
     g_lua.createTable(0, 3);
@@ -731,67 +859,6 @@ int push_luavalue(const BosstiarySlotsData& data) {
         return 1;
 }
 
-int push_luavalue(const HomeOffer& homeOffer) {
-    g_lua.createTable(0, 16);
-    g_lua.pushString(homeOffer.name);
-    g_lua.setField("name");
-    g_lua.pushInteger(homeOffer.unknownByte);
-    g_lua.setField("unknownByte");
-    g_lua.pushInteger(homeOffer.id);
-    g_lua.setField("id");
-    g_lua.pushInteger(homeOffer.unknownU16);
-    g_lua.setField("unknownU16");
-    g_lua.pushInteger(homeOffer.price);
-    g_lua.setField("price");
-    g_lua.pushInteger(homeOffer.coinType);
-    g_lua.setField("coinType");
-    g_lua.pushInteger(homeOffer.disabledReasonIndex);
-    g_lua.setField("disabledReasonIndex");
-    g_lua.pushInteger(homeOffer.unknownByte2);
-    g_lua.setField("unknownByte2");
-    g_lua.pushInteger(homeOffer.type);
-    g_lua.setField("type");
-
-    if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_NONE) {
-        g_lua.pushString(homeOffer.icon);
-        g_lua.setField("icon");
-    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_MOUNT) {
-        g_lua.pushInteger(homeOffer.mountClientId);
-        g_lua.setField("mountClientId");
-    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_ITEM) {
-        g_lua.pushInteger(homeOffer.itemType);
-        g_lua.setField("itemType");
-    } else if (homeOffer.type == Otc::GameStoreInfoType_t::SHOW_OUTFIT) {
-        g_lua.pushInteger(homeOffer.sexId);
-        g_lua.setField("sexId");
-        g_lua.createTable(0, 4);
-        g_lua.pushInteger(homeOffer.outfit.lookHead);
-        g_lua.setField("lookHead");
-        g_lua.pushInteger(homeOffer.outfit.lookBody);
-        g_lua.setField("lookBody");
-        g_lua.pushInteger(homeOffer.outfit.lookLegs);
-        g_lua.setField("lookLegs");
-        g_lua.pushInteger(homeOffer.outfit.lookFeet);
-        g_lua.setField("lookFeet");
-        g_lua.setField("outfit");
-    }
-
-    g_lua.pushInteger(homeOffer.tryOnType);
-    g_lua.setField("tryOnType");
-    g_lua.pushInteger(homeOffer.collection);
-    g_lua.setField("collection");
-    g_lua.pushInteger(homeOffer.popularityScore);
-    g_lua.setField("popularityScore");
-    g_lua.pushInteger(homeOffer.stateNewUntil);
-    g_lua.setField("stateNewUntil");
-    g_lua.pushInteger(homeOffer.userConfiguration);
-    g_lua.setField("userConfiguration");
-    g_lua.pushInteger(homeOffer.productsCapacity);
-    g_lua.setField("productsCapacity");
-
-    return 1;
-}
-
 int push_luavalue(const ItemSummary& item) {
     g_lua.createTable(0, 2);
     g_lua.pushInteger(item.itemId);
@@ -939,68 +1006,5 @@ int push_luavalue(const CharacterInfoFamiliar& familiar) {
     g_lua.setField("type");
     g_lua.pushInteger(familiar.isCurrent);
     g_lua.setField("isCurrent");
-    return 1;
-}
-int push_luavalue(const Banner& banner) {
-    g_lua.createTable(0, 5);
-    g_lua.pushString(banner.image);
-    g_lua.setField("image");
-    g_lua.pushInteger(banner.bannerType);
-    g_lua.setField("bannerType");
-    g_lua.pushInteger(banner.offerId);
-    g_lua.setField("offerId");
-    g_lua.pushInteger(banner.unknownByte1);
-    g_lua.setField("unknownByte1");
-    g_lua.pushInteger(banner.unknownByte2);
-    g_lua.setField("unknownByte2");
-    return 1;
-}
-
-int push_luavalue(const StoreData& storeData) {
-    g_lua.createTable(0, 7);
-    g_lua.pushString(storeData.categoryName);
-    g_lua.setField("categoryName");
-    g_lua.pushInteger(storeData.redirectId);
-    g_lua.setField("redirectId");
-
-    g_lua.createTable(0, storeData.disableReasons.size());
-    for (size_t i = 0; i < storeData.disableReasons.size(); ++i) {
-        g_lua.pushString(storeData.disableReasons[i]);
-        g_lua.rawSeti(i + 1);
-    }
-    g_lua.setField("disableReasons");
-
-    if (storeData.categoryName == "Home") {
-        g_lua.createTable(0, storeData.homeOffers.size());
-        for (size_t i = 0; i < storeData.homeOffers.size(); ++i) {
-            push_luavalue(storeData.homeOffers[i]);
-            g_lua.rawSeti(i + 1);
-        }
-    } else {
-        g_lua.createTable(0, storeData.storeOffers.size());
-        for (size_t i = 0; i < storeData.storeOffers.size(); ++i) {
-            push_luavalue(storeData.storeOffers[i]);
-            g_lua.rawSeti(i + 1);
-        }
-    }
-    g_lua.setField("offers");
-
-    if (storeData.categoryName == "Home") {
-        g_lua.createTable(0, storeData.banners.size());
-        for (size_t i = 0; i < storeData.banners.size(); ++i) {
-            push_luavalue(storeData.banners[i]);
-            g_lua.rawSeti(i + 1);
-        }
-        g_lua.setField("banners");
-
-        g_lua.pushInteger(storeData.bannerDelay);
-        g_lua.setField("bannerDelay");
-    }
-
-    if (storeData.categoryName == "Search") {
-        g_lua.pushBoolean(storeData.tooManyResults);
-        g_lua.setField("tooManyResults");
-    }
-
     return 1;
 }
