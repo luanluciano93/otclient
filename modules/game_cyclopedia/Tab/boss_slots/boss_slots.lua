@@ -55,7 +55,7 @@ local CONFIG = {
 Cyclopedia.BossSlots = {}
 function Cyclopedia.loadBossSlots(data)
 
-    if not UI then
+    if not UI or not UI.Sprite then
         return
     end
     local raceData = RACE_Bosstiary[data.boostedBossId]
