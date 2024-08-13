@@ -35,9 +35,9 @@ Cyclopedia.Bestiary = {}
 
 Cyclopedia.Bestiary.Stage = STAGES.CATEGORY
 
-function Cyclopedia.SetBestiaryProgress(firstBar, secondBar, thirdBar, killCount, firstGoal, secondGoal, thirdGoal)
+function Cyclopedia.SetBestiaryProgress(fit,firstBar, secondBar, thirdBar, killCount, firstGoal, secondGoal, thirdGoal)
     local function calculateWidth(value, max)
-        return math.min(math.floor((value / max) * 66), 66)
+        return math.min(math.floor((value / max) * fit), fit)
     end
 
     local function setBarVisibility(bar, isVisible, width)
@@ -160,7 +160,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
     })
     UI.ListBase.CreatureInfo.LeftBase.Sprite:getCreature():setStaticWalking(1000)
 
-    Cyclopedia.SetBestiaryProgress(UI.ListBase.CreatureInfo.ProgressBack, UI.ListBase.CreatureInfo.ProgressBack33,
+    Cyclopedia.SetBestiaryProgress(60,UI.ListBase.CreatureInfo.ProgressBack, UI.ListBase.CreatureInfo.ProgressBack33,
         UI.ListBase.CreatureInfo.ProgressBack55, data.killCounter, data.thirdDifficulty, data.secondUnlock,
         data.lastProgressKillCount)
 
@@ -739,7 +739,7 @@ function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
     storedRaceIDs = {}
 
     for _, entry in ipairs(data) do
-        local raceId, kills, _, _, maxKills = unpack(entry)
+        local raceId, kills, uno, dos, maxKills = unpack(entry)
         table.insert(storedRaceIDs, raceId)
         local raceInfo = raceData[raceId]
         local name = raceInfo.name
@@ -753,9 +753,8 @@ function Cyclopedia.onParseCyclopediaTracker(trackerType, data)
         widget.label:setText(name:len() > 12 and name:sub(1, 9) .. "..." or name)
         widget.kills:setText(kills .. "/" .. maxKills)
         widget.onMouseRelease = onTrackerClick
-
-        local percent = math.min(kills / maxKills * 100, 100)
-        Cyclopedia.setBarPercent(widget, percent)
+       
+        Cyclopedia.SetBestiaryProgress(54,widget.killsBar2, widget.ProgressBack33, widget.ProgressBack55, kills, uno, dos, maxKills)
     end
 end
 

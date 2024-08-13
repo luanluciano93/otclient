@@ -213,7 +213,6 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
 
     for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
 
-        print(internalData.bossId)
         local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
         internalWidget:setId(internalData.bossId)
         internalWidget.Sprite:setOutfit({

@@ -895,26 +895,29 @@ BosstiaryItem < UIWidget
     size: 47 14
   UIWidget
     id: ProgressBack
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    margin-bottom: 22
-    margin-right: 9
-    margin-left: 9
+    anchors.left: ProgressBorder1.left
+    anchors.bottom: ProgressBorder2.bottom
     height: 12
-    image-border: 10
     phantom: true
-  UIWidget
-    id: fill
-    anchors.fill: ProgressBack
     image-source: /game_cyclopedia/images/bestiary/fill
-    margin-top: 1
+  UIWidget
+    id: ProgressBack33
+    anchors.left: ProgressBorder2.left
+    anchors.bottom: ProgressBorder2.bottom
+    height: 12
     phantom: true
+    image-source: /game_cyclopedia/images/bestiary/fill
+  UIWidget
+    id: ProgressBack55
+    anchors.left: ProgressBorder3.left
+    anchors.bottom: ProgressBorder2.bottom
+    height: 12
+    phantom: true
+    image-source: /game_cyclopedia/images/bestiary/fill
   UIWidget
     anchors.left: ProgressBorder1.right
     anchors.top: ProgressBorder1.top
     image-source: /images/ui/progress-separator
-    margin-right: 4
     phantom: true
   UIWidget
     anchors.left: ProgressBorder2.right
@@ -1193,7 +1196,7 @@ TrackerButton < Panel
 
   UICreature
     id: creature
-    size: 32 32
+    size: 16 16
     anchors.left: parent.left
     anchors.top: parent.top
     phantom: true
@@ -1229,6 +1232,53 @@ TrackerButton < Panel
     anchors.top: label.bottom
     margin-top: 2
     phantom: true
+    visible: false
+    
+  ProgressBackground
+    id: ProgressBorder2
+    anchors.left: spacer.right
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.top: creature.bottom
+    margin-top: 2
+    size: 54 15
+  ProgressBackground
+    id: ProgressBorder1
+    anchors.right: ProgressBorder2.left
+    anchors.top: creature.bottom
+    margin-right: 2
+    margin-top: 2
+    size: 54 15
+  ProgressBackground
+    id: ProgressBorder3
+    anchors.left: ProgressBorder2.right
+    anchors.top: creature.bottom
+    margin-top: 2
+    margin-left: 2
+    size: 54 15
+  UIWidget
+    id: killsBar2
+    anchors.left: ProgressBorder1.left
+    anchors.top: creature.bottom
+    height: 12
+    phantom: true
+    margin-top: 3
+
+  UIWidget
+    id: ProgressBack33
+    anchors.left: ProgressBorder2.left
+    anchors.top: creature.bottom
+    height: 12
+    phantom: true
+    margin-top: 3
+
+  UIWidget
+    id: ProgressBack55
+    anchors.left: ProgressBorder3.left
+    anchors.top: creature.bottom
+    height: 12
+    phantom: true
+    margin-top: 3
+
 
 BestiaryTracker < MiniWindow
   id: BestiaryTracker

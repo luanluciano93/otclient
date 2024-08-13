@@ -50,7 +50,7 @@ local CONFIG = {
     }
 }
 
-function Cyclopedia.SetBosstiaryProgress(object, value, maxValue)
+--[[ function Cyclopedia.SetBosstiaryProgress(object, value, maxValue)
     local rect = {
         height = 12,
         x = 0,
@@ -68,7 +68,7 @@ function Cyclopedia.SetBosstiaryProgress(object, value, maxValue)
     object.ProgressValue:setText(value)
     object.fill:setImageSource("/game_cyclopedia/images/bestiary/fill")
 
-end
+end ]]
 
 function Cyclopedia.CreateBosstiaryCreature(data)
     if not data.visible then
@@ -136,9 +136,10 @@ function Cyclopedia.CreateBosstiaryCreature(data)
             "Nemesis\n\nFor unlocking a level, you will receive the following boss points:\nProwess: 10\nExpertise: 30\nMastery: 60")
         --	widget.TypeIcon:setTooltipAlign(AlignTopLeft)
     end
+    widget.ProgressValue:setText(data.kills)
 
-    Cyclopedia.SetBosstiaryProgress(widget, data.kills, CONFIG[data.category].MASTERY)
-
+     Cyclopedia.SetBestiaryProgress(46,widget.ProgressBack, widget.ProgressBack33, widget.ProgressBack55,  data.kills, CONFIG[data.category].PROWESS, CONFIG[data.category].EXPERTISE, CONFIG[data.category].MASTERY)
+   
     if raceData then
         widget.Sprite:setOutfit({
             type = safeOutfit(raceData.type)

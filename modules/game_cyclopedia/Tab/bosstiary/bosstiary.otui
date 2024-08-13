@@ -270,6 +270,6 @@ UIWidget
     icon-source: /game_cyclopedia/images/icon-left-arrow
     @onClick: modules.game_cyclopedia.Cyclopedia.changeBosstiaryPage(true, false)
     $pressed:
-      icon-source: /game_cyclopedia/images/arrow_prev_pressed
+      icon-source: /game_cyclopedia/images/icon-left-arrow-disabled
     $disabled:
       icon-source: /game_cyclopedia/images/icon-left-arrow-disabled

@@ -54,7 +54,7 @@ UIWidget
     icon-source: /game_cyclopedia/images/icon-left-arrow
     @onClick: modules.game_cyclopedia.Cyclopedia.changeBestiaryPage(true, false)
     $pressed:
-      icon-source: /game_cyclopedia/images/arrow_prev_pressed
+      icon-source: /game_cyclopedia/images/icon-left-arrow-disabled
     $disabled:
       icon-source: /game_cyclopedia/images/icon-left-arrow-disabled
   UIWidget
@@ -281,7 +281,7 @@ UIWidget
         text-align: center
         enabled: false
         @onSetup: |
-          self:addOption("None Unlocked")
+          self:addOption("?")
       UIWidget
         id: BalanceBase
         anchors.right: CharmSelector.right
