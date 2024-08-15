@@ -1,5 +1,6 @@
 local characterPanel = nil
 local UI = nil
+
 local function close(parent)
     if table.empty(parent.subCategories) then
         return
@@ -880,28 +881,9 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         Cyclopedia.onSkillChange(player, i - 1, skillLevel, skillPercent)
         Cyclopedia.onBaseCharacterSkillChange(player, i - 1, baseSkill)
     end
-
-    local accountStatus = ""
-    local color = "#00ff00"
-    if g_game.getLocalPlayer():isPremium() then
-        accountStatus = "Premium"
-        color = "#00ff00"
-    else
-        accountStatus = "no Premium"
-        color = "#ff0000"
-    end
--- TODO g_game.getLocalPlayer():getTitle()
-    local title = "None"
-    if true then
-        title = "none"
-    end
-    Cyclopedia.setCharacterSkillValue("accountStatus", accountStatus, color)
-    Cyclopedia.setCharacterSkillValue("accountOnline", "Online","#00ff00")
-    Cyclopedia.setCharacterSkillValue("loyaltyTitle", title)
-        
 end
 
-function Cyclopedia.setCharacterSkillValue(id, value,color)
+function Cyclopedia.setCharacterSkillValue(id, value, color)
     local skill = UI.CharacterStats:recursiveGetChildById(id)
     local widget = skill:getChildById("value")
     widget:setText(value)
@@ -1168,7 +1150,7 @@ function Cyclopedia.createCharacterDescription()
     local descriptions = {{
         Level = player:getLevel()
     }, {
-        Vocation =player:getVocationName()
+        Vocation = player:getVocationName()
     }, {
         loyaltyTitle = "?"
     }, {
@@ -1208,6 +1190,29 @@ end
 
 function Cyclopedia.loadCharacterBadges(showAccountInformation, playerOnline, playerPremium, loyaltyTitle, badgesVector)
     UI.CharacterStats.ListBadge:destroyChildren()
+
+    local playerOnlineStatus = "Offline"
+    local playerOnlineStatusColor = "#ff0000"
+    if playerOnline == 1 then
+        playerOnlineStatus = "Online"
+        playerOnlineStatusColor = "#00ff00"
+    end
+
+    local accountStatus = "Free"
+    local accountStatusColor = "#ff0000"
+    if playerPremium == 1 then
+        accountStatus = "Premium"
+        accountStatusColor = "#00ff00"
+    end
+
+    if not loyaltyTitle or loyaltyTitle == "" then
+        loyaltyTitle = "None"
+    end
+
+    Cyclopedia.setCharacterSkillValue("accountStatus", accountStatus, accountStatusColor)
+    Cyclopedia.setCharacterSkillValue("accountOnline", playerOnlineStatus, playerOnlineStatusColor)
+    Cyclopedia.setCharacterSkillValue("loyaltyTitle", loyaltyTitle)
+
     for _, badge in ipairs(badgesVector) do
 
         local cell = g_ui.createWidget("CharacterBadge", UI.CharacterStats.ListBadge)
