@@ -8,13 +8,19 @@ local STAGES = {
 }
 
 local storedRaceIDs = {}
+local animusMasteryPoints = 0
+function Cyclopedia.onParseBestiaryOverview(name, creatures,animusMasteryPoints)
 
-function Cyclopedia.onParseBestiaryOverview(name, creatures)
+
     if name == "Result" then
         Cyclopedia.loadBestiarySearchCreatures(creatures)
     else
         Cyclopedia.loadBestiaryCreatures(creatures)
     end
+    if animusMasteryPoints and animusMasteryPoints > 0 then
+        animusMasteryPoints = animusMasteryPoints
+    end
+
 end
 
 function showBestiary()
@@ -263,6 +269,13 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
 
     Cyclopedia.CreateCreatureItems(lootData)
     UI.ListBase.CreatureInfo.LocationField.Textlist.Text:setText(data.location)
+
+    if data.AnimusMasteryPoints and data.AnimusMasteryPoints > 1 then
+        UI.ListBase.CreatureInfo.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields "..(data.AnimusMasteryBonus / 10).."% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from "..(data.AnimusMasteryBonus / 10).."% bonus experience points due to having unlocked ".. data.AnimusMasteryPoints .." Animus Masteries.")
+        UI.ListBase.CreatureInfo.AnimusMastery:setVisible(true)
+    else
+        UI.ListBase.CreatureInfo.AnimusMastery:setVisible(false)
+    end
 end
 
 function Cyclopedia.ShowBestiaryCreature()
@@ -321,10 +334,11 @@ function Cyclopedia.loadBestiarySearchCreatures(data)
             page = page + 1
             Cyclopedia.Bestiary.Search[page] = {}
         end
-
         local creature = {
             id = data[i].id,
-            currentLevel = data[i].currentLevel
+            currentLevel = data[i].currentLevel,
+            AnimusMasteryBonus = data[i].AnimusMasteryBonus,
+
         }
 
         table.insert(Cyclopedia.Bestiary.Search[page], creature)
@@ -355,7 +369,9 @@ function Cyclopedia.loadBestiaryCreatures(data)
 
         local creature = {
             id = data[i].id,
-            currentLevel = data[i].currentLevel
+            currentLevel = data[i].currentLevel,
+            AnimusMasteryBonus = data[i].creatureAnimousBonus,
+
         }
 
         table.insert(Cyclopedia.Bestiary.Creatures[page], creature)
@@ -437,6 +453,14 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
         g_game.requestBestiarySearch(widget:getId())
         Cyclopedia.ShowBestiaryCreature()
     end
+
+
+    if data.AnimusMasteryBonus > 0 then
+        widget.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields ".. data.AnimusMasteryBonus.. "% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from ".. data.AnimusMasteryBonus.. "% bonus experience points due to having unlocked ".. animusMasteryPoints.." Animus Masteries.")
+        widget.AnimusMastery:setVisible(true)
+    else
+        widget.AnimusMastery:setVisible(false)
+    end
 end
 
 function Cyclopedia.loadBestiaryCreature(page, search)
@@ -481,7 +505,8 @@ function Cyclopedia.LoadBestiaryCategories(data)
         local category = {
             name = data[i].bestClass,
             amount = data[i].count,
-            know = data[i].unlockedCount
+            know = data[i].unlockedCount,
+            AnimusMasteryBonus = data[i].AnimusMasteryBonus,
         }
 
         table.insert(Cyclopedia.Bestiary.Categories[page], category)

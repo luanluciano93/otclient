@@ -2855,23 +2855,25 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
         const uint16_t raceId = msg->getU16();
         const uint8_t progress = msg->getU8();
         uint8_t occurrence = 0;
+        uint16_t creatureAnimousBonus = 0;
         if (progress > 0) {
             occurrence = msg->getU8();
         }
         if (g_game.getClientVersion() >= 1340) {
-            msg->getU16(); // Creature Animous Bonus
+            creatureAnimousBonus = msg->getU16(); // Creature Animous Bonus
         }
         BestiaryOverviewMonsters monster;
         monster.id = raceId;
         monster.currentLevel = progress;
         monster.occurrence = occurrence;
-
+        monster.creatureAnimousBonus = creatureAnimousBonus;
         data.emplace_back(monster);
     }
+    uint16_t animusMasteryPoints = 0;
     if (g_game.getClientVersion() >= 1340) {
-        msg->getU16(); // Animus Mastery Points
+        animusMasteryPoints = msg->getU16(); // Animus Mastery Points
     }
-    g_game.processParseBestiaryOverview(raceName, data);
+    g_game.processParseBestiaryOverview(raceName, data, animusMasteryPoints);
 }
 
 void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
@@ -2882,8 +2884,11 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
     data.currentLevel = msg->getU8();
 
     if (g_game.getClientVersion() >= 1340) {
-        msg->getU16();// Animus Mastery Bonus
-        msg->getU16();// Animus Mastery Points
+        data.AnimusMasteryBonus = msg->getU16(); // Animus Mastery Bonus
+        data.AnimusMasteryPoints = msg->getU16(); // Animus Mastery Points
+    } else {
+        data.AnimusMasteryBonus = 0;
+        data.AnimusMasteryPoints = 0;
     }
 
     data.killCounter = msg->getU32();

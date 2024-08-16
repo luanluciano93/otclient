@@ -126,6 +126,7 @@ struct BestiaryOverviewMonsters
     uint16_t id;
     uint8_t currentLevel;
     uint8_t occurrence;
+    uint16_t creatureAnimousBonus;
 };
 
 struct LootItem
@@ -142,6 +143,8 @@ struct BestiaryMonsterData
     uint16_t id;
     std::string bestClass;
     uint8_t currentLevel;
+    uint16_t AnimusMasteryBonus;
+    uint16_t AnimusMasteryPoints;
     uint32_t killCounter;
     uint16_t thirdDifficulty;
     uint16_t secondUnlock;
@@ -491,7 +494,7 @@ protected:
     static void processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data);
     static void processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
-    static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data);
+    static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data,uint16_t animusMasteryPoints);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
     static void processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData);
     static void processBosstiaryInfo(const std::vector<BosstiaryData>& boss);

@@ -1005,6 +1005,11 @@ BestiaryCreature < UIWidget
     anchors.fill: ClassBase
     phantom: true
   UIWidget
+    id: AnimusMastery
+    anchors.top: prev.top
+    anchors.left: prev.left
+    image-source: /game_cyclopedia/images/indicator_soulcore
+  UIWidget
     id: Finalized
     image-source: images/checkmark-icon
     anchors.horizontalCenter: ClassBase.horizontalCenter

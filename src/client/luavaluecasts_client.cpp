@@ -585,6 +585,10 @@ int push_luavalue(const BestiaryMonsterData& data) {
     g_lua.setField("class");
     g_lua.pushInteger(data.currentLevel);
     g_lua.setField("currentLevel");
+    g_lua.pushInteger(data.AnimusMasteryPoints);
+    g_lua.setField("AnimusMasteryPoints");
+    g_lua.pushInteger(data.AnimusMasteryBonus);
+    g_lua.setField("AnimusMasteryBonus");
     g_lua.pushInteger(data.killCounter);
     g_lua.setField("killCounter");
     g_lua.pushInteger(data.thirdDifficulty);
@@ -678,8 +682,6 @@ int push_luavalue(const BestiaryCharmsData& charmData) {
     return 1;
 }
 
-
-
 int push_luavalue(const BestiaryOverviewMonsters& monster) {
     g_lua.createTable(0, 3);
     g_lua.pushInteger(monster.id);
@@ -688,6 +690,8 @@ int push_luavalue(const BestiaryOverviewMonsters& monster) {
     g_lua.setField("currentLevel");
     g_lua.pushInteger(monster.occurrence);
     g_lua.setField("occurrence");
+    g_lua.pushInteger(monster.creatureAnimousBonus);
+    g_lua.setField("creatureAnimousBonus");
     return 1;
 }
 

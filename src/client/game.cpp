@@ -454,9 +454,9 @@ void Game::processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& 
     g_lua.callGlobalField("g_game", "onParseBestiaryRaces", bestiaryData);
 }
 
-void Game::processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data)
+void Game::processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data, uint16_t animusMasteryPoints)
 {
-    g_lua.callGlobalField("g_game", "onParseBestiaryOverview", raceName, data);
+    g_lua.callGlobalField("g_game", "onParseBestiaryOverview", raceName, data, animusMasteryPoints);
 }
 
 void Game::processUpdateBestiaryMonsterData(const BestiaryMonsterData& data)

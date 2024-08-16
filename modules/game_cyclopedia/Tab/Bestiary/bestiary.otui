@@ -2,6 +2,7 @@ UIWidget
   id: Cat2
   anchors.fill: parent
   visible: false
+
   Button
     id: SearchButton
     size: 40 20
@@ -110,6 +111,14 @@ UIWidget
       text-offset: 0 4
       color: #919191
       UIWidget
+        id: AnimusMastery
+        anchors.top: parent.top
+        anchors.left: parent.left
+
+        margin-top: 18
+        margin-left: 3
+        image-source: /game_cyclopedia/images/indicator_soulcore
+      UIWidget
         id: LeftBase
         anchors.left: parent.left
         anchors.top: parent.top
@@ -117,6 +126,7 @@ UIWidget
         margin-top: 20
         margin-left: 5
         width: 125
+        phantom: true
         CheckBox
           id: TrackCheck
           anchors.bottom: parent.bottom
