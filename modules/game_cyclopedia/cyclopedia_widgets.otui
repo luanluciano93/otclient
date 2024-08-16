@@ -317,7 +317,7 @@ CharacterElementReduction < UIWidget
     id: icon
     size: 9 9
     image-source: /images/icons/icons-skills
-    image-clip: 63 0 9 9
+
     anchors.top: parent.top
     anchors.left: value.right
     margin-left: 5

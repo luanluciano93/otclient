@@ -592,16 +592,16 @@ end
 
 function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsArray, forgeSkillsArray,
     perfectShotDamageRanges, combatsArray, concoctionsArray)
-    UI.CombatStats.attack.icon:setImageSource(ICONS[data.weaponElement].icon)
-    UI.CombatStats.attack.icon:setImageClip(ICONS[data.weaponElement].clip)
+    UI.CombatStats.attack.icon:setImageSource(Icons[data.weaponElement+1].icon)
+    UI.CombatStats.attack.icon:setImageClip(Icons[data.weaponElement+1].clip)
     UI.CombatStats.attack.value:setText(data.weaponMaxHitChance)
 
     if data.weaponElementDamage > 0 then
         UI.CombatStats.converted.none:setVisible(false)
         UI.CombatStats.converted.value:setVisible(true)
         UI.CombatStats.converted.icon:setVisible(true)
-        UI.CombatStats.converted.icon:setImageSource(ICONS[data.weaponElementType].icon)
-        UI.CombatStats.converted.icon:setImageClip(ICONS[data.weaponElementType].clip)
+        UI.CombatStats.converted.icon:setImageSource(Icons[data.weaponElementType+1].icon)
+        UI.CombatStats.converted.icon:setImageClip(Icons[data.weaponElementType+1].clip)
         UI.CombatStats.converted.value:setText(data.weaponElementDamage .. "%")
     else
         UI.CombatStats.converted.none:setVisible(true)
@@ -620,33 +620,36 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
             UI.CombatStats[id]:destroy()
         end
     end
+    UI.CombatStats.reductionNone:destroyChildren()
 
-    if table.empty(combatsArray) then
+    if  (next(combatsArray) == nil) then
         UI.CombatStats.reductionNone:setVisible(true)
     else
-        UI.CombatStats.reductionNone:setVisible(false)
-
-        for i = 0, #combatsArray do
-            local widget = g_ui.createWidget("CharacterElementReduction", UI.CombatStats)
-
+        UI.CombatStats.reductionNone:setVisible(true)
+        for i = 1, #combatsArray do
+            local widget = g_ui.createWidget("CharacterElementReduction", UI.CombatStats.reductionNone)
             widget:setId("reduction_" .. i)
-
-            local element = ICONS[combatsArray[i].type]
-            widget.icon:setImageSource(element.icon)
-            widget.icon:setImageClip(element.clip)
-            widget.value:setText(string.format("+%d%%", combatsArray[i].value))
-            widget.name:setText(element.name)
-
-            if i == 0 then
-                widget:addAnchor(AnchorTop, "reduction", AnchorBottom)
-                widget:addAnchor(AnchorLeft, "parent", AnchorLeft)
-                widget:addAnchor(AnchorRight, "separator", AnchorRight)
+            local element = Icons[combatsArray[i][1]]
+            widget.icon:setImageSource(element.path)
+            widget.icon:setImageSize({
+                width = 9,
+                height = 9
+            })
+            local valor = combatsArray[i][2]
+            local porcentaje = math.ceil(valor / 100)
+            local diferencia = 65535 - valor
+            local porcentaje_negativo = math.ceil(diferencia / 100)
+            
+            local resultado
+            if porcentaje <= porcentaje_negativo then
+                resultado = string.format("%d%%", porcentaje)
+                widget.value:setColor("green")
             else
-                widget:addAnchor(AnchorTop, "prev", AnchorBottom)
-                widget:addAnchor(AnchorLeft, "parent", AnchorLeft)
-                widget:addAnchor(AnchorRight, "separator", AnchorRight)
+                resultado = string.format("-%d%%", porcentaje_negativo)
+                widget.value:setColor("red")
             end
-
+            widget.value:setText(resultado)
+            widget.name:setText(string.gsub(element.id, "^condition_", ""))
             widget:setMarginLeft(13)
         end
     end

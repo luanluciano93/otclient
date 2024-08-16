@@ -579,6 +579,7 @@ UIWidget
     anchors.right: parent.right
     margin-left: 10
     visible: false
+
     VerticalSeparator
       id: separator
       anchors.horizontalCenter: parent.horizontalCenter
@@ -703,14 +704,22 @@ UIWidget
       SkillNameLabel
         !text: tr('Damage Reduction:')
         color: #C0C0C0
-    UIWidget
+    Panel
       id: reductionNone
       anchors.top: reduction.bottom
       anchors.left: reduction.left
-      !text: tr('None')
-      color: #C0C0C0
+      anchors.right: separator.right
+
+      color: #f00303
+      background-color: #355d89
+      shader: Map - Party
       margin-left: 10
-      visible: false
+      margin-top: 10
+      size: 232 233
+      layout:
+        type: verticalBox
+        fit-children: true
+
     CharacterSkillBase
       id: criticalHit
       anchors.top: attack.top
