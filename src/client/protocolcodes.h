@@ -310,6 +310,7 @@ namespace Proto
         ClientBrowseField = 203,
         ClientSeekInContainer = 204,
         ClientInspectionObject = 205,
+        ClientRequestBless = 207,
         ClientRequestOutfit = 210,
         ClientChangeOutfit = 211,
         ClientMount = 212, // 870

@@ -604,11 +604,13 @@ void Game::loginWorld(const std::string_view account, const std::string_view pas
 
 void Game::cancelLogin()
 {
+    m_denyBotCall = false;
     // send logout even if the game has not started yet, to make sure that the player doesn't stay logged there
     if (m_protocolGame)
         m_protocolGame->sendLogout();
 
     processDisconnect();
+    m_denyBotCall = true;
 }
 
 void Game::forceLogout()
@@ -1826,6 +1828,14 @@ void Game::imbuementDurations(bool isOpen)
         return;
 
     m_protocolGame->sendImbuementDurations(isOpen);
+}
+
+void Game::requestBless()
+{
+    if (!canPerformGameAction())
+        return;
+
+    m_protocolGame->sendRequestBless();
 }
 
 void Game::requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems)
