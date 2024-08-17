@@ -1828,6 +1828,20 @@ void Game::imbuementDurations(bool isOpen)
     m_protocolGame->sendImbuementDurations(isOpen);
 }
 
+void Game::requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems)
+{
+    m_denyBotCall = false;
+    m_protocolGame->requestQuickLootBlackWhiteList(filter, size, listedItems);
+    m_denyBotCall = true;
+}
+
+void Game::openContainerQuickLoot(uint8_t action, uint8_t category, const Position& pos, uint16_t itemId, uint8_t stackpos, bool useMainAsFallback)
+{
+    m_denyBotCall = false;
+    m_protocolGame->openContainerQuickLoot(action, category, pos, itemId, stackpos, useMainAsFallback);
+    m_denyBotCall = true;
+}
+
 void Game::requestBestiary()
 {
     if (!canPerformGameAction())
@@ -1889,24 +1903,12 @@ void Game::requestBossSlotAction(const uint8_t action, const uint32_t raceId)
     if (!canPerformGameAction())
         return;
 
-    m_protocolGame->sendRequestBossSlotAction(action,raceId);
+    m_protocolGame->sendRequestBossSlotAction(action, raceId);
 
 }
 void Game::sendStatusTrackerBestiary(const uint16_t raceId, bool status)
 {
     m_denyBotCall = false;
     m_protocolGame->SendStatusTrackerBestiary(raceId, status);
-}
-void Game::requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems)
-{
-    m_denyBotCall = false;
-    m_protocolGame->requestQuickLootBlackWhiteList(filter, size, listedItems);
-    m_denyBotCall = true;
-}
-
-void Game::openContainerQuickLoot(uint8_t action, uint8_t category, const Position& pos, uint16_t itemId, uint8_t stackpos, bool useMainAsFallback)
-{
-    m_denyBotCall = false;
-    m_protocolGame->openContainerQuickLoot(action, category, pos, itemId, stackpos, useMainAsFallback);
     m_denyBotCall = true;
 }

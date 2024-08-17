@@ -53,6 +53,96 @@ struct UnjustifiedPoints
     uint8_t skullTime;
 };
 
+using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
+
+struct StoreCategory
+{
+    std::string name;
+    std::vector<StoreCategory> subCategories;
+    uint8_t state;
+    std::vector<std::string> icons;
+    std::string parent;
+};
+
+struct SubOffer
+{
+    uint32_t id;
+    uint16_t count;
+    uint32_t price;
+    uint8_t coinType;
+    bool disabled;
+    uint16_t disabledReason;
+    uint8_t state;
+    uint32_t validUntil;
+    uint32_t basePrice;
+};
+
+struct StoreOffer
+{
+    std::string name;
+    std::vector<SubOffer> subOffers;
+    uint32_t ofertaid;
+    std::string description;
+    uint8_t type;
+    std::string icon;
+    uint16_t mountId;
+    uint16_t itemId;
+    uint16_t outfitId;
+    uint8_t outfitHead, outfitBody, outfitLegs, outfitFeet;
+    uint8_t sex;
+    uint16_t maleOutfitId, femaleOutfitId;
+    uint8_t tryOnType;
+    uint16_t collection;
+    uint16_t popularityScore;
+    uint32_t stateNewUntil;
+    bool configurable;
+    uint16_t productsCapacity;
+};
+
+struct HomeOffer
+{
+    std::string name;
+    uint8_t unknownByte;
+    uint32_t id;
+    uint16_t unknownU16;
+    uint32_t price;
+    uint8_t coinType;
+    uint16_t disabledReasonIndex;
+    uint8_t unknownByte2;
+    uint8_t type;
+    std::string icon;
+    uint16_t mountClientId;
+    uint16_t itemType;
+    uint16_t sexId;
+    struct { uint8_t lookHead, lookBody, lookLegs, lookFeet; } outfit;
+    uint8_t tryOnType;
+    uint16_t collection;
+    uint16_t popularityScore;
+    uint32_t stateNewUntil;
+    uint8_t userConfiguration;
+    uint16_t productsCapacity;
+};
+
+struct Banner
+{
+    std::string image;
+    uint8_t bannerType;
+    uint32_t offerId;
+    uint8_t unknownByte1, unknownByte2;
+};
+
+struct StoreData
+{
+    std::string categoryName;
+    uint32_t redirectId;
+    std::vector<std::string> disableReasons;
+    std::vector<HomeOffer> homeOffers;  
+    std::vector<StoreOffer> storeOffers;
+    std::vector<Banner> banners;
+    uint8_t bannerDelay;
+    bool tooManyResults;
+};
+
 struct CyclopediaCharacterGeneralStats
 {
     uint64_t experience;
@@ -282,97 +372,6 @@ struct CharacterInfoFamiliar
     uint8_t type;
     uint32_t isCurrent;
 };
-
-using Vip = std::tuple<std::string, uint32_t, std::string, int, bool>;
-
-struct StoreCategory
-{
-    std::string name;
-    std::vector<StoreCategory> subCategories;
-    uint8_t state;
-    std::vector<std::string> icons;
-    std::string parent;
-};
-
-struct SubOffer
-{
-    uint32_t id;
-    uint16_t count;
-    uint32_t price;
-    uint8_t coinType;
-    bool disabled;
-    uint16_t disabledReason;
-    uint8_t state;
-    uint32_t validUntil;
-    uint32_t basePrice;
-};
-
-struct StoreOffer
-{
-    std::string name;
-    std::vector<SubOffer> subOffers;
-    uint32_t ofertaid;
-    std::string description;
-    uint8_t type;
-    std::string icon;
-    uint16_t mountId;
-    uint16_t itemId;
-    uint16_t outfitId;
-    uint8_t outfitHead, outfitBody, outfitLegs, outfitFeet;
-    uint8_t sex;
-    uint16_t maleOutfitId, femaleOutfitId;
-    uint8_t tryOnType;
-    uint16_t collection;
-    uint16_t popularityScore;
-    uint32_t stateNewUntil;
-    bool configurable;
-    uint16_t productsCapacity;
-};
-
-struct HomeOffer
-{
-    std::string name;
-    uint8_t unknownByte;
-    uint32_t id;
-    uint16_t unknownU16;
-    uint32_t price;
-    uint8_t coinType;
-    uint16_t disabledReasonIndex;
-    uint8_t unknownByte2;
-    uint8_t type;
-    std::string icon;
-    uint16_t mountClientId;
-    uint16_t itemType;
-    uint16_t sexId;
-    struct { uint8_t lookHead, lookBody, lookLegs, lookFeet; } outfit;
-    uint8_t tryOnType;
-    uint16_t collection;
-    uint16_t popularityScore;
-    uint32_t stateNewUntil;
-    uint8_t userConfiguration;
-    uint16_t productsCapacity;
-};
-
-struct Banner
-{
-    std::string image;
-    uint8_t bannerType;
-    uint32_t offerId;
-    uint8_t unknownByte1, unknownByte2;
-};
-
-struct StoreData
-{
-    std::string categoryName;
-    uint32_t redirectId;
-    std::vector<std::string> disableReasons;
-    std::vector<HomeOffer> homeOffers;  
-    std::vector<StoreOffer> storeOffers;
-    std::vector<Banner> banners;
-    uint8_t bannerDelay;
-    bool tooManyResults;
-};
-
 
 //@bindsingleton g_game
 class Game
@@ -738,7 +737,12 @@ public:
                             const std::vector<std::tuple<uint8_t, std::string>>& categories,
                             uint16_t page, uint16_t totalPages,
                             const std::vector<std::tuple<uint32_t, std::string, std::string, uint8_t, std::string, uint16_t, uint8_t, uint64_t>>& highscores, uint32_t entriesTs);
-    
+  
+    // imbuement related
+    void imbuementDurations(bool isOpen = false);
+    void requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems);
+    void openContainerQuickLoot(uint8_t action, uint8_t category, const Position& pos, uint16_t itemId, uint8_t stackpos, bool useMainAsFallback);
+
     // cyclopedia related
     void inspectionNormalObject(const Position& position);
     void inspectionObject(const Otc::InspectObjectTypes inspectionType, const uint16_t itemId, const uint8_t itemCount);
@@ -750,13 +754,7 @@ public:
     void requestBosstiaryInfo();
     void requestBossSlootInfo();
     void requestBossSlotAction(const uint8_t action, const uint32_t raceId);
-    void sendStatusTrackerBestiary(const uint16_t raceId,  bool status);
-
-    // imbuement related
-    void imbuementDurations(bool isOpen = false);
-    void requestQuickLootBlackWhiteList(uint8_t filter, uint16_t size, const std::vector<uint16_t>& listedItems);
-    void openContainerQuickLoot(uint8_t action, uint8_t category, const Position& pos, uint16_t itemId, uint8_t stackpos, bool useMainAsFallback);
-
+    void sendStatusTrackerBestiary(const uint16_t raceId, bool status);
 protected:
     void enableBotCall() { m_denyBotCall = false; }
     void disableBotCall() { m_denyBotCall = true; }

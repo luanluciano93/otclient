@@ -42,9 +42,9 @@ Module
     - game_shop
     - game_screenshot
     - game_highscore
-    - game_cyclopedia
     - game_store
     - game_quickloot
-
+    - game_cyclopedia
+    
   @onLoad: init()
   @onUnload: terminate()
