@@ -106,13 +106,6 @@ function showCharacter()
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
 end
 
---[[ 
-Send = 	
-   
-Get:
-
-]]
-
 Cyclopedia.Character = {}
 Cyclopedia.Character.Achievements = {}
 Cyclopedia.InventorySlotStyles = {
@@ -423,10 +416,6 @@ function Cyclopedia.characterItemListFilter(widget)
 end
 
 function Cyclopedia.achievementFilter(widget)
-    if widget:isChecked() then
-        return
-    end
-
     local parent = widget:getParent()
     for i = 1, parent:getChildCount() do
         local child = parent:getChildByIndex(i)
