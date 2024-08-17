@@ -432,6 +432,11 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     })
     widget.Sprite:getCreature():setStaticWalking(1000)
 
+    if data.AnimusMasteryBonus > 0 then
+        widget.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields ".. data.AnimusMasteryBonus.. "% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from ".. data.AnimusMasteryBonus.. "% bonus experience points due to having unlocked ".. animusMasteryPoints.." Animus Masteries.")
+        widget.AnimusMastery:setVisible(true)
+    end
+
     -- local level = {0, 1, 2} -- ??????
     if data.currentLevel >= 3 then
         widget.Finalized:setVisible(true)
@@ -442,6 +447,7 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
             widget.KillsLabel:setText("?")
             widget.Sprite:getCreature():setShader("Outfit - cyclopedia-black")
             widget.Name:setText("Unknown")
+            widget.AnimusMastery:setVisible(false)
         else
             widget.KillsLabel:setText(string.format("%d / 3", data.currentLevel - 1))
         end
@@ -452,14 +458,6 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
         UI.BackPageButton:setEnabled(true)
         g_game.requestBestiarySearch(widget:getId())
         Cyclopedia.ShowBestiaryCreature()
-    end
-
-
-    if data.AnimusMasteryBonus > 0 then
-        widget.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields ".. data.AnimusMasteryBonus.. "% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from ".. data.AnimusMasteryBonus.. "% bonus experience points due to having unlocked ".. animusMasteryPoints.." Animus Masteries.")
-        widget.AnimusMastery:setVisible(true)
-    else
-        widget.AnimusMastery:setVisible(false)
     end
 end
 
