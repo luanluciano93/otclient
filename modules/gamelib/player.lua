@@ -64,8 +64,11 @@ vocationNames = {
     [5] = "Master Sorcerer",
     [6] = "Elder Druid",
     [7] = "Royal Paladin",
-    [8] = "Elite Knight"
-  }
+    [11]= "Elite Knight",
+    [12] = "Royal Paladin",
+    [13] = "Master Sorcerer",
+    [14] = "Elder Druid"
+}
 
 function Player:isPartyLeader()
     local shield = self:getShield()
