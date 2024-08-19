@@ -1,10 +1,15 @@
 -- Is temp fix : you would have to see how this reading is done in the assets editor and put it in the OTC
+-- temp. TODO assets search
 -- LuaFormatter off
 
 ItemsDatabase = {}
 
 ItemsDatabase.lib = {
     ['yellow'] = {
+        ['gold coin'] = {
+            clientId = 3031,
+            sell = 1070000,
+        },
         ['fiery tear'] = {
             clientId = 39040,
             sell = 1070000,
@@ -4861,11 +4866,11 @@ ItemsDatabase.lib = {
 }
 
 ItemsDatabase.rarityColors = {
-    gold = TextColors.yellow,
+    yellow = TextColors.yellow,
     purple = TextColors.purple,
     blue = TextColors.blue,
     green = TextColors.green,
-    white = TextColors.white,
+    grey = TextColors.white,
 }
 
 --[[ python
@@ -4968,15 +4973,18 @@ function ItemsDatabase.getColorForRarity(rarity)
 end
 
 function ItemsDatabase.setColorLootMessage(text)
-    -- untest
+    -- temp. TODO assets search
     local function coloringLootName(match)
         local id, itemName = match:match("(%d+)|(.+)")
-        local itemInfo = ItemsDatabase.getRarityByClientId[tonumber(id)]
+
+        local itemInfo = ItemsDatabase.getRarityByClientId(tonumber(id))
         if itemInfo then
-            local color = ItemsDatabase.getColorForRarity(itemInfo.rarity)
+            local color = ItemsDatabase.getColorForRarity(itemInfo)
             return "{" .. itemName .. ", " .. color .. "}"
+        else
+            return itemName
         end
-        return itemName
+
     end
     return (text:gsub("{(.-)}", coloringLootName))
 end
