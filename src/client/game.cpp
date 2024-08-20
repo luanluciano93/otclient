@@ -1916,6 +1916,7 @@ void Game::requestBossSlotAction(const uint8_t action, const uint32_t raceId)
     m_protocolGame->sendRequestBossSlotAction(action, raceId);
 
 }
+
 void Game::sendStatusTrackerBestiary(const uint16_t raceId, bool status)
 {
     m_denyBotCall = false;
