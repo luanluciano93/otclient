@@ -1,11 +1,13 @@
 ﻿local UI = nil
+
 function showHouse()
     UI = g_ui.loadUI("house", contentContainer)
     UI:show()
     UI.LateralBase.LayerScrollbar.decrementButton:setVisible(false)
     UI.LateralBase.LayerScrollbar.incrementButton:setVisible(false)
     UI.LateralBase.LayerScrollbar.sliderButton:setImageSource("")
-    --[[g_ui.createWidget("MapLayerSelector", UI.LateralBase.LayerScrollbar.sliderButton)
+    --[[
+    g_ui.createWidget("MapLayerSelector", UI.LateralBase.LayerScrollbar.sliderButton)
     function UI.LateralBase.LayerScrollbar:onValueChange(value)
         local rect = {
             width = 14,
@@ -15,7 +17,8 @@ function showHouse()
         }
 
         UI.LateralBase.LayerIndicator:setImageClip(rect)
-    end ]]
+    end
+    ]]--
 
     UI.LateralBase.LayerScrollbar:setValue(150)
 
@@ -28,24 +31,20 @@ function showHouse()
     if not Cyclopedia.House.Loaded then
         for i = 1, #Cyclopedia.StateList do
             UI.TopBase.StatesOption:addOption(Cyclopedia.StateList[i].Title, i)
-
             UI.TopBase.StatesOption.onOptionChange = Cyclopedia.houseChangeState
         end
 
         for i = 0, #Cyclopedia.CityList do
             UI.TopBase.CityOption:addOption(Cyclopedia.CityList[i].Title, i)
-
             UI.TopBase.CityOption.onOptionChange = Cyclopedia.selectTown
         end
 
         for i = 1, #Cyclopedia.SortList do
             UI.TopBase.SortOption:addOption(Cyclopedia.SortList[i].Title, i)
-
             UI.TopBase.SortOption.onOptionChange = Cyclopedia.houseSort
         end
 
         Cyclopedia.House.Loaded = true
-
         Cyclopedia.houseFilter(UI.TopBase.HousesCheck)
     end
 
@@ -59,10 +58,8 @@ function showHouse()
     UI.TopBase.SortOption:setOption("Sort by name", true)
 
     Cyclopedia.House.lastTown = nil
-
 end
 
--- LuaFormatter off
 Cyclopedia.House = {}
 Cyclopedia.StateList = {
     { Title = "All States" },
@@ -159,20 +156,16 @@ function Cyclopedia.houseChangeState(widget)
         end
 
         Cyclopedia.reloadHouseList()
-
         Cyclopedia.House.lastChangeState = widget
     end
 end
 
 function Cyclopedia.houseMessage(houseId, type, message)
     local confirmWindow
-
     local function yesCallback()
         if confirmWindow then
             confirmWindow:destroy()
-
             confirmWindow = nil
-
             Cyclopedia.Toggle(true, false, 5)
         end
     end
@@ -310,24 +303,20 @@ function Cyclopedia.rejectTransfer()
 
     function UI.rejectTransferHouse.transfer:onClick()
         local confirmWindow
-
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
             g_game.requestRejectHouseTransfer(house.id)
 
             Cyclopedia.House.ignore = true
-
             if Cyclopedia.House.lastTown then
-                --  g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                --    g_game.requestShowHouses("")
+                -- g_game.requestShowHouses("")
             end
 
             UI.TopBase.StatesOption:setOption("All States", true)
@@ -337,9 +326,7 @@ function Cyclopedia.rejectTransfer()
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -392,14 +379,11 @@ function Cyclopedia.acceptTransfer()
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
             g_game.requestAcceptHouseTransfer(house.id)
-
             Cyclopedia.House.ignore = true
 
             -- g_game.requestShowHouses("")
@@ -410,9 +394,7 @@ function Cyclopedia.acceptTransfer()
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -465,20 +447,17 @@ function Cyclopedia.cancelTransfer()
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
             g_game.requestCancelHouseTransfer(house.id)
 
             Cyclopedia.House.ignore = true
-
             if Cyclopedia.House.lastTown then
-                --   g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                --    g_game.requestShowHouses("")
+                -- g_game.requestShowHouses("")
             end
 
             UI.TopBase.StatesOption:setOption("All States", true)
@@ -488,9 +467,7 @@ function Cyclopedia.cancelTransfer()
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -579,20 +556,17 @@ function Cyclopedia.transferHouse()
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
             g_game.requestTransferHouse(house.id, transfer, tonumber(value))
 
             Cyclopedia.House.ignore = true
-
             if Cyclopedia.House.lastTown then
-                --        g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                --       g_game.requestShowHouses("")
+                -- g_game.requestShowHouses("")
             end
 
             UI.TopBase.StatesOption:setOption("All States", true)
@@ -602,9 +576,7 @@ function Cyclopedia.transferHouse()
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -634,7 +606,6 @@ function Cyclopedia.transferHouse()
     UI.transferArea.rent:setText((house.rent))
     UI.transferArea.paid:setText(time)
     UI.transferArea.year:clearOptions()
-
     UI.transferArea.year.onOptionChange = verify
 
     local yearNumber = tonumber(os.date("%Y"))
@@ -642,7 +613,6 @@ function Cyclopedia.transferHouse()
     UI.transferArea.year:addOption(yearNumber, 1, true)
     UI.transferArea.year:addOption(yearNumber + 1, 2, true)
     UI.transferArea.month:clearOptions()
-
     UI.transferArea.month.onOptionChange = verify
 
     for i = 1, 12 do
@@ -650,7 +620,6 @@ function Cyclopedia.transferHouse()
     end
 
     UI.transferArea.day:clearOptions()
-
     UI.transferArea.day.onOptionChange = verify
 
     local days = tonumber(os.date("%d", os.time({
@@ -665,16 +634,13 @@ function Cyclopedia.transferHouse()
 
     UI.transferArea.month:setOption(tonumber(os.date("%m")), true)
     UI.transferArea.day:setOption(tonumber(os.date("%d") + 1), true)
-
     UI.transferArea.owner.onTextChange = verifyName
-
     UI.transferArea.owner:setText("")
     verifyName(UI.transferArea.owner, "", "")
     UI.transferArea.price:setText(0)
 
     function UI.transferArea.price:onTextChange(text, oldText)
         local convertedText = tonumber(text)
-
         if text ~= "" and type(convertedText) ~= "number" then
             self:setText(oldText)
         end
@@ -730,9 +696,7 @@ function Cyclopedia.moveOutHouse()
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
@@ -742,9 +706,7 @@ function Cyclopedia.moveOutHouse()
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -774,7 +736,6 @@ function Cyclopedia.moveOutHouse()
     UI.moveOutArea.rent:setText((house.rent))
     UI.moveOutArea.paid:setText(time)
     UI.moveOutArea.year:clearOptions()
-
     UI.moveOutArea.year.onOptionChange = verify
 
     local yearNumber = tonumber(os.date("%Y"))
@@ -782,7 +743,6 @@ function Cyclopedia.moveOutHouse()
     UI.moveOutArea.year:addOption(yearNumber, 1, true)
     UI.moveOutArea.year:addOption(yearNumber + 1, 2, true)
     UI.moveOutArea.month:clearOptions()
-
     UI.moveOutArea.month.onOptionChange = verify
 
     for i = 1, 12 do
@@ -790,7 +750,6 @@ function Cyclopedia.moveOutHouse()
     end
 
     UI.moveOutArea.day:clearOptions()
-
     UI.moveOutArea.day.onOptionChange = verify
 
     local days = tonumber(os.date("%d", os.time({
@@ -862,7 +821,6 @@ function Cyclopedia.bidHouse(widget)
     if house.hasBid then
         for index, data in ipairs(labels) do
             local label = g_ui.createWidget("Label", UI.bidArea)
-
             label:setId(data.id)
             label:setText(data.name .. "44242")
             label:setColor("#909090")
@@ -882,7 +840,6 @@ function Cyclopedia.bidHouse(widget)
             label:setMarginLeft(4)
 
             local value = g_ui.createWidget("Label", UI.bidArea)
-
             value:setId(data.id .. "_value")
             value:setText(data.value)
             value:setColor("#C0C0C0")
@@ -897,7 +854,6 @@ function Cyclopedia.bidHouse(widget)
                 value:setTextAlign(AlignRight)
 
                 local gold = g_ui.createWidget("UIWidget", UI.bidArea)
-
                 gold:setId("highestBid_gold")
                 gold:setImageSource("/game_cyclopedia/images/icon_gold")
                 gold:addAnchor(AnchorTop, "prev", AnchorTop)
@@ -909,7 +865,6 @@ function Cyclopedia.bidHouse(widget)
 
         if house.bidHolderLimit then
             local label = g_ui.createWidget("Label", UI.bidArea)
-
             label:setId("yourLimit")
             label:setText("Your Limit: ")
             label:setColor("#909090")
@@ -921,7 +876,6 @@ function Cyclopedia.bidHouse(widget)
             label:addAnchor(AnchorLeft, "parent", AnchorLeft)
 
             local value = g_ui.createWidget("Label", UI.bidArea)
-
             value:setWidth(90)
             value:setHeight(15)
             value:setId("yourLimit_value")
@@ -933,7 +887,6 @@ function Cyclopedia.bidHouse(widget)
             value:setTextAlign(AlignRight)
 
             local gold = g_ui.createWidget("UIWidget", UI.bidArea)
-
             gold:setId("yourLimit_gold")
             gold:setImageSource("/game_cyclopedia/images/icon_gold")
             gold:addAnchor(AnchorTop, "prev", AnchorTop)
@@ -947,7 +900,6 @@ function Cyclopedia.bidHouse(widget)
         end
 
         local label = g_ui.createWidget("Label", UI.bidArea)
-
         label:setId("soFar")
         label:setText("There is not bid so far.")
         label:setColor("#C0C0C0")
@@ -961,7 +913,6 @@ function Cyclopedia.bidHouse(widget)
     end
 
     local bidArea = g_ui.createWidget("HouseBidArea", UI.bidArea)
-
     bidArea:setId("bidArea")
     bidArea:addAnchor(AnchorTop, "prev", AnchorBottom)
     bidArea:addAnchor(AnchorLeft, "parent", AnchorLeft)
@@ -976,7 +927,6 @@ function Cyclopedia.bidHouse(widget)
 
     function bidArea.textEdit:onTextChange(text, oldText)
         local convertedText = tonumber(text)
-
         if text ~= "" and type(convertedText) ~= "number" then
             self:setText(oldText)
         end
@@ -1013,9 +963,7 @@ function Cyclopedia.bidHouse(widget)
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
 
@@ -1025,9 +973,7 @@ function Cyclopedia.bidHouse(widget)
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 Cyclopedia.Toggle(true, false, 5)
             end
         end
@@ -1054,7 +1000,7 @@ end
 
 function Cyclopedia.houseRefresh()
     if Cyclopedia.House.lastTown then
-        --   g_game.requestShowHouses(Cyclopedia.House.lastTown)
+        -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
 
         if Cyclopedia.House.lastChangeState then
             if Cyclopedia.House.refreshEvent then
@@ -1063,7 +1009,6 @@ function Cyclopedia.houseRefresh()
 
             Cyclopedia.House.refreshEvent = scheduleEvent(function()
                 Cyclopedia.houseChangeState(Cyclopedia.House.lastChangeState)
-
                 Cyclopedia.House.refreshEvent = nil
             end, 100)
         end
@@ -1123,9 +1068,7 @@ function Cyclopedia.houseFilter(widget)
 
     if not table.empty(Cyclopedia.House.Data) then
         local onlyGuildHall = UI.TopBase.GuildhallsCheck:isChecked()
-
         for _, data in ipairs(Cyclopedia.House.Data) do
-
             if onlyGuildHall then
                 data.visible = data.gh
             else
@@ -1149,19 +1092,15 @@ function Cyclopedia.reloadHouseList()
         for _, data in ipairs(Cyclopedia.House.Data) do
             if data.visible then
                 local widget = g_ui.createWidget("House", UI.ListBase.AuctionList)
-
                 widget.data = data
-
                 widget:setId(data.id)
                 widget:setText(data.name)
                 widget.size:setColoredText("{Size:     , #909090}" .. data.sqm .. " sqm")
-
                 widget.beds:setColoredText("{Max. Beds: ,#909090} " .. data.beds)
                 widget.rent:setColoredText(data.rent)
 
                 if data.description ~= "" then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
-
                     -- icon:setImageSource("/game_cyclopedia/images/house-description")
                     icon:setTooltip(data.description)
                 end
@@ -1172,7 +1111,6 @@ function Cyclopedia.reloadHouseList()
                             local difference = timestamp - os.time()
                             local hour = math.floor(difference / 3600)
                             local minutes = math.floor(difference % 3600 / 60)
-
                             return string.format("%02dh %02dmin", hour, minutes)
                         end
 
@@ -1180,7 +1118,6 @@ function Cyclopedia.reloadHouseList()
                                                          data.hightestBid .. " Ends in: " .. format(data.bidEnd) .. ")")
                     else
                         widget.status:setColoredText("{Status:  , #909090}{auctioned, #00F000} (no bid yet)")
-
                     end
                 elseif data.state == 2 then
                     widget.status:setColoredText("{Status:  , #909090}rented by " .. data.owner)
@@ -1190,25 +1127,21 @@ function Cyclopedia.reloadHouseList()
 
                 if data.isYourOwner then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
-
                     -- icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
                 end
 
                 if widget.data.isTransferOwner then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
-
                     icon:setImageSource("/game_cyclopedia/images/pending-transfer-house")
                 end
 
                 if data.isYourOwner and data.inTransfer then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
-
                     icon:setImageSource("/game_cyclopedia/images/transfer-house")
                 end
 
                 if data.shop then
                     local icon = g_ui.createWidget("HouseIcon", widget.icons)
-
                     -- icon:setImageSource("/game_cyclopedia/images/house-shop")
                     icon:setTooltip("This house is a shop.")
                 end
@@ -1217,9 +1150,7 @@ function Cyclopedia.reloadHouseList()
 
         if Cyclopedia.House.lastSelectedHouse then
             local last = UI.ListBase.AuctionList:getChildById(Cyclopedia.House.lastSelectedHouse:getId())
-
             last = last or UI.ListBase.AuctionList:getChildByIndex(1)
-
             Cyclopedia.selectHouse(last)
         else
             Cyclopedia.selectHouse(UI.ListBase.AuctionList:getChildByIndex(1))
@@ -1248,7 +1179,6 @@ end
 function Cyclopedia.loadHouseList(data, other)
     if Cyclopedia.House.ignore then
         Cyclopedia.House.ignore = false
-
         return
     end
 
@@ -1258,7 +1188,6 @@ function Cyclopedia.loadHouseList(data, other)
         for i = 0, #data do
             local value = data[i]
             local house = HOUSE[value.houseId]
-
             if house then
                 local isGuildHall = house.GH > 0 and true or false
                 local data_t = {
@@ -1304,20 +1233,16 @@ function Cyclopedia.loadHouseList(data, other)
     end)
 
     Cyclopedia.House.Data = houses
-
     Cyclopedia.reloadHouseList()
 end
 
 function Cyclopedia.selectTown(widget, text, type)
     local name = text
-
     if type ~= 0 then
-        --     g_game.requestShowHouses(name)
-
+        -- g_game.requestShowHouses(name)
         Cyclopedia.House.lastTown = name
     else
-        --  g_game.requestShowHouses("")
-
+        -- g_game.requestShowHouses("")
         Cyclopedia.House.lastTown = ""
     end
 end
@@ -1328,10 +1253,8 @@ function Cyclopedia.selectHouse(widget)
     end
 
     local parent = widget:getParent()
-
     for i = 1, parent:getChildCount() do
         local child = parent:getChildByIndex(i)
-
         child:setChecked(false)
     end
 
@@ -1339,32 +1262,27 @@ function Cyclopedia.selectHouse(widget)
 
     if widget.data.isYourOwner then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
-
         -- icon:setImageSource("/game_cyclopedia/images/house-owner-icon")
     end
 
     if widget.data.isYourOwner and widget.data.inTransfer then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
-
         icon:setImageSource("/game_cyclopedia/images/transfer-house")
     end
 
     if widget.data.isTransferOwner then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
-
         icon:setImageSource("/game_cyclopedia/images/pending-transfer-house")
     end
 
     if widget.data.shop then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
-
         -- icon:setImageSource("/game_cyclopedia/images/house-shop")
         icon:setTooltip("This house is a shop.")
     end
 
     if widget.data.description ~= "" then
         local icon = g_ui.createWidget("HouseIcon", UI.LateralBase.icons)
-
         -- icon:setImageSource("/game_cyclopedia/images/house-description")
         icon:setTooltip(widget.data.description)
     end
@@ -1420,7 +1338,6 @@ function Cyclopedia.selectHouse(widget)
     if widget.data.rented then
         if widget.data.isYourOwner then
             local button = g_ui.createWidget("Button", UI.LateralBase)
-
             button:setId("transferButton")
             button:setText("Transfer")
             button:setColor("#C0C0C0")
@@ -1431,10 +1348,8 @@ function Cyclopedia.selectHouse(widget)
             button:addAnchor(AnchorRight, "parent", AnchorRight)
             button:setMarginRight(7)
             button:setMarginBottom(7)
-
             button.onClick = Cyclopedia.transferHouse
             button = g_ui.createWidget("Button", UI.LateralBase)
-
             button:setId("moveOutButton")
             button:setText("Move Out")
             button:setColor("#C0C0C0")
@@ -1444,12 +1359,10 @@ function Cyclopedia.selectHouse(widget)
             button:addAnchor(AnchorTop, "prev", AnchorTop)
             button:addAnchor(AnchorRight, "prev", AnchorLeft)
             button:setMarginRight(5)
-
             button.onClick = Cyclopedia.moveOutHouse
         end
     elseif widget.data.inTransfer and not widget.data.isTransferOwner then
         local button = g_ui.createWidget("Button", UI.LateralBase)
-
         button:setId("cancelTransfer")
         button:setText("Cancel Transfer")
         button:setColor("#C0C0C0")
@@ -1460,11 +1373,9 @@ function Cyclopedia.selectHouse(widget)
         button:addAnchor(AnchorRight, "parent", AnchorRight)
         button:setMarginRight(7)
         button:setMarginBottom(7)
-
         button.onClick = Cyclopedia.cancelTransfer
     elseif widget.data.isTransferOwner then
         local button = g_ui.createWidget("Button", UI.LateralBase)
-
         button:setId("rejectTransfer")
         button:setText("Reject Transfer")
         button:setColor("#C0C0C0")
@@ -1476,11 +1387,9 @@ function Cyclopedia.selectHouse(widget)
         button:setMarginRight(7)
         button:setMarginBottom(7)
         button:setTextOffset(topoint(0 .. " " .. 0))
-
         button.onClick = Cyclopedia.rejectTransfer
 
         local transferButton = g_ui.createWidget("Button", UI.LateralBase)
-
         transferButton:setId("acceptTransfer")
         transferButton:setText("Accept Transfer")
         transferButton:setColor("#C0C0C0")
@@ -1491,7 +1400,6 @@ function Cyclopedia.selectHouse(widget)
         transferButton:addAnchor(AnchorRight, "prev", AnchorLeft)
         transferButton:setMarginRight(5)
         transferButton:setTextOffset(topoint(0 .. " " .. 0))
-
         transferButton.onClick = Cyclopedia.acceptTransfer
 
         if widget.data.canAcceptTransfer ~= 0 then
@@ -1501,7 +1409,6 @@ function Cyclopedia.selectHouse(widget)
         end
     else
         local button = g_ui.createWidget("Button", UI.LateralBase)
-
         button:setId("bidButton")
         button:setText("Bid")
         button:setColor("#C0C0C0")
@@ -1512,7 +1419,6 @@ function Cyclopedia.selectHouse(widget)
         button:addAnchor(AnchorRight, "parent", AnchorRight)
         button:setMarginRight(7)
         button:setMarginBottom(7)
-
         button.onClick = Cyclopedia.bidHouse
 
         if widget.data.canBid == 0 then
@@ -1543,11 +1449,13 @@ function Cyclopedia.selectHouse(widget)
         UI.LateralBase.MapViewbase.houseImage:setImageSource(imagePath)
     end
 
-    --[[     UI.LateralBase.MapViewbase.houseImage:setVisible(true)
-    HTTP.downloadImage("https://next-stage.pl/images/houses/A%20Horse%20farm.jpeg", function(path, err) 
+    --[[
+    UI.LateralBase.MapViewbase.houseImage:setVisible(true)
+    HTTP.downloadImage("https://next-stage.pl/images/houses/A%20Horse%20farm.jpeg", function(path, err)
         if err then g_logger.warning("HTTP error: " .. err .. " - ") return end
         UI.LateralBase.MapViewbase.houseImage:setImageSource(path)
       end)
- ]]
+    ]]--
+
     Cyclopedia.House.lastSelectedHouse = widget
 end
