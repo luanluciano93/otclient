@@ -53,11 +53,12 @@ local CONFIG = {
 }
 
 Cyclopedia.BossSlots = {}
-function Cyclopedia.loadBossSlots(data)
 
+function Cyclopedia.loadBossSlots(data)
     if not UI or not UI.Sprite then
         return
     end
+
     local raceData = RACE_Bosstiary[data.boostedBossId]
 
     UI.Sprite:setOutfit({
@@ -130,13 +131,11 @@ function Cyclopedia.loadBossSlots(data)
     -- UI.TypeIcon:setTooltipAlign(AlignTopLeft)
 
     for i, unlockData in ipairs(data.bossesUnlockedData) do
-
         if not unlockData then
             break
         end
 
         local raceData = RACE_Bosstiary[unlockData.bossId]
-
         if raceData then
             local data_t = {
                 visible = true,
@@ -148,10 +147,12 @@ function Cyclopedia.loadBossSlots(data)
             table.insert(Cyclopedia.BossSlots.UnlockBosses, data_t)
         end
     end
+
     if Cyclopedia.BossSlots.UnlockBosses then
         table.sort(Cyclopedia.BossSlots.UnlockBosses, function(a, b)
             return a.name < b.name
         end)
+
         if data.isSlotOneUnlocked or data.isSlotTwoUnlocked then
             Cyclopedia.BossSlotChangeSlot(data, unlockedBosses)
         end
@@ -172,17 +173,14 @@ function Cyclopedia.BossSlotChangeSlot(data, unlockedBosses)
     }}
 
     for _, slotInfo in ipairs(slots) do
-
         if slotInfo.isUnlocked then
             local widget = UI[SLOTS[slotInfo.slotNumber]]
 
             if slotInfo.slotData then
                 Cyclopedia.setActiveSlot(widget, slotInfo.slotNumber, slotInfo.slotData, data, slotInfo.bossId)
             elseif data.bossesUnlocked and #data.bossesUnlockedData > 0 then
-
                 Cyclopedia.setLockedSlot(widget, slotInfo.slotNumber, unlockedBosses)
             else
-
                 Cyclopedia.setEmptySlot(widget, slotInfo.slotNumber, slotInfo.bossId)
             end
         end
@@ -213,7 +211,6 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
     end
 
     for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
-
         local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
         internalWidget:setId(internalData.bossId)
         internalWidget.Sprite:setOutfit({
@@ -240,11 +237,9 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
         g_game.requestBossSlotAction(slot, Cyclopedia.BossSlots.lastSelected:getId())
         Cyclopedia.BossSlots.UnlockBosses = {}
     end
-
 end
 
 function Cyclopedia.setActiveSlot(widget, slot, slotData, data, bossId)
-
     widget.LockLabel:setVisible(false)
     widget.SelectBoss:setVisible(false)
     widget.ActivedBoss:setVisible(true)
@@ -305,7 +300,6 @@ function Cyclopedia.setActiveSlot(widget, slot, slotData, data, bossId)
 
     widget.ActivedBoss.RemoveButton.onClick = function()
         g_game.requestBossSlotAction(slot, 0)
-
     end
 
     widget.ActivedBoss.RemoveButton:setTooltip(string.format(
@@ -347,7 +341,6 @@ function Cyclopedia.setBosstiarySlotsBossProgress(object, value, maxValue)
     object.ProgressValue:setText(value)
 
     if maxValue <= value then
-
         object.fill:setImageSource("/game_cyclopedia/images/bestiary/fill")
     end
 end
@@ -357,7 +350,6 @@ function Cyclopedia.bossSlotSelectBoss(widget)
 
     for i = 1, widget:getParent():getChildCount() do
         local child = widget:getParent():getChildByIndex(i)
-
         child:setChecked(false)
     end
 
@@ -392,7 +384,6 @@ function Cyclopedia.readjustSelectBoss()
     for _, internalData in ipairs(Cyclopedia.BossSlots.UnlockBosses) do
         if internalData.visible then
             local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
-
             internalWidget.Sprite:setOutfit({
                 type = safeOutfit(RACE_Bosstiary[internalData.bossId].type)
             })

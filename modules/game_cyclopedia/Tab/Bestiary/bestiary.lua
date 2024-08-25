@@ -9,18 +9,17 @@ local STAGES = {
 
 local storedRaceIDs = {}
 local animusMasteryPoints = 0
-function Cyclopedia.onParseBestiaryOverview(name, creatures,animusMasteryPoints)
 
-
+function Cyclopedia.onParseBestiaryOverview(name, creatures, animusMasteryPoints)
     if name == "Result" then
         Cyclopedia.loadBestiarySearchCreatures(creatures)
     else
         Cyclopedia.loadBestiaryCreatures(creatures)
     end
+
     if animusMasteryPoints and animusMasteryPoints > 0 then
         animusMasteryPoints = animusMasteryPoints
     end
-
 end
 
 function showBestiary()
@@ -36,7 +35,6 @@ function showBestiary()
     controllerCyclopedia.ui.GoldBase:setVisible(true)
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(true)
     g_game.requestBestiary()
-
 end
 
 Cyclopedia.Bestiary = {}
@@ -168,7 +166,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
 
     UI.ListBase.CreatureInfo.ProgressValue:setText(data.killCounter)
 
-	local fullText = ""
+    local fullText = ""
     if data.killCounter >= data.lastProgressKillCount then
         fullText = "(fully unlocked)"
     end
@@ -181,7 +179,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         data.lastProgressKillCount, fullText))
     UI.ListBase.CreatureInfo.LeftBase.TrackCheck.raceId = data.id
 
-	-- TODO investigate when it can be track-- idk when
+    -- TODO investigate when it can be track-- idk when
     --[[     if data.currentLevel == 1 then
         UI.ListBase.CreatureInfo.LeftBase.TrackCheck:enable()
     else
@@ -437,7 +435,6 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
         widget.AnimusMastery:setVisible(true)
     end
 
-    -- local level = {0, 1, 2} -- ??????
     if data.currentLevel >= 3 then
         widget.Finalized:setVisible(true)
         widget.KillsLabel:setVisible(false)
@@ -641,7 +638,7 @@ end
 
 --[[
 ===================================================
-=					tracker		  =
+=                     tracker                     =
 ===================================================
 ]]
 
@@ -809,15 +806,11 @@ function onAddLootClick(widget, mousePosition, mouseButton)
     local menu = g_ui.createWidget("PopupMenu")
 
     menu:setGameMenu(true)
-    if true then -- is in loot list ?
-        menu:addOption("Add to Loot List", function()
-            print("future")
-        end)
-    else
-        menu:addOption("Remove from Loot List", function()
-            print("future")
-        end)
-    end
+    --if true then -- is in loot list ?
+        menu:addOption("Add to Loot List", function() print("future") end)
+    --else
+        --menu:addOption("Remove from Loot List", function() print("future") end)
+    --end
 
     menu:display(menuPosition)
 

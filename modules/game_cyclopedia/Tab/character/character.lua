@@ -15,9 +15,7 @@ local function close(parent)
     end
 
     parent:setHeight(parent.closedSize)
-
     parent.opened = false
-
     parent.Button.Arrow:setVisible(true)
 end
 
@@ -54,9 +52,7 @@ local function open(parent)
     end
 
     parent:setHeight(parent.openedSize)
-
     parent.opened = true
-
     parent.Button.Arrow:setVisible(false)
 
     UI.openedCategory = parent
@@ -67,6 +63,7 @@ function showCharacter()
     UI = characterPanel
     characterPanel:show()
     UI.selectedOption = "InfoBase"
+
     if g_game.isOnline() then
         local player = g_game.getLocalPlayer()
         UI.CharacterBase:setText(player:getName())
@@ -74,13 +71,11 @@ function showCharacter()
         UI.CharacterBase.Outfit:setOutfit(player:getOutfit())
 
         UI.InfoBase.outfitPanel.Sprite:setOutfit(player:getOutfit())
-    
         UI.InfoBase.InspectLabel:setText(tr("You are inspecting") .. ": " .. player:getName())
 
         for i = InventorySlotFirst, InventorySlotPurse do
             local item = player:getInventoryItem(i)
             local itemWidget = UI.InfoBase.inventoryPanel["slot" .. i]
-
             if itemWidget then
                 if item then
                     itemWidget:setStyle("InventoryItemCyclopedia")
@@ -227,7 +222,6 @@ function Cyclopedia.loadCharacterAppearances(color, outfits, mounts, familiars)
     process(familiars, "familiars")
 
     Cyclopedia.Character.Appearances = data
-
     Cyclopedia.characterAppearancesFilter(UI.CharacterAppearances.listFilter.outfits)
 end
 
@@ -294,7 +288,8 @@ function Cyclopedia.reloadCharacterItems()
             gridItem.item:setItemId(itemId)
             gridItem.amount:setText(data.amount)
 
-            --[[             if frame > 0 then
+            --[[
+            if frame > 0 then
                 listItem.rarity:setImageSource("/images/ui/frames")
                 listItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
                 gridItem.rarity:setImageSource("/images/ui/frames")
@@ -302,7 +297,8 @@ function Cyclopedia.reloadCharacterItems()
             else
                 listItem.rarity:setImageSource("")
                 gridItem.rarity:setImageSource("")
-            end ]]
+            end
+            ]]--
 
             colorIndex = 3 - colorIndex
         end
@@ -324,7 +320,6 @@ function Cyclopedia.loadCharacterItems(data)
 
         local thing = g_things.getThingType(data.itemId, ThingCategoryItem)
         local name = thing:getMarketData().name:lower()
-
         name = name ~= "" and name or "?"
 
         local data_t = {
@@ -491,9 +486,7 @@ function Cyclopedia.loadCharacterRecentKills(data)
             widget.date:setText(os.date("%Y-%m-%d, %H:%M:%S", time))
             widget.description:setText(description)
             widget.status:setText(status)
-
             widget.color = color
-
             widget:setBackgroundColor(color)
 
             color = color == "#484848" and "#414141" or "#484848"
@@ -552,7 +545,6 @@ function Cyclopedia.loadCharacterRecentDeaths(data)
                 local parent = widget:getParent()
                 for y = 1, parent:getChildCount() do
                     local child = parent:getChildByIndex(y)
-
                     child:setChecked(false)
                     child.cause:setOn(false)
                     child.date:setOn(false)
@@ -618,17 +610,19 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
         for i = 1, #combatsArray do
             local widget = g_ui.createWidget("CharacterElementReduction", UI.CombatStats.reductionNone)
             widget:setId("reduction_" .. i)
+
             local element = Icons[combatsArray[i][1]]
             widget.icon:setImageSource(element.path)
             widget.icon:setImageSize({
                 width = 9,
                 height = 9
             })
+
             local valor = combatsArray[i][2]
             local porcentaje = math.ceil(valor / 100)
             local diferencia = 65535 - valor
             local porcentaje_negativo = math.ceil(diferencia / 100)
-            
+
             local resultado
             if porcentaje <= porcentaje_negativo then
                 resultado = string.format("%d%%", porcentaje)
@@ -637,6 +631,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
                 resultado = string.format("-%d%%", porcentaje_negativo)
                 widget.value:setColor("red")
             end
+
             widget.value:setText(resultado)
             widget.name:setText(string.gsub(element.id, "^condition_", ""))
             widget:setMarginLeft(13)
@@ -708,7 +703,6 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
 
         if percent > 0 then
             local widget = g_ui.createWidget("CharacterSkillBase", UI.CombatStats)
-
             widget:setId("special_" .. skillId)
 
             local specialName = {
@@ -1033,17 +1027,14 @@ function Cyclopedia.configureCharacterCategories()
 
             for subId, subButton in ipairs(button.subCategories) do
                 local subWidget = g_ui.createWidget("CharacterCategoryItem", widget)
-
                 subWidget:setId(subId)
                 subWidget.Button.Icon:setIcon(subButton.icon)
                 subWidget.Button.Title:setText(subButton.text)
                 subWidget:setVisible(false)
-
                 subWidget.open = subButton.open
 
                 function subWidget.Button:onClick(test)
                     local selectedOption = UI.selectedOption
-
                     Cyclopedia.closeCharacterButtons()
                     subWidget.Button:setChecked(true)
                     subWidget.Button.Arrow:setVisible(true)
@@ -1127,7 +1118,6 @@ function Cyclopedia.configureCharacterCategories()
                 this.Icon:setChecked(true)
                 UI[selectedOption]:setVisible(false)
                 UI[parent.open]:setVisible(true)
-
                 UI.selectedOption = parent.open
             end
         end
@@ -1167,13 +1157,11 @@ end
 function Cyclopedia.characterButton(widget)
     if widget.state == 1 then
         widget.state = 2
-
         widget:setIcon("/game_cyclopedia/images/icon-equipmentdetails")
         UI.InfoBase.inventoryPanel:setVisible(false)
         UI.InfoBase.outfitPanel:setVisible(true)
     else
         widget.state = 1
-
         widget:setIcon("/game_cyclopedia/images/icon-playerdetails")
         UI.InfoBase.inventoryPanel:setVisible(true)
         UI.InfoBase.outfitPanel:setVisible(false)
@@ -1206,7 +1194,6 @@ function Cyclopedia.loadCharacterBadges(showAccountInformation, playerOnline, pl
     Cyclopedia.setCharacterSkillValue("loyaltyTitle", loyaltyTitle)
 
     for _, badge in ipairs(badgesVector) do
-
         local cell = g_ui.createWidget("CharacterBadge", UI.CharacterStats.ListBadge)
         if cell then
             cell:setImageClip(getImageClip(badge[1]))
@@ -1242,14 +1229,16 @@ function Cyclopedia.onParseCyclopediaStoreSummary(xpBoostTime, dailyRewardXpBoos
 
     UI.StoreSummary.ListBase.List.preyPanel.PermanentPreySlotsValue:setText(preySlotsUnlocked)
     UI.StoreSummary.ListBase.List.preyPanel.PreyWildcardsValue:setText(preyWildcards)
-
     UI.StoreSummary.ListBase.List.dailyReward.InstantRewardAccessValue:setText(instantRewards)
+
     if hasCharmExpansion then
         UI.StoreSummary.ListBase.List.CharmPanel.CharmExpansionValue:setText("Yes")
     else
         UI.StoreSummary.ListBase.List.CharmPanel.CharmExpansionValue:setText("No")
     end
+
     UI.StoreSummary.ListBase.List.hirelings.PurchasedHirelingsValue:setText(hirelingsObtained)
+
     local rowHeight = 130
     local maxVisibleRows = 1.6
     local itemCount = #houseItems
@@ -1266,5 +1255,4 @@ function Cyclopedia.onParseCyclopediaStoreSummary(xpBoostTime, dailyRewardXpBoos
         itemWidget:setItemId(item[1])
         itemWidget:fill('parent')
     end
-
 end

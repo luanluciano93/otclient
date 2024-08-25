@@ -1,4 +1,5 @@
 ﻿local UI = nil
+
 function showCharms()
     UI = g_ui.loadUI("charms", contentContainer)
     UI:show()
@@ -9,7 +10,7 @@ function showCharms()
 end
 
 Cyclopedia.Charms = {}
--- LuaFormatter off
+
 local CHARMS = {
     { ID = 9, IMAGE = "/game_cyclopedia/images/charms/9", TYPE = 1 },
     { ID = 11, IMAGE = "/game_cyclopedia/images/charms/11", TYPE = 2 },
@@ -30,9 +31,7 @@ local CHARMS = {
     { ID = 12, IMAGE = "/game_cyclopedia/images/charms/12", TYPE = 6 },
     { ID = 14, IMAGE = "/game_cyclopedia/images/charms/14", TYPE = 6 },
     { ID = 18, IMAGE = "/game_cyclopedia/images/charms/18", TYPE = 6 },
-
 }
--- LuaFormatter on
 
 function Cyclopedia.UpdateCharmsBalance(Value)
     for i, child in pairs(UI.Bottombase:getChildren()) do
@@ -43,7 +42,6 @@ function Cyclopedia.UpdateCharmsBalance(Value)
 end
 
 function Cyclopedia.CreateCharmItem(data)
-
     local widget = g_ui.createWidget("CharmItem", UI.CharmList)
     local value = widget.PriceBase.Value
 
@@ -108,9 +106,11 @@ end
 
 function Cyclopedia.loadCharms(data2)
     controllerCyclopedia.ui.CharmsBase.Value:setText(Cyclopedia.formatGold(data2.points))
+
     if UI == nil or UI.CharmList == nil then -- I know, don't change it
         return
     end
+
     local points = data2.points
     local monsters = data2.finishedMonsters
     local data = data2.charms
@@ -142,11 +142,9 @@ function Cyclopedia.loadCharms(data2)
     local formatedData = {}
     for _, charmData in pairs(data) do
         local internalId = (charmData.id)
-
         if internalId then
             charmData.internalId = internalId
             charmData.typePriority = CHARMS[internalId + 1].TYPE
-
             table.insert(formatedData, charmData)
         end
     end
@@ -170,7 +168,6 @@ function Cyclopedia.loadCharms(data2)
     if Cyclopedia.Charms.redirect then
         Cyclopedia.selectCharm(UI.CharmList:getChildById(Cyclopedia.Charms.redirect),
             UI.CharmList:getChildById(Cyclopedia.Charms.redirect):isChecked())
-
         Cyclopedia.Charms.redirect = nil
     else
         Cyclopedia.selectCharm(UI.CharmList:getChildByIndex(1), UI.CharmList:getChildByIndex(1):isChecked())
@@ -219,7 +216,6 @@ function Cyclopedia.selectCharm(widget, isChecked)
             type = safeOutfit(RACE[widget.data.raceId].type)
         })
         UI.InformationBase.InfoBase.sprite:getCreature():setStaticWalking(1000)
-
         UI.InformationBase.InfoBase.sprite:setOpacity(1)
     else
         UI.InformationBase.InfoBase.sprite:setVisible(false)
@@ -268,14 +264,10 @@ function Cyclopedia.selectCharm(widget, isChecked)
 
         for index, raceId in ipairs(Cyclopedia.Charms.Monsters) do
             local internalWidget = g_ui.createWidget("CharmCreatureName", UI.InformationBase.CreaturesBase.CreatureList)
-
             internalWidget:setId(index)
             internalWidget:setText(format(RACE[raceId].name))
-
             internalWidget.raceId = raceId
-
             internalWidget:setBackgroundColor(color)
-
             internalWidget.color = color
             color = color == "#484848" and "#414141" or "#484848"
         end
@@ -290,7 +282,6 @@ function Cyclopedia.selectCharm(widget, isChecked)
         button:setText("Remove")
 
         local internalWidget = g_ui.createWidget("CharmCreatureName", UI.InformationBase.CreaturesBase.CreatureList)
-
         internalWidget:setText(format(RACE[widget.data.raceId].name))
         internalWidget:setEnabled(false)
         internalWidget:setColor("#707070")
@@ -358,7 +349,6 @@ function Cyclopedia.searchCharmMonster(text)
     if text ~= "" then
         for _, raceId in ipairs(Cyclopedia.Charms.Monsters) do
             local name = RACE[raceId].name
-
             if string.find(name:lower(), text:lower()) then
                 table.insert(searchedMonsters, raceId)
             end
@@ -371,14 +361,10 @@ function Cyclopedia.searchCharmMonster(text)
 
     for _, raceId in ipairs(searchedMonsters) do
         local internalWidget = g_ui.createWidget("CharmCreatureName", UI.InformationBase.CreaturesBase.CreatureList)
-
         internalWidget:setId(raceId)
         internalWidget:setText(format(RACE[raceId].name))
-
         internalWidget.raceId = raceId
-
         internalWidget:setBackgroundColor(color)
-
         internalWidget.color = color
         color = getColor(color)
     end
@@ -394,9 +380,7 @@ function Cyclopedia.actionCharmButton(widget)
             g_game.BuyCharmRune(data.id)
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
                 -- Cyclopedia.Toggle(true, false, 3)
             end
 
@@ -425,14 +409,13 @@ function Cyclopedia.actionCharmButton(widget)
                         callback = noCallback
                     },
                     anchor = AnchorHorizontalCenter
-                }, yesCallback, noCallback)
-
+                }, yesCallback, noCallback
+            )
         end
     end
 
     if type == "Select" then
         local function yesCallback()
-
             g_game.BuyCharmRune(data.id, 1, Cyclopedia.Charms.SelectedCreature)
 
             if confirmWindow then
@@ -448,9 +431,7 @@ function Cyclopedia.actionCharmButton(widget)
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
             end
         end
 
@@ -466,20 +447,17 @@ function Cyclopedia.actionCharmButton(widget)
                         callback = noCallback
                     },
                     anchor = AnchorHorizontalCenter
-                }, yesCallback, noCallback)
-
+                }, yesCallback, noCallback
+            )
         end
     end
 
     if type == "Remove" then
         local function yesCallback()
-
             g_game.BuyCharmRune(data.id, 2)
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
             end
 
             Cyclopedia.Charms.redirect = data.id
@@ -488,9 +466,7 @@ function Cyclopedia.actionCharmButton(widget)
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
             end
         end
 
@@ -507,8 +483,8 @@ function Cyclopedia.actionCharmButton(widget)
                         callback = noCallback
                     },
                     anchor = AnchorHorizontalCenter
-                }, yesCallback, noCallback)
-
+                }, yesCallback, noCallback
+            )
         end
     end
 end
