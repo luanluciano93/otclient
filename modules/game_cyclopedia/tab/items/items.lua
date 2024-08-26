@@ -275,6 +275,15 @@ function Cyclopedia.internalCreateItem(data)
             UI.SelectedItem.Rarity:setImageSource("")
         end
         widget:setBackgroundColor("#585858")
+       
+        UI.InfoBase.SkipQuickLootCheck.onCheckChange = function(self, checked)
+            UI.InfoBase.SkipQuickLootCheck:setChecked(modules.game_quickloot.QuickLoot.lootExists(data:getId(), 1))
+            if checked then
+                modules.game_quickloot.QuickLoot.addLootList(data:getId(), 1)
+            else
+                modules.game_quickloot.QuickLoot.removeLootList(data:getId(), 1)
+            end
+        end
 
         --[[  local buy, sell = Cyclopedia.formatSaleData(internalData:getNpcSaleData())
         local sellColor = "#484848"
