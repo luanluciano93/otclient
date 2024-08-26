@@ -58,11 +58,13 @@ function Cyclopedia.loadBossSlots(data)
     if not UI or not UI.Sprite then
         return
     end
-
+    if not RACE_Bosstiary[data.boostedBossId] then
+        g_logger.warning(string.format("Race id: %d not found. add in ./modules/game_cyclopedia/utils.lua", data.id))
+    end
     local raceData = RACE_Bosstiary[data.boostedBossId]
 
     UI.Sprite:setOutfit({
-        type = safeOutfit(raceData.type)
+        type = safeOutfit(raceData and raceData.type or 22)
     })
 
     UI.Sprite:getCreature():setStaticWalking(1000)
@@ -214,7 +216,7 @@ function Cyclopedia.setLockedSlot(widget, slot, unlockedBosses)
         local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
         internalWidget:setId(internalData.bossId)
         internalWidget.Sprite:setOutfit({
-            type = safeOutfit(RACE_Bosstiary[internalData.bossId].type)
+            type = safeOutfit(RACE_Bosstiary[internalData.bossId] and RACE_Bosstiary[internalData.bossId].type or 22)
         })
         internalWidget:setText(format(RACE_Bosstiary[internalData.bossId].name))
         internalWidget.Sprite:getCreature():setStaticWalking(1000)
@@ -282,7 +284,7 @@ function Cyclopedia.setActiveSlot(widget, slot, slotData, data, bossId)
                                          "/game_cyclopedia/images/boss/icon_star_dark")
 
     widget.ActivedBoss.Sprite:setOutfit({
-        type = safeOutfit(RACE_Bosstiary[bossId].type)
+        type = safeOutfit(RACE_Bosstiary[bossId] and RACE_Bosstiary[bossId].type or 22)
     })
     widget.ActivedBoss.Sprite:getCreature():setStaticWalking(1000)
     widget.ActivedBoss.EquipmentLabel:setText(string.format("Equipment loot bonus: %d%%", slotData.lootBonus))
@@ -385,7 +387,7 @@ function Cyclopedia.readjustSelectBoss()
         if internalData.visible then
             local internalWidget = g_ui.createWidget("SelectBossBossSlots", widget.SelectBoss.ListBase.List)
             internalWidget.Sprite:setOutfit({
-                type = safeOutfit(RACE_Bosstiary[internalData.bossId].type)
+                type = safeOutfit(RACE_Bosstiary[internalData.bossId] and RACE_Bosstiary[internalData.bossId].type or 22)
             })
             internalWidget:setText(format(RACE_Bosstiary[internalData.bossId].name))
             internalWidget.Sprite:getCreature():setStaticWalking(1000)

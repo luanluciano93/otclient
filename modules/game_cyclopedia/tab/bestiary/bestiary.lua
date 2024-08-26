@@ -403,7 +403,7 @@ end
 
 function Cyclopedia.CreateBestiaryCreaturesItem(data)
     if not RACE[data.id] then
-        --  error(string.format("Race id: %d not found.", data.id))
+        g_logger.warning(string.format("Race id: %d not found. add in ./modules/game_cyclopedia/utils.lua", data.id))
     end
 
     local function verify(name)
@@ -417,7 +417,7 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     local widget = g_ui.createWidget("BestiaryCreature", UI.ListBase.CreatureList)
     widget:setId(data.id)
 
-    local formattedName = "BUSCAR__" .. data.id
+    local formattedName = "search__" .. data.id
     if RACE[data.id] then
         formattedName = RACE[data.id].name:gsub("(%l)(%w*)", function(first, rest)
             return first:upper() .. rest
@@ -426,7 +426,7 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
 
     widget.Name:setText(verify(formattedName))
     widget.Sprite:setOutfit({
-        type = safeOutfit(RACE[data.id].type)
+        type = safeOutfit(RACE[data.id] and RACE[data.id].type or nil)
     })
     widget.Sprite:getCreature():setStaticWalking(1000)
 
