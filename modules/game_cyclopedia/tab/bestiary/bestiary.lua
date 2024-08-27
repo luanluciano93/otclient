@@ -452,6 +452,7 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     end
 
     function widget.ClassBase:onClick()
+        if data.currentLevel < 1  then return end
         UI.BackPageButton:setEnabled(true)
         g_game.requestBestiarySearch(widget:getId())
         Cyclopedia.ShowBestiaryCreature()
