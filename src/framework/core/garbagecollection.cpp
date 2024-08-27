@@ -59,32 +59,16 @@ void GarbageCollection::drawpoll() {
 void GarbageCollection::texture() {
     static constexpr uint32_t IDLE_TIME = 25 * 60 * 1000; // 25min
 
-    std::vector<std::string> textureRemove;
-    std::vector<AnimatedTexturePtr> animatedTextureRemove;
+    std::shared_lock l(g_textures.m_mutex);
 
-    {
-        std::shared_lock l(g_textures.m_mutex);
-        for (const auto& [fileName, tex] : g_textures.m_textures) {
-            if (tex->m_lastTimeUsage.ticksElapsed() > IDLE_TIME) {
-                textureRemove.emplace_back(fileName);
-            }
-        }
+    std::erase_if(g_textures.m_textures, [](const auto& item) {
+        const auto& [key, tex] = item;
+        return tex.use_count() == 1 && tex->m_lastTimeUsage.ticksElapsed() > IDLE_TIME;
+    });
 
-        for (const auto& tex : g_textures.m_animatedTextures) {
-            if (tex->m_lastTimeUsage.ticksElapsed() > IDLE_TIME) {
-                animatedTextureRemove.emplace_back(tex);
-            }
-        }
-    }
-
-    if (!textureRemove.empty() || !animatedTextureRemove.empty()) {
-        std::unique_lock l(g_textures.m_mutex);
-        for (const auto& path : textureRemove)
-            g_textures.m_textures.erase(path);
-
-        for (const auto& text : animatedTextureRemove)
-            std::erase(g_textures.m_animatedTextures, text);
-    }
+    std::erase_if(g_textures.m_animatedTextures, [](const TexturePtr& tex) {
+        return tex.use_count() == 1 && tex->m_lastTimeUsage.ticksElapsed() > IDLE_TIME;
+    });
 }
 
 void GarbageCollection::thingType() {
@@ -101,12 +85,12 @@ void GarbageCollection::thingType() {
     const auto& thingTypes = g_things.m_thingTypes[category];
     const size_t limit = std::min<size_t>(index + AMOUNT_PER_CHECK, thingTypes.size());
 
-    std::vector<ThingTypePtr> thingsUnload;
+    std::vector<ThingTypePtr> thingsUnloaded;
 
     while (index < limit) {
         auto& thing = thingTypes[index];
         if (thing->hasTexture() && thing->getLastTimeUsage().ticksElapsed() > IDLE_TIME) {
-            thingsUnload.emplace_back(thing);
+            thingsUnloaded.emplace_back(thing);
         }
         ++index;
     }
@@ -116,9 +100,9 @@ void GarbageCollection::thingType() {
         ++category;
     }
 
-    if (!thingsUnload.empty()) {
-        g_dispatcher.addEvent([thingsUnload = std::move(thingsUnload)] {
-            for (auto& thingType : thingsUnload)
+    if (!thingsUnloaded.empty()) {
+        g_dispatcher.addEvent([thingsUnloaded = std::move(thingsUnloaded)] {
+            for (auto& thingType : thingsUnloaded)
                 thingType->unload();
         });
     }
