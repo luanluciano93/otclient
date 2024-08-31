@@ -516,7 +516,7 @@ protected:
                                                     const std::vector<std::tuple<uint16_t, uint16_t>>& concoctionsArray);
     static void processCyclopediaCharacterGeneralStatsBadge(const uint8_t showAccountInformation, const uint8_t playerOnline, const uint8_t playerPremium, 
                                                     const std::string_view loyaltyTitle,
-                                                    const std::vector<std::tuple<uint32_t, std::string_view>>& badgesVector);
+                                                    const std::vector<std::tuple<uint32_t, std::string>>& badgesVector);
     static void processCyclopediaCharacterItemSummary(const CyclopediaCharacterItemSummary& data);
     static void processCyclopediaCharacterAppearances(const OutfitColorStruct& currentOutfit, const std::vector<CharacterInfoOutfits>& outfits, 
                                                     const std::vector<CharacterInfoMounts>& mounts, std::vector<CharacterInfoFamiliar>& familiars);

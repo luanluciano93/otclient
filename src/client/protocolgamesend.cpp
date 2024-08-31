@@ -992,7 +992,7 @@ void ProtocolGame::sendRequestBestiarySearch(const uint16_t raceId)
 void ProtocolGame::sendBuyCharmRune(const uint8_t runeId, const uint8_t action, const uint16_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientSendBuyCharmRune);
+    msg->addU8(Proto::ClientCyclopediaSendBuyCharmRune);
     msg->addU8(runeId);
     msg->addU8(action);
     msg->addU16(raceId);
@@ -1017,32 +1017,32 @@ void ProtocolGame::sendCyclopediaRequestCharacterInfo(const uint32_t playerId, c
 void ProtocolGame::sendRequestBosstiaryInfo()
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBosstiaryInfo);
+    msg->addU8(Proto::ClientBosstiaryRequestInfo);
     send(msg);
 }
 
 void ProtocolGame::sendRequestBossSlootInfo()
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBossSlootInfo);
+    msg->addU8(Proto::ClientBosstiaryRequestSlotInfo);
     send(msg);
 }
 
 void ProtocolGame::sendRequestBossSlotAction(const uint8_t action, const uint32_t raceId)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRequestBossSlotAction);
+    msg->addU8(Proto::ClientBosstiaryRequestSlotAction);
     msg->addU8(action);
     msg->addU32(raceId);
     send(msg);
 }
 
-void ProtocolGame::SendStatusTrackerBestiary(const uint16_t raceId, bool status)
+void ProtocolGame::sendStatusTrackerBestiary(const uint16_t raceId, const bool status)
 {
     const auto& msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientStatusTrackerBestiary);
+    msg->addU8(Proto::ClientBestiaryTrackerStatus);
     msg->addU16(raceId);
-    msg->addU8(status ? 1 : 0);
+    msg->addU8(static_cast<uint8_t>(status));
     send(msg);
 }
 

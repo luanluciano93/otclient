@@ -1445,9 +1445,9 @@ void ProtocolGame::parseContainerRemoveItem(const InputMessagePtr& msg)
 
 void ProtocolGame::parseBosstiaryInfo(const InputMessagePtr& msg) 
 {
+    const uint16_t bosstiaryRaceLast = msg->getU16();
     std::vector<BosstiaryData> bossData;
 
-    const uint16_t bosstiaryRaceLast = msg->getU16();
     for (auto i = 0; i < bosstiaryRaceLast; ++i) {
         BosstiaryData boss;
         boss.raceId = msg->getU32();
@@ -1473,11 +1473,12 @@ void ProtocolGame::parseCyclopediaItemDetail(const InputMessagePtr& msg)
 
     msg->getU8(); // 0x00
 
-    std::vector<std::tuple<std::string, std::string>> descriptions;
     const uint8_t descriptionsSize = msg->getU8();
+    std::vector<std::tuple<std::string, std::string>> descriptions;
+
     for (auto i = 0; i < descriptionsSize; ++i) {
-        const auto firstDescription = msg->getString();
-        const auto secondDescription = msg->getString();
+        const auto& firstDescription = msg->getString();
+        const auto& secondDescription = msg->getString();
         descriptions.emplace_back(firstDescription, secondDescription);
     }
 
@@ -2741,9 +2742,9 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
 {
     const auto& raceName = msg->getString();
 
+    const uint16_t raceSize = msg->getU16();
     std::vector<BestiaryOverviewMonsters> data;
 
-    const uint16_t raceSize = msg->getU16();
     for (auto i = 0; i < raceSize; ++i) {
         const uint16_t raceId = msg->getU16();
         const uint8_t progress = msg->getU8();
@@ -2762,10 +2763,12 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
         monster.creatureAnimusMasteryBonus = creatureAnimusMasteryBonus;
         data.emplace_back(monster);
     }
+
     uint16_t animusMasteryPoints = 0;
     if (g_game.getClientVersion() >= 1340) {
         animusMasteryPoints = msg->getU16(); // Animus Mastery Points
     }
+
     g_game.processParseBestiaryOverview(raceName, data, animusMasteryPoints);
 }
 
@@ -2798,8 +2801,7 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
         lootItem.diffculty = msg->getU8();
         lootItem.specialEvent = msg->getU8();
 
-        bool shouldAddItem = lootItem.itemId != 0;
-
+        const bool shouldAddItem = lootItem.itemId != 0;
         if (shouldAddItem) {
             lootItem.name = msg->getString();
             lootItem.amount = msg->getU8();
@@ -2831,7 +2833,7 @@ void ProtocolGame::parseBestiaryMonsterData(const InputMessagePtr& msg)
     }
 
     if (data.currentLevel > 3) {
-        const bool hasCharm = msg->getU8() > 0;
+        const bool hasCharm = static_cast<bool>(msg->getU8());
         if (hasCharm) {
             msg->getU8();
             msg->getU32();
@@ -2856,13 +2858,13 @@ void ProtocolGame::parseBestiaryCharmsData(const InputMessagePtr& msg)
         charm.description = msg->getString();
         msg->getU8();
         charm.unlockPrice = msg->getU16();
-        charm.unlocked = (msg->getU8() == 1) ? true : false;
+        charm.unlocked = static_cast<bool>(msg->getU8() == 1);
         charm.asignedStatus = false;
         charm.raceId = 0;
         charm.removeRuneCost = 0;
 
         if (charm.unlocked) {
-            const bool asigned = msg->getU8() > 0;
+            const bool asigned = static_cast<bool>(msg->getU8());
             if (asigned) {
                 charm.asignedStatus = asigned;
                 charm.raceId = msg->getU16(); 
@@ -3654,22 +3656,21 @@ void ProtocolGame::parseShowDescription(const InputMessagePtr& msg)
 void ProtocolGame::parseBestiaryTracker(const InputMessagePtr& msg)
 {
     uint8_t trackerType = msg->getU8(); // 0x00 para bestiary, 0x01 para boss
-    std::vector<std::tuple<uint16_t, uint32_t, uint16_t, uint16_t, uint16_t, uint8_t>> trackerData;
+
     const uint8_t size = msg->getU8();
+    std::vector<std::tuple<uint16_t, uint32_t, uint16_t, uint16_t, uint16_t, uint8_t>> trackerData;
 
     for (auto i = 0; i < size; ++i) {
-        uint16_t raceID = msg->getU16();
-        uint32_t killCount = msg->getU32();
-        uint16_t firstUnlock = msg->getU16();
-        uint16_t secondUnlock = msg->getU16();
-        uint16_t lastUnlock = msg->getU16();
-        uint8_t status = msg->getU8();
+        const uint16_t raceID = msg->getU16();
+        const uint32_t killCount = msg->getU32();
+        const uint16_t firstUnlock = msg->getU16();
+        const uint16_t secondUnlock = msg->getU16();
+        const uint16_t lastUnlock = msg->getU16();
+        const uint8_t status = msg->getU8();
         trackerData.emplace_back(raceID, killCount, firstUnlock, secondUnlock, lastUnlock, status);
     }
 
-
-    g_lua.callGlobalField("g_game", "onParseCyclopediaTracker", trackerType,trackerData);
-
+    g_lua.callGlobalField("g_game", "onParseCyclopediaTracker", trackerType, trackerData);
 }
 
 void ProtocolGame::parseTaskHuntingBasicData(const InputMessagePtr& msg)
@@ -4053,9 +4054,9 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 skills.push_back({ skillLevel, skillPercent, baseSkill });
             }
 
+            const uint8_t combatCount = msg->getU8();
             std::vector<std::tuple<uint8_t, uint16_t>> combats;
 
-            const uint8_t combatCount = msg->getU8();
             for (auto i = 0; i < combatCount; ++i) {
                 const uint8_t element = msg->getU8();
                 const uint16_t specializedMagicLevel = msg->getU16();
@@ -4102,7 +4103,7 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
 
             std::vector<uint16_t> perfectShotDamageRangesArray;
 
-            for (auto range = 1; range <= 5; range++) {
+            for (auto i = 1; i <= 5; i++) {
                 const uint16_t perfectShotDamageRange = msg->getU16();
                 perfectShotDamageRangesArray.emplace_back(perfectShotDamageRange);
             }
@@ -4117,24 +4118,22 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             data.weaponElement = msg->getU8();
             data.weaponElementDamage = msg->getU8();
             data.weaponElementType = msg->getU8();
-
             data.armor = msg->getU16();
             data.defense = msg->getU16();
-
             const double mitigation = msg->getDouble();
 
+            const uint8_t combatCount = msg->getU8();
             std::vector<std::tuple<uint8_t, uint16_t>> combatsArray;
 
-            const uint8_t combatCount = msg->getU8();
             for (auto i = 0; i < combatCount; ++i) {
                 const uint8_t element = msg->getU8();
                 const uint16_t clientModifier = msg->getU16();
                 combatsArray.emplace_back(element, clientModifier);
             }
 
+            const uint8_t concoctionsCount = msg->getU8();
             std::vector<std::tuple<uint16_t, uint16_t>> concoctionsArray;
 
-            const uint8_t concoctionsCount = msg->getU8();
             for (auto i = 0; i < concoctionsCount; ++i) {
                 const uint16_t concoctionFirst = msg->getU8();
                 const uint16_t concoctionSecond = msg->getU16();
@@ -4282,9 +4281,9 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_OUTFITSMOUNTS:
         {
+            const uint16_t outfitsSize = msg->getU16();
             std::vector<CharacterInfoOutfits> outfits;
 
-            const uint16_t outfitsSize = msg->getU16();
             for (auto i = 0; i < outfitsSize; ++i) {
                 CharacterInfoOutfits outfit;
                 outfit.lookType = msg->getU16();
@@ -4303,9 +4302,9 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 currentOutfit.lookFeet = msg->getU8();
             }
 
+            const uint16_t mountsSize = msg->getU16();
             std::vector<CharacterInfoMounts> mounts;
 
-            const uint16_t mountsSize = msg->getU16();
             for (auto i = 0; i < mountsSize; ++i) {
                 CharacterInfoMounts mount;
                 mount.mountId = msg->getU16();
@@ -4322,9 +4321,9 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 currentOutfit.lookMountFeet = msg->getU8();
             }
 
+            const uint16_t familiarsSize = msg->getU16();
             std::vector<CharacterInfoFamiliar> familiars;
 
-            const uint16_t familiarsSize = msg->getU16();
             for (auto i = 0; i < familiarsSize; ++i) {
                 CharacterInfoFamiliar familiar;
                 familiar.lookType = msg->getU16();
@@ -4339,38 +4338,42 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
         }
         case Otc::CYCLOPEDIA_CHARACTERINFO_STORESUMMARY:
         {
-            uint32_t xpBoostTime = msg->getU32();  
-            uint32_t dailyRewardXpBoostTime = msg->getU32();  
+            const uint32_t xpBoostTime = msg->getU32();  
+            const uint32_t dailyRewardXpBoostTime = msg->getU32();  
 
             std::vector<std::tuple<std::string, uint8_t>> blessings;
-            uint8_t blessingCount = msg->getU8();
-            for (uint8_t i = 0; i < blessingCount; ++i) {
-                std::string blessingName = msg->getString();
-                uint8_t blessingObtained = msg->getU8();
-                blessings.emplace_back(std::make_tuple(blessingName, blessingObtained));
+            const uint8_t blessingCount = msg->getU8();
+
+            for (auto i = 0; i < blessingCount; ++i) {
+                const auto& blessingName = msg->getString();
+                const uint8_t blessingObtained = msg->getU8();
+                blessings.emplace_back(blessingName, blessingObtained);
             }
 
-            uint8_t preySlotsUnlocked = msg->getU8();
-            uint8_t preyWildcards = msg->getU8();
-            uint8_t instantRewards = msg->getU8();
-            bool hasCharmExpansion = msg->getU8() == 0x01;
-            uint8_t hirelingsObtained = msg->getU8();
+            const uint8_t preySlotsUnlocked = msg->getU8();
+            const uint8_t preyWildcards = msg->getU8();
+            const uint8_t instantRewards = msg->getU8();
+            const bool hasCharmExpansion = static_cast<bool>(msg->getU8());
+            const uint8_t hirelingsObtained = msg->getU8();
 
             std::vector<uint16_t> hirelingSkills;
-            uint8_t hirelingSkillsCount = msg->getU8();
-            for (uint8_t i = 0; i < hirelingSkillsCount; ++i) {
-                hirelingSkills.emplace_back(msg->getU8() + 1000);
+            const uint8_t hirelingSkillsCount = msg->getU8();
+
+            for (auto i = 0; i < hirelingSkillsCount; ++i) {
+                const uint8_t skill = msg->getU8();
+                hirelingSkills.emplace_back(static_cast<uint16_t>(skill + 1000));
             }
 
             msg->getU8();
 
             std::vector<std::tuple<uint16_t, std::string, uint8_t>> houseItems;
-            uint16_t houseItemsCount = msg->getU16();
-            for (uint16_t i = 0; i < houseItemsCount; ++i) {
-                uint16_t itemId = msg->getU16();
-                std::string itemName = msg->getString();
-                uint8_t count = msg->getU8();
-                houseItems.emplace_back(std::make_tuple(itemId, itemName, count));
+            const uint16_t houseItemsCount = msg->getU16();
+
+            for (auto i = 0; i < houseItemsCount; ++i) {
+                const uint16_t itemId = msg->getU16();
+                const auto& itemName = msg->getString();
+                const uint8_t count = msg->getU8();
+                houseItems.emplace_back(itemId, itemName, count);
             }
             g_lua.callGlobalField("g_game", "onParseCyclopediaStoreSummary", xpBoostTime, dailyRewardXpBoostTime, blessings, preySlotsUnlocked, preyWildcards, instantRewards, hasCharmExpansion, hirelingsObtained, hirelingSkills, houseItems);
             break;
@@ -4386,9 +4389,9 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             const uint8_t playerPremium = msg->getU8();
             const auto& loyaltyTitle = msg->getString();
 
-            std::vector<std::tuple<uint32_t, std::string_view>> badgesVector;
-
             const uint8_t badgesSize = msg->getU8();
+            std::vector<std::tuple<uint32_t, std::string>> badgesVector;
+
             for (auto i = 0; i < badgesSize; ++i) {
                 const uint32_t badgeId = msg->getU32();
                 const auto& badgeName = msg->getString();

@@ -142,7 +142,7 @@ public:
     void sendRequestBosstiaryInfo();
     void sendRequestBossSlootInfo();
     void sendRequestBossSlotAction(const uint8_t action, const uint32_t raceId);
-    void SendStatusTrackerBestiary(const uint16_t raceId,  bool status);
+    void sendStatusTrackerBestiary(const uint16_t raceId,  const bool status);
     void requestQuickLootBlackWhiteList(const uint8_t filter, const uint16_t size, const std::vector<uint16_t>& listedItems);
     void openContainerQuickLoot(const uint8_t action, const uint8_t category, const Position& pos, const uint16_t itemId, const uint8_t stackpos, const bool useMainAsFallback);
     void sendInspectionNormalObject(const Position& position);

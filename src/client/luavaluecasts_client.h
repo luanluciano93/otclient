@@ -48,17 +48,20 @@ bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints);
 // imbuement
 int push_luavalue(const Imbuement& i);
 int push_luavalue(const ImbuementTrackerItem& i);
-// Bless
+
+// bless
 int push_luavalue(const BlessData& bless);
 int push_luavalue(const LogData& log);
 int push_luavalue(const BlessDialogData& data);
-// Store
+
+// store
 int push_luavalue(const StoreCategory& category);
 int push_luavalue(const SubOffer& subOffer);
 int push_luavalue(const StoreOffer& offer);
 int push_luavalue(const HomeOffer& homeOffer);
 int push_luavalue(const Banner& banner);
 int push_luavalue(const StoreData& storeData);
+
 // cyclopedia
 int push_luavalue(const CyclopediaBestiaryRace& race);
 int push_luavalue(const BestiaryOverviewMonsters& monster);
@@ -67,8 +70,8 @@ int push_luavalue(const BestiaryCharmsData& charmData);
 int push_luavalue(const CyclopediaCharacterGeneralStats& stats);
 int push_luavalue(const CyclopediaCharacterCombatStats& data);
 int push_luavalue(const CyclopediaCharacterItemSummary& data);
-int push_luavalue(const ItemSummary& item); // Bestiary mejorar nombre
-int push_luavalue(const LootItem& lootItem); // Bestiary mejorar nombre
+int push_luavalue(const ItemSummary& item);
+int push_luavalue(const LootItem& lootItem);
 int push_luavalue(const BestiaryMonsterData& data);
 int push_luavalue(const BosstiaryData& boss);
 int push_luavalue(const BosstiarySlot& slot);
