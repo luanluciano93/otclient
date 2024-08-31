@@ -142,7 +142,7 @@ function Cyclopedia.CreateBosstiaryCreature(data)
    
     if raceData then
         widget.Sprite:setOutfit({
-            type = safeOutfit(raceData.type)
+            type = Cyclopedia.safeOutfit(raceData.type)
         })
         widget.Sprite:getCreature():setStaticWalking(1000)
         if data.unlocked then

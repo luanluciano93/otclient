@@ -2748,18 +2748,18 @@ void ProtocolGame::parseBestiaryOverview(const InputMessagePtr& msg)
         const uint16_t raceId = msg->getU16();
         const uint8_t progress = msg->getU8();
         uint8_t occurrence = 0;
-        uint16_t creatureAnimousBonus = 0;
+        uint16_t creatureAnimusMasteryBonus = 0;
         if (progress > 0) {
             occurrence = msg->getU8();
         }
         if (g_game.getClientVersion() >= 1340) {
-            creatureAnimousBonus = msg->getU16(); // Creature Animous Bonus
+            creatureAnimusMasteryBonus = msg->getU16(); // Creature Animous Bonus
         }
         BestiaryOverviewMonsters monster;
         monster.id = raceId;
         monster.currentLevel = progress;
         monster.occurrence = occurrence;
-        monster.creatureAnimousBonus = creatureAnimousBonus;
+        monster.creatureAnimusMasteryBonus = creatureAnimusMasteryBonus;
         data.emplace_back(monster);
     }
     uint16_t animusMasteryPoints = 0;

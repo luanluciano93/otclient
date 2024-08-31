@@ -97,7 +97,6 @@ Cyclopedia.SortList = {
     { Title = "Sort by auction end" }
 }
 
--- LuaFormatter on
 local function resetButtons()
     if UI.LateralBase:getChildById("bidButton") then
         UI.LateralBase:getChildById("bidButton"):destroy()
@@ -138,11 +137,9 @@ local function resetSelectedInfo()
 end
 
 function Cyclopedia.houseChangeState(widget)
-    local type = widget:getCurrentOption().data
-
     if Cyclopedia.House.Data then
         local onlyGuildHall = UI.TopBase.GuildhallsCheck:isChecked()
-
+        local type = widget:getCurrentOption().data
         for _, data in ipairs(Cyclopedia.House.Data) do
             if onlyGuildHall then
                 data.visible = data.gh
@@ -313,11 +310,13 @@ function Cyclopedia.rejectTransfer()
             g_game.requestRejectHouseTransfer(house.id)
 
             Cyclopedia.House.ignore = true
+            --[[
             if Cyclopedia.House.lastTown then
-                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                -- g_game.requestShowHouses("")
+                g_game.requestShowHouses("")
             end
+            ]]--
 
             UI.TopBase.StatesOption:setOption("All States", true)
             UI.TopBase.SortOption:setOption("Sort by name", true)
@@ -454,11 +453,13 @@ function Cyclopedia.cancelTransfer()
             g_game.requestCancelHouseTransfer(house.id)
 
             Cyclopedia.House.ignore = true
+            --[[
             if Cyclopedia.House.lastTown then
-                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                -- g_game.requestShowHouses("")
+                g_game.requestShowHouses("")
             end
+            ]]--
 
             UI.TopBase.StatesOption:setOption("All States", true)
             UI.TopBase.SortOption:setOption("Sort by name", true)
@@ -563,11 +564,13 @@ function Cyclopedia.transferHouse()
             g_game.requestTransferHouse(house.id, transfer, tonumber(value))
 
             Cyclopedia.House.ignore = true
+            --[[
             if Cyclopedia.House.lastTown then
-                -- g_game.requestShowHouses(Cyclopedia.House.lastTown)
+                g_game.requestShowHouses(Cyclopedia.House.lastTown)
             else
-                -- g_game.requestShowHouses("")
+                g_game.requestShowHouses("")
             end
+            ]]--
 
             UI.TopBase.StatesOption:setOption("All States", true)
             UI.TopBase.SortOption:setOption("Sort by name", true)
@@ -739,7 +742,6 @@ function Cyclopedia.moveOutHouse()
     UI.moveOutArea.year.onOptionChange = verify
 
     local yearNumber = tonumber(os.date("%Y"))
-
     UI.moveOutArea.year:addOption(yearNumber, 1, true)
     UI.moveOutArea.year:addOption(yearNumber + 1, 2, true)
     UI.moveOutArea.month:clearOptions()
@@ -801,7 +803,6 @@ function Cyclopedia.bidHouse(widget)
 
     for _, value in ipairs(labels) do
         local child = UI.bidArea:getChildById(value.id)
-
         if child then
             child:destroy()
             UI.bidArea:getChildById(value.id .. "_value"):destroy()
@@ -954,12 +955,11 @@ function Cyclopedia.bidHouse(widget)
 
     function UI.bidArea.bid:onClick()
         local value = tonumber(bidArea.textEdit:getText())
-        local confirmWindow
-
         if not value or value <= 0 then
             return
         end
 
+        local confirmWindow
         local function yesCallback()
             if confirmWindow then
                 confirmWindow:destroy()
@@ -1441,7 +1441,6 @@ function Cyclopedia.selectHouse(widget)
     UI.LateralBase.MapViewbase.houseImage:setVisible(false)
 
     local imagePath = string.format("/game_cyclopedia/images/houses/%s.png", widget.data.id)
-
     if g_resources.fileExists(imagePath) then
         UI.LateralBase.MapViewbase.noHouse:setVisible(false)
         UI.LateralBase.MapViewbase.reload:setVisible(false)

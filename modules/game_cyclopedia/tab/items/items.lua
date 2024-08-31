@@ -1,4 +1,3 @@
--- LuaFormatter off
 Cyclopedia.Items = {}
 Cyclopedia.CategoryItems = {
     { id = 1, name = "Armors" },
@@ -29,18 +28,19 @@ Cyclopedia.CategoryItems = {
     { id = 21, name = "Weapons: Wands" },
     { id = 1000, name = "Weapons: All" }
 }
--- LuaFormatter on
 
 local UI = nil
+
 focusCategoryList = nil
+
 function Cyclopedia.ResetItemCategorySelection(list)
     for i, child in pairs(list:getChildren()) do
         child:setChecked(false)
         child:setBackgroundColor(child.BaseColor)
     end
 end
-function showItems()
 
+function showItems()
     UI = g_ui.loadUI("items", contentContainer)
     UI:show()
     UI.VocFilter = false
@@ -60,6 +60,7 @@ function showItems()
     controllerCyclopedia.ui.CharmsBase:setVisible(false)
     controllerCyclopedia.ui.GoldBase:setVisible(false)
     controllerCyclopedia.ui.BestiaryTrackerButton:setVisible(false)
+
     local CategoryColor = "#484848"
 
     for _, data in ipairs(Cyclopedia.CategoryItems) do
@@ -78,8 +79,8 @@ function showItems()
         end
 
         CategoryColor = CategoryColor == "#484848" and "#414141" or "#484848"
-
     end
+
     Cyclopedia.ItemList = {}
     Cyclopedia.AllItemList = {}
     Cyclopedia.loadItemsCategories()
@@ -89,9 +90,11 @@ function showItems()
     g_keyboard.bindKeyPress('Down', function()
         focusCategoryList:focusNextChild(KeyboardFocusReason)
     end, focusCategoryList:getParent())
+
     g_keyboard.bindKeyPress('Up', function()
         focusCategoryList:focusPreviousChild(KeyboardFocusReason)
     end, focusCategoryList:getParent())
+
     connect(focusCategoryList, {
         onChildFocusChange = function(self, focusedChild)
             if focusedChild == nil then
@@ -103,27 +106,21 @@ function showItems()
 end
 
 function Cyclopedia.onCategoryChange(widget)
-
     if widget:isChecked() then
         Cyclopedia.selectItemCategory(tonumber(widget:getId()))
-
         UI.selectedCategory = widget
     end
 end
 
 function Cyclopedia.vocationFilter(value)
     UI.ItemListBase.List:destroyChildren()
-
     Cyclopedia.Items.VocFilter = value
-
     Cyclopedia.applyFilters()
 end
 
 function Cyclopedia.levelFilter(value)
     UI.ItemListBase.List:destroyChildren()
-
     Cyclopedia.Items.LevelFilter = value
-
     Cyclopedia.applyFilters()
 end
 
@@ -133,12 +130,10 @@ function Cyclopedia.h1Filter(value)
     local brother = UI.H2Button
 
     Cyclopedia.Items.h1Filter = value
-
     Cyclopedia.applyFilters()
 
     if value and brother:isChecked() then
         brother:setChecked(false)
-
         Cyclopedia.Items.h2Filter = false
     end
 end
@@ -147,33 +142,28 @@ function Cyclopedia.h2Filter(value)
     UI.ItemListBase.List:destroyChildren()
 
     local brother = UI.H1Button
-
     Cyclopedia.Items.h2Filter = value
-
     Cyclopedia.applyFilters()
 
     if value and brother:isChecked() then
         brother:setChecked(false)
-
         Cyclopedia.Items.h1Filter = false
     end
 end
 
 function Cyclopedia.classificationFilter(data)
     UI.ItemListBase.List:destroyChildren()
-
     Cyclopedia.Items.ClassificationFilter = tonumber(data)
-
     Cyclopedia.applyFilters()
 end
 
 function Cyclopedia.applyFilters()
     local isSearching = UI.SearchEdit:getText() ~= ""
-
     if not isSearching then
         if UI.selectedCategory then
             local id = tonumber(UI.selectedCategory:getId())
         end
+
         if Cyclopedia.ItemList[id] then
             for _, data in pairs(Cyclopedia.ItemList[id]) do
                 local item = Cyclopedia.internalCreateItem(data)
@@ -242,7 +232,9 @@ function Cyclopedia.internalCreateItem(data)
     if price > 0 then
         item.Rarity:setImageSource("/images/ui/rarity_" .. rarity)
     end
+
     ItemsDatabase.setRarityItem(item.Sprite, item)
+
     function item.onClick(widget)
         UI.InfoBase.SellBase.List:destroyChildren()
         UI.InfoBase.BuyBase.List:destroyChildren()
@@ -337,13 +329,12 @@ end
 function Cyclopedia.ItemSearch(text, clearTextEdit)
     UI.ItemListBase.List:destroyChildren()
     if text ~= "" then
-
         UI.SelectedItem.Sprite:setItemId(0)
         UI.SelectedItem.Rarity:setImageSource("")
 
         local searchedItems = {}
-        local oldSelected = UI.selectedCategory
 
+        local oldSelected = UI.selectedCategory
         if oldSelected then
             oldSelected:setBackgroundColor(oldSelected.BaseColor)
             oldSelected:setChecked(false)
@@ -365,7 +356,6 @@ function Cyclopedia.ItemSearch(text, clearTextEdit)
             local item = Cyclopedia.internalCreateItem(data)
         end
     else
-
         UI.SelectedItem.Sprite:setItemId(0)
         UI.SelectedItem.Rarity:setImageSource("")
     end
@@ -394,7 +384,6 @@ function Cyclopedia.selectItemCategory(id)
         UI.ItemFilter:enable()
     else
         UI.ItemFilter:clearOptions()
-
         Cyclopedia.Items.ClassificationFilter = 0
     end
 
@@ -429,7 +418,6 @@ function Cyclopedia.loadItemsCategories()
 
     for _, data in pairs(types) do
         local marketData = data:getMarketData()
-
         if not tempItemList[marketData.category] then
             tempItemList[marketData.category] = {}
         end
@@ -443,7 +431,6 @@ function Cyclopedia.loadItemsCategories()
 
     for category, itemList in pairs(tempItemList) do
         table.sort(itemList, Cyclopedia.compareItems)
-
         Cyclopedia.ItemList[category] = itemList
     end
 end
@@ -454,10 +441,8 @@ function Cyclopedia.FillItemList()
     for i = 1, #types do
         local itemType = types[i]
         local item = Item.create(itemType:getId())
-
         if item then
             local marketData = itemType:getMarketData()
-
             if not table.empty(marketData) then
                 item:setId(marketData.showAs)
 

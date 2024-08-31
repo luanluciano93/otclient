@@ -1,5 +1,6 @@
 ﻿local UI = nil
 local virtualFloor = 7
+
 function showMap()
     UI = g_ui.loadUI("map", contentContainer)
     UI:show()
@@ -8,7 +9,6 @@ function showMap()
     }):execute()
 
     Cyclopedia.prevFloor = 7
-
     Cyclopedia.loadMap()
 
     controllerCyclopedia.ui.CharmsBase:setVisible(false)
@@ -49,7 +49,6 @@ end
 
 function Cyclopedia.CreateMarkItem(Data)
     local MarkItem = g_ui.createWidget("MarkListItem", UI.InformationBase.InternalBase.DisplayBase.MarkList)
-
     MarkItem:setIcon("/images/game/minimap/flag" .. Data.flagId)
 end
 
@@ -59,11 +58,9 @@ end
 
 function Cyclopedia.showAllFlags(checked)
     local size = UI.InformationBase.InternalBase.DisplayBase.MarkList:getChildCount()
-
     if checked then
         for i = 0, size do
             local flag = UI.InformationBase.InternalBase.DisplayBase.MarkList[i]
-
             if flag then
                 flag:setChecked(true)
             end
@@ -71,7 +68,6 @@ function Cyclopedia.showAllFlags(checked)
     else
         for i = 0, size do
             local flag = UI.InformationBase.InternalBase.DisplayBase.MarkList[i]
-
             if flag then
                 flag:setChecked(false)
             end
@@ -82,7 +78,6 @@ end
 function Cyclopedia.moveMap(widget)
     local distance = 5
     local direction = widget:getId()
-
     if direction == "n" then
         UI.MapBase.minimap:move(0, distance)
     elseif direction == "ne" then
@@ -130,18 +125,16 @@ end
 
 function Cyclopedia.onUpdateCameraPosition()
     local player = g_game.getLocalPlayer()
-    local minimapWidget = UI.MapBase.minimap
-
     if not player then
         return
     end
 
     local pos = player:getPosition()
-
     if not pos then
         return
     end
 
+    local minimapWidget = UI.MapBase.minimap
     if not minimapWidget:isDragging() then
         if not fullmapView then
             minimapWidget:setCameraPosition(player:getPosition())
@@ -182,7 +175,6 @@ function Cyclopedia.setZooom(zoom)
 end
 
 local function refreshVirtualFloors()
-
     UI.InformationBase.InternalBase.NavigationBase.layersMark:setMarginTop(((virtualFloor + 1) * 4) - 3)
     UI.InformationBase.InternalBase.NavigationBase.automapLayers:setImageClip((virtualFloor * 14) .. ' 0 14 67')
 end

@@ -246,7 +246,7 @@ struct BestiaryOverviewMonsters
     uint16_t id;
     uint8_t currentLevel;
     uint8_t occurrence;
-    uint16_t creatureAnimousBonus;
+    uint16_t creatureAnimusMasteryBonus;
 };
 
 struct LootItem
@@ -523,7 +523,7 @@ protected:
     static void processCyclopediaCharacterRecentDeaths(const CyclopediaCharacterRecentDeaths& data);
     static void processCyclopediaCharacterRecentPvpKills(const CyclopediaCharacterRecentPvPKills& data);
     static void processParseBestiaryRaces(const std::vector<CyclopediaBestiaryRace>& bestiaryData);
-    static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data,uint16_t animusMasteryPoints);
+    static void processParseBestiaryOverview(const std::string_view raceName, const std::vector<BestiaryOverviewMonsters>& data, const uint16_t animusMasteryPoints);
     static void processUpdateBestiaryMonsterData(const BestiaryMonsterData& data);
     static void processUpdateBestiaryCharmsData(const BestiaryCharmsData& charmData);
     static void processBosstiaryInfo(const std::vector<BosstiaryData>& boss);
@@ -783,7 +783,7 @@ public:
     void requestBosstiaryInfo();
     void requestBossSlootInfo();
     void requestBossSlotAction(const uint8_t action, const uint32_t raceId);
-    void sendStatusTrackerBestiary(const uint16_t raceId, bool status);
+    void sendStatusTrackerBestiary(const uint16_t raceId, const bool status);
 protected:
     void enableBotCall() { m_denyBotCall = false; }
     void disableBotCall() { m_denyBotCall = true; }

@@ -55,15 +55,12 @@ InventorySlotPurse = 11
 InventorySlotFirst = 1
 InventorySlotLast = 10
 
-vocationNames = {
+vocationNamesByClientId = {
     [0] = "No Vocation",
-    [1] = "Sorcerer",
-    [2] = "Druid",
-    [3] = "Paladin",
-    [4] = "Knight",
-    [5] = "Master Sorcerer",
-    [6] = "Elder Druid",
-    [7] = "Royal Paladin",
+    [1] = "Knight",
+    [2] = "Paladin",
+    [3] = "Sorcerer",
+    [4] = "Druid",
     [11]= "Elite Knight",
     [12] = "Royal Paladin",
     [13] = "Master Sorcerer",
@@ -175,6 +172,6 @@ function Player:hasState(state, states)
     return false
 end
 
-function Player:getVocationName()
-    return vocationNames[self:getVocation()] or "Unknown Vocation"
+function Player:getVocationNameByClientId()
+    return vocationNamesByClientId[self:getVocation()] or "Unknown Vocation"
 end

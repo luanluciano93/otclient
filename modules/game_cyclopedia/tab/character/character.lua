@@ -28,7 +28,6 @@ local function reset()
     end
 
     Cyclopedia.selectCharacterPage()
-
     characterPanel.openedCategory = nil
 end
 
@@ -67,7 +66,7 @@ function showCharacter()
     if g_game.isOnline() then
         local player = g_game.getLocalPlayer()
         UI.CharacterBase:setText(player:getName())
-        UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocationName()))
+        UI.CharacterBase.InfoLabel:setText(string.format("Level: %d\n%s", player:getLevel(), player:getVocationNameByClientId()))
         UI.CharacterBase.Outfit:setOutfit(player:getOutfit())
 
         UI.InfoBase.outfitPanel.Sprite:setOutfit(player:getOutfit())
@@ -277,14 +276,12 @@ function Cyclopedia.reloadCharacterItems()
         if data.visible then
             local listItem = g_ui.createWidget("CharacterListItem", UI.CharacterItems.ListBase.list)
             -- local frame = g_game.getItemFrame(data.value)
-
             listItem.item:setItemId(itemId)
             listItem.name:setText(data.name)
             listItem.amount:setText(data.amount)
             listItem:setBackgroundColor(colors[colorIndex])
 
             local gridItem = g_ui.createWidget("CharacterGridItem", UI.CharacterItems.gridBase.grid)
-
             gridItem.item:setItemId(itemId)
             gridItem.amount:setText(data.amount)
 
@@ -817,7 +814,6 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         if minutes < 10 then
             minutes = "0" .. minutes
         end
-
         return hours, minutes
     end
 
@@ -863,7 +859,6 @@ function Cyclopedia.loadCharacterGeneralStats(data, skills)
         local skillLevel = skills[i][1]
         local baseSkill = skills[i][2]
         local skillPercent = skills[i][3]
-
         Cyclopedia.onSkillChange(player, i - 1, skillLevel, skillPercent)
         Cyclopedia.onBaseCharacterSkillChange(player, i - 1, baseSkill)
     end
@@ -963,51 +958,65 @@ end
 function Cyclopedia.configureCharacterCategories()
     UI.OptionsBase:destroyChildren()
 
-    local buttons = {{
-        text = "General Stats",
-        icon = "/game_cyclopedia/images/character_icons/icon_generalstats",
-        subCategories = {{
-            text = "Character Stats",
-            icon = "/game_cyclopedia/images/character_icons/icon-character-generalstats-overview",
-            open = "CharacterStats"
-        }, {
-            text = "Combat Stats",
-            icon = "/game_cyclopedia/images/character_icons/icon-character-generalstats-combatstats",
-            open = "CombatStats"
-        }}
-    }, {
-        text = "Battle Results",
-        icon = "/game_cyclopedia/images/character_icons/icon_battleresults",
-        subCategories = {{
-            text = "Recent Deaths",
-            icon = "/game_cyclopedia/images/character_icons/icon-character-battleresults-recentdeaths",
-            open = "RecentDeaths"
-        }, {
-            text = "Recent PvP Kills",
-            icon = "/game_cyclopedia/images/character_icons/icon-character-battleresults-recentpvpkills",
-            open = "RecentKills"
-        }}
-    }, {
-        text = "Achievements",
-        icon = "/game_cyclopedia/images/character_icons/icon_achievement",
-        open = "CharacterAchievements"
-    }, {
-        text = "Item Summary",
-        icon = "/game_cyclopedia/images/character_icons/icon_items",
-        open = "CharacterItems"
-    }, {
-        text = "Appearances",
-        icon = "/game_cyclopedia/images/character_icons/icon_outfitsmounts",
-        open = "CharacterAppearances"
-    }, {
-        text = "Store Summary",
-        icon = "/game_cyclopedia/images/character_icons/icon-character-store",
-        open = "StoreSummary"
-    }, {
-        text = "Character Titles",
-        icon = "/game_cyclopedia/images/character_icons/icon-character-titles",
-        open = "CharacterTitles"
-    }}
+    local buttons = {
+        {
+            text = "General Stats",
+            icon = "/game_cyclopedia/images/character_icons/icon_generalstats",
+            subCategories = {
+                {
+                    text = "Character Stats",
+                    icon = "/game_cyclopedia/images/character_icons/icon-character-generalstats-overview",
+                    open = "CharacterStats"
+                },
+                {
+                    text = "Combat Stats",
+                    icon = "/game_cyclopedia/images/character_icons/icon-character-generalstats-combatstats",
+                    open = "CombatStats"
+                }
+            }
+        },
+        {
+            text = "Battle Results",
+            icon = "/game_cyclopedia/images/character_icons/icon_battleresults",
+            subCategories = {
+                {
+                    text = "Recent Deaths",
+                    icon = "/game_cyclopedia/images/character_icons/icon-character-battleresults-recentdeaths",
+                    open = "RecentDeaths"
+                },
+                {
+                    text = "Recent PvP Kills",
+                    icon = "/game_cyclopedia/images/character_icons/icon-character-battleresults-recentpvpkills",
+                    open = "RecentKills"
+                }
+            }
+        },
+        {
+            text = "Achievements",
+            icon = "/game_cyclopedia/images/character_icons/icon_achievement",
+            open = "CharacterAchievements"
+        },
+        {
+            text = "Item Summary",
+            icon = "/game_cyclopedia/images/character_icons/icon_items",
+            open = "CharacterItems"
+        },
+        {
+            text = "Appearances",
+            icon = "/game_cyclopedia/images/character_icons/icon_outfitsmounts",
+            open = "CharacterAppearances"
+        },
+        {
+            text = "Store Summary",
+            icon = "/game_cyclopedia/images/character_icons/icon-character-store",
+            open = "StoreSummary"
+        },
+        {
+            text = "Character Titles",
+            icon = "/game_cyclopedia/images/character_icons/icon-character-titles",
+            open = "CharacterTitles"
+        }
+    }
 
     for id, button in ipairs(buttons) do
         local widget = g_ui.createWidget("CharacterCategoryItem", UI.OptionsBase)
@@ -1022,7 +1031,6 @@ function Cyclopedia.configureCharacterCategories()
         if button.subCategories ~= nil then
             widget.subCategories = button.subCategories
             widget.subCategoriesSize = #button.subCategories
-
             widget.Button.Arrow:setVisible(true)
 
             for subId, subButton in ipairs(button.subCategories) do
@@ -1125,31 +1133,24 @@ function Cyclopedia.configureCharacterCategories()
 end
 
 function Cyclopedia.createCharacterDescription()
-    local player = g_game.getLocalPlayer()
-
     UI.InfoBase.DetailsBase.List:destroyChildren()
 
-    local descriptions = {{
-        Level = player:getLevel()
-    }, {
-        Vocation = player:getVocationName()
-    }, {
-        loyaltyTitle = "?"
-    }, {
-        Prey = "?"
-    }, {
-        Outfit = "?"
-    }, {
-    }}
+    local player = g_game.getLocalPlayer()
+    local descriptions = {
+        { Level = player:getLevel() },
+        { Vocation = player:getVocationNameByClientId() },
+        { loyaltyTitle = "?" },
+        { Prey = "?" },
+        { Outfit = "?" },
+        { }
+    }
 
     for _, description in ipairs(descriptions) do
         local widget = g_ui.createWidget("UIWidget", UI.InfoBase.DetailsBase.List)
-
         for key, value in pairs(description) do
             widget:setText(key .. ": " .. value)
             widget:setColor("#C0C0C0")
         end
-
         widget:setTextWrap(true)
     end
 end

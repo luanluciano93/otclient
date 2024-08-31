@@ -236,7 +236,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
 
     if not table.empty(data.combat) then
         for i = 1, 8 do
-            local combat = calculateCombatValues(data.combat[i])
+            local combat = Cyclopedia.calculateCombatValues(data.combat[i])
             UI.ListBase.CreatureInfo[resists[i]].Fill:setMarginRight(combat.margin)
             UI.ListBase.CreatureInfo[resists[i]].Fill:setBackgroundColor(combat.color)
             UI.ListBase.CreatureInfo[resists[i]]:setTooltip(string.format("Sensitive to %s : %s", string.gsub(
@@ -368,7 +368,7 @@ function Cyclopedia.loadBestiaryCreatures(data)
         local creature = {
             id = data[i].id,
             currentLevel = data[i].currentLevel,
-            AnimusMasteryBonus = data[i].creatureAnimousBonus,
+            AnimusMasteryBonus = data[i].creatureAnimusMasteryBonus,
 
         }
 
@@ -426,7 +426,7 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
 
     widget.Name:setText(verify(formattedName))
     widget.Sprite:setOutfit({
-        type = safeOutfit(RACE[data.id] and RACE[data.id].type or nil)
+        type = Cyclopedia.safeOutfit(RACE[data.id] and RACE[data.id].type or nil)
     })
     widget.Sprite:getCreature():setStaticWalking(1000)
 
@@ -642,7 +642,7 @@ end
 
 --[[
 ===================================================
-=                     tracker                     =
+=                     Tracker                     =
 ===================================================
 ]]
 

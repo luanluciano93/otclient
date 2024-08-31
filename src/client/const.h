@@ -776,5 +776,5 @@ namespace Otc
         STATE_NEW = 1,
         STATE_SALE = 2,
         STATE_TIMED = 3
-    }; 
+    };
 }

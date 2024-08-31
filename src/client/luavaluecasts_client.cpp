@@ -752,8 +752,8 @@ int push_luavalue(const BestiaryOverviewMonsters& monster) {
     g_lua.setField("currentLevel");
     g_lua.pushInteger(monster.occurrence);
     g_lua.setField("occurrence");
-    g_lua.pushInteger(monster.creatureAnimousBonus);
-    g_lua.setField("creatureAnimousBonus");
+    g_lua.pushInteger(monster.creatureAnimusMasteryBonus);
+    g_lua.setField("creatureAnimusMasteryBonus");
     return 1;
 }
 

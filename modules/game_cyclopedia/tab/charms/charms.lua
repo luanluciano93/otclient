@@ -60,7 +60,7 @@ function Cyclopedia.CreateCharmItem(data)
     if data.asignedStatus then
         if data.raceId and RACE[data.raceId] then
             widget.InfoBase.Sprite:setOutfit({
-                type = safeOutfit(RACE[data.raceId] and RACE[data.raceId].type or 22)
+                type = Cyclopedia.safeOutfit(RACE[data.raceId] and RACE[data.raceId].type or 22)
             })
 
             widget.InfoBase.Sprite:getCreature():setStaticWalking(1000)
@@ -213,7 +213,7 @@ function Cyclopedia.selectCharm(widget, isChecked)
     if widget.data.asignedStatus then
         UI.InformationBase.InfoBase.sprite:setVisible(true)
         UI.InformationBase.InfoBase.sprite:setOutfit({
-            type = safeOutfit(RACE[widget.data.raceId] and RACE[widget.data.raceId].type or 22)
+            type = Cyclopedia.safeOutfit(RACE[widget.data.raceId] and RACE[widget.data.raceId].type or 22)
         })
         UI.InformationBase.InfoBase.sprite:getCreature():setStaticWalking(1000)
         UI.InformationBase.InfoBase.sprite:setOpacity(1)
@@ -316,7 +316,7 @@ function Cyclopedia.selectCreatureCharm(widget, isChecked)
 
     UI.InformationBase.InfoBase.sprite:setVisible(true)
     UI.InformationBase.InfoBase.sprite:setOutfit({
-        type = safeOutfit(RACE[widget.raceId] and RACE[widget.raceId].type or 22)
+        type = Cyclopedia.safeOutfit(RACE[widget.raceId] and RACE[widget.raceId].type or 22)
     })
     UI.InformationBase.InfoBase.sprite:getCreature():setStaticWalking(1000)
     UI.InformationBase.InfoBase.sprite:setOpacity(0.5)
@@ -390,9 +390,7 @@ function Cyclopedia.actionCharmButton(widget)
         local function noCallback()
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
             end
         end
 
@@ -417,14 +415,10 @@ function Cyclopedia.actionCharmButton(widget)
     if type == "Select" then
         local function yesCallback()
             g_game.BuyCharmRune(data.id, 1, Cyclopedia.Charms.SelectedCreature)
-
             if confirmWindow then
                 confirmWindow:destroy()
-
                 confirmWindow = nil
-
             end
-
             Cyclopedia.Charms.redirect = data.id
         end
 
