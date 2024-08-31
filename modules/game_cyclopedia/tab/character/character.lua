@@ -609,12 +609,16 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
             widget:setId("reduction_" .. i)
 
             local element = Icons[combatsArray[i][1]]
-            widget.icon:setImageSource(element.path)
-            widget.icon:setImageSize({
-                width = 9,
-                height = 9
-            })
 
+            if element then
+                widget.icon:setImageSource(element.path)
+                widget.icon:setImageSize({
+                    width = 9,
+                    height = 9
+                })
+            else
+                print(string.format("WARNING: Element not found for combat array index %d with key %s.", i, tostring(combatsArray[i][1])))
+            end
             local valor = combatsArray[i][2]
             local porcentaje = math.ceil(valor / 100)
             local diferencia = 65535 - valor
@@ -630,7 +634,10 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
             end
 
             widget.value:setText(resultado)
-            widget.name:setText(string.gsub(element.id, "^condition_", ""))
+            if element  then
+                widget.name:setText(string.gsub(element.id, "^condition_", ""))
+            end
+    
             widget:setMarginLeft(13)
         end
     end
