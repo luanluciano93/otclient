@@ -272,6 +272,7 @@ function Cyclopedia.loadBestiarySelectedCreature(data)
         UI.ListBase.CreatureInfo.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields "..(data.AnimusMasteryBonus / 10).."% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from "..(data.AnimusMasteryBonus / 10).."% bonus experience points due to having unlocked ".. data.AnimusMasteryPoints .." Animus Masteries.")
         UI.ListBase.CreatureInfo.AnimusMastery:setVisible(true)
     else
+        UI.ListBase.CreatureInfo.AnimusMastery:removeTooltip()
         UI.ListBase.CreatureInfo.AnimusMastery:setVisible(false)
     end
 end
@@ -433,6 +434,9 @@ function Cyclopedia.CreateBestiaryCreaturesItem(data)
     if data.AnimusMasteryBonus > 0 then
         widget.AnimusMastery:setTooltip("The Animus Mastery for this creature is unlocked.\nIt yields ".. data.AnimusMasteryBonus.. "% bonus experience points, plus an additional 0.1% for every 10 Animus Masteries unlocked, up to a maximum of 4%.\nYou currently benefit from ".. data.AnimusMasteryBonus.. "% bonus experience points due to having unlocked ".. animusMasteryPoints.." Animus Masteries.")
         widget.AnimusMastery:setVisible(true)
+    else
+        widget.AnimusMastery:removeTooltip()
+        widget.AnimusMastery:setVisible(false)
     end
 
     if data.currentLevel >= 3 then
