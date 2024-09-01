@@ -620,24 +620,21 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
                 print(string.format("WARNING: Element not found for combat array index %d with key %s.", i, tostring(combatsArray[i][1])))
             end
             local valor = combatsArray[i][2]
-            local porcentaje = math.ceil(valor / 100)
+            local porcentaje = valor / 100
             local diferencia = 65535 - valor
-            local porcentaje_negativo = math.ceil(diferencia / 100)
-
+            local porcentaje_negativo = diferencia / 100
             local resultado
             if porcentaje <= porcentaje_negativo then
-                resultado = string.format("%d%%", porcentaje)
+                resultado = string.format("+%.2f%%", porcentaje)
                 widget.value:setColor("green")
             else
-                resultado = string.format("-%d%%", porcentaje_negativo)
+                resultado = string.format("-%.2f%%", porcentaje_negativo)
                 widget.value:setColor("red")
             end
-
             widget.value:setText(resultado)
             if element  then
-                widget.name:setText(string.gsub(element.id, "^condition_", ""))
+                widget.name:setText(element.id)
             end
-    
             widget:setMarginLeft(13)
         end
     end
