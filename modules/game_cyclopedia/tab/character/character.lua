@@ -608,7 +608,7 @@ function Cyclopedia.loadCharacterCombatStats(data, mitigation, additionalSkillsA
             local widget = g_ui.createWidget("CharacterElementReduction", UI.CombatStats.reductionNone)
             widget:setId("reduction_" .. i)
 
-            local element = Icons[combatsArray[i][1]]
+            local element = Cyclopedia.clientCombat[combatsArray[i][1]]
 
             if element then
                 widget.icon:setImageSource(element.path)

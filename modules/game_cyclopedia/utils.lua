@@ -1624,3 +1624,30 @@ function Cyclopedia.safeOutfit(raceData)
         return raceData
     end
 end
+
+local combatStates= {
+	CLIENT_COMBAT_PHYSICAL = 0,
+	CLIENT_COMBAT_FIRE = 1,
+	CLIENT_COMBAT_EARTH = 2,
+	CLIENT_COMBAT_ENERGY = 3,
+	CLIENT_COMBAT_ICE = 4,
+	CLIENT_COMBAT_HOLY = 5,
+	CLIENT_COMBAT_DEATH = 6,
+	CLIENT_COMBAT_HEALING = 7,
+	CLIENT_COMBAT_DROWN = 8,
+	CLIENT_COMBAT_LIFEDRAIN = 9,
+	CLIENT_COMBAT_MANADRAIN = 10,
+}
+
+Cyclopedia.clientCombat ={}
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_PHYSICAL] = { path = '/game_cyclopedia/images/bestiary/icons/monster-icon-physical-resist', id = 'condition_PHYSICAL' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_FIRE] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-fire-resist', id = 'condition_FIRE' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_EARTH] = { path = '/game_cyclopedia/images/bestiary/icons/monster-icon-earth-resist', id = 'condition_EARTH' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_ENERGY] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-energy-resist', id = 'condition_ENERGY' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_ICE] = { path = '/game_cyclopedia/images/bestiary/icons/monster-icon-ice-resist', id = 'condition_ICE' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_HOLY] = {path = '/game_cyclopedia/images/bestiary/icons/monster-icon-holy-resist', id = 'condition_HOLY' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_DEATH] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-death-resist', id = 'condition_DEATH' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_HEALING] = { path = '/game_cyclopedia/images/bestiary/icons/monster-icon-healing-resist', id = 'condition_HEALING' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_DROWN] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-drown-resist', id = 'condition_DROWN' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_LIFEDRAIN] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-lifedrain-resist', id = 'condition_LIFEDRAIN ' }
+Cyclopedia.clientCombat[combatStates.CLIENT_COMBAT_MANADRAIN] = {  path = '/game_cyclopedia/images/bestiary/icons/monster-icon-manadrain-resist', id = 'condition_MANADRAIN' }
