@@ -235,12 +235,14 @@ function Cyclopedia.characterItemsSearch(text)
         end
     end
 
-    for _, item in ipairs(Cyclopedia.Character.Items) do
-        local data = item.data
-        local name = data.name:lower()
-        local meetsSearchCriteria = text == "" or string.find(name, text:lower()) ~= nil
-        local meetsFilterCriteria = #activeFilters == 0 or table.contains(activeFilters, data.type)
-        data.visible = meetsSearchCriteria and meetsFilterCriteria
+    for _, tierTable in ipairs(Cyclopedia.Character.Items) do
+        for _, item in ipairs(tierTable) do
+            local data = item.data
+            local name = data.name:lower()
+            local meetsSearchCriteria = text == "" or string.find(name, text:lower()) ~= nil
+            local meetsFilterCriteria = #activeFilters == 0 or table.contains(activeFilters, data.type)
+            data.visible = meetsSearchCriteria and meetsFilterCriteria
+        end
     end
 
     Cyclopedia.reloadCharacterItems()
@@ -253,10 +255,12 @@ function Cyclopedia.characterItemsFilter(widget, force)
 
     local id = widget:getId()
 
-    for _, item in ipairs(Cyclopedia.Character.Items) do
-        local data = item.data
-        if data.type == id then
-            data.visible = widget:isChecked()
+    for _, tierTable in ipairs(Cyclopedia.Character.Items) do
+        for _, item in ipairs(tierTable) do
+            local data = item.data
+            if data.type == id then
+                data.visible = widget:isChecked()
+            end
         end
     end
 
@@ -270,44 +274,41 @@ function Cyclopedia.reloadCharacterItems()
     local colors = {"#484848", "#414141"}
     local colorIndex = 1
 
-    for _, item in ipairs(Cyclopedia.Character.Items) do
-        local itemId, data = item.itemId, item.data
+    for _, tierTable in ipairs(Cyclopedia.Character.Items) do
+        for _, item in ipairs(tierTable) do
+            local itemId, data = item.itemId, item.data
 
-        if data.visible then
-            local listItem = g_ui.createWidget("CharacterListItem", UI.CharacterItems.ListBase.list)
-            -- local frame = g_game.getItemFrame(data.value)
-            listItem.item:setItemId(itemId)
-            listItem.name:setText(data.name)
-            listItem.amount:setText(data.amount)
-            listItem:setBackgroundColor(colors[colorIndex])
+            if data.visible then
+                local listItem = g_ui.createWidget("CharacterListItem", UI.CharacterItems.ListBase.list)
+                -- local frame = g_game.getItemFrame(data.value)
+                listItem.item:setItemId(itemId)
+                listItem.name:setText(data.name)
+                listItem.amount:setText(data.amount)
+                listItem:setBackgroundColor(colors[colorIndex])
 
-            local gridItem = g_ui.createWidget("CharacterGridItem", UI.CharacterItems.gridBase.grid)
-            gridItem.item:setItemId(itemId)
-            gridItem.amount:setText(data.amount)
+                local gridItem = g_ui.createWidget("CharacterGridItem", UI.CharacterItems.gridBase.grid)
+                gridItem.item:setItemId(itemId)
+                gridItem.amount:setText(data.amount)
 
-            --[[
-            if frame > 0 then
-                listItem.rarity:setImageSource("/images/ui/frames")
-                listItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
-                gridItem.rarity:setImageSource("/images/ui/frames")
-                gridItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
-            else
-                listItem.rarity:setImageSource("")
-                gridItem.rarity:setImageSource("")
+                --[[
+                if frame > 0 then
+                    listItem.rarity:setImageSource("/images/ui/frames")
+                    listItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
+                    gridItem.rarity:setImageSource("/images/ui/frames")
+                    gridItem.rarity:setImageClip(torect(g_game.getRectFrame(frame)))
+                else
+                    listItem.rarity:setImageSource("")
+                    gridItem.rarity:setImageSource("")
+                end
+                ]]--
+
+                colorIndex = 3 - colorIndex
             end
-            ]]--
-
-            colorIndex = 3 - colorIndex
         end
     end
 end
 
 function Cyclopedia.loadCharacterItems(data)
-    local inventory = data.inventory
-    local store = data.store
-    local stash = data.stash
-    local depot = data.depot
-    local inbox = data.inbox
     Cyclopedia.Character.Items = {}
 
     local function insert(data, type)
@@ -323,15 +324,15 @@ function Cyclopedia.loadCharacterItems(data)
             visible = false,
             name = name,
             amount = data.amount,
+            tier = data.tier,
             type = type
-            -- value = thing:getResultingValue()
         }
 
-        local insertedItem = Cyclopedia.Character.Items[data.itemId]
+        local insertedItem = Cyclopedia.Character.Items[data.itemId][data.tier]
         if insertedItem then
             insertedItem.amount = insertedItem.amount + data.amount
         else
-            Cyclopedia.Character.Items[data.itemId] = data_t
+            Cyclopedia.Character.Items[data.itemId][data.tier] = data_t
         end
     end
 
@@ -344,19 +345,22 @@ function Cyclopedia.loadCharacterItems(data)
         end
     end
 
-    processContainer(inventory, "inventory")
-    processContainer(store, "store")
-    processContainer(stash, "stash")
-    processContainer(depot, "depot")
-    processContainer(inbox, "inbox")
+    processContainer(data.inventory, "inventory")
+    processContainer(data.store, "store")
+    processContainer(data.stash, "stash")
+    processContainer(data.depot, "depot")
+    processContainer(data.inbox, "inbox")
 
     local sortedItems = {}
 
-    for itemId, data in pairs(Cyclopedia.Character.Items) do
-        table.insert(sortedItems, {
-            itemId = itemId,
-            data = data
-        })
+    for itemId, tierTable in pairs(Cyclopedia.Character.Items) do
+        for tier, data in pairs(tierTable) do
+            table.insert(sortedItems, {
+                itemId = itemId,
+                data = data
+            })
+            break
+        end
     end
 
     local function compareByName(a, b)
