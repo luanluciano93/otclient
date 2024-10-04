@@ -215,6 +215,7 @@ private:
     void parseContainerRemoveItem(const InputMessagePtr& msg);
     void parseBosstiaryInfo(const InputMessagePtr& msg);
     void parseTakeScreenshot(const InputMessagePtr& msg);
+    void parseCloseForgeWindow(const InputMessagePtr& msg);
     void parseCyclopediaItemDetail(const InputMessagePtr& msg);
     void parseAddInventoryItem(const InputMessagePtr& msg);
     void parseRemoveInventoryItem(const InputMessagePtr& msg);
