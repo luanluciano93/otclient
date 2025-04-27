@@ -2301,11 +2301,7 @@ void ProtocolGame::parsePlayerState(const InputMessagePtr& msg) const
 {
     uint64_t states;
     if (g_game.getClientVersion() >= 1281) {
-        if (g_game.getClientVersion() >= 1405) {
-            states = msg->getU64();
-        } else {
-            states = msg->getU32();
-        }
+        states = g_game.getClientVersion() >= 1405 ? msg->getU64() : msg->getU32();
         if (g_game.getFeature(Otc::GamePlayerStateCounter)) {
             msg->getU8(); // icons counter
         }

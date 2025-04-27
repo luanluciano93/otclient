@@ -36,7 +36,7 @@ public:
     bool autoWalk(const Position& destination, bool retry = false);
     bool canWalk(bool ignoreLock = false);
 
-    void setStates(uint32_t states);
+    void setStates(uint64_t states);
     void setSkill(Otc::Skill skillId, uint16_t level, uint16_t levelPercent);
     void setBaseSkill(Otc::Skill skill, uint16_t baseLevel);
     void setHealth(uint32_t health, uint32_t maxHealth);

@@ -174,10 +174,13 @@ void Protocol::recv()
     int headerSize = 2; // 2 bytes for message size
     if (m_checksumEnabled)
         headerSize += 4; // 4 bytes for checksum
-    if (g_game.getClientVersion() >= 1405) {
-        headerSize += 1; // 1 bytes for padding size
-    } else if (m_xteaEncryptionEnabled) {
-        headerSize += 2; // 2 bytes for XTEA encrypted message size
+    
+    if (m_xteaEncryptionEnabled) {
+        if (g_game.getClientVersion() >= 1405) {
+            headerSize += 1; // 1 bytes for padding size
+        } else {
+            headerSize += 2; // 2 bytes for XTEA encrypted message size
+        }
     }
     m_inputMessage->setHeaderSize(headerSize);
 
@@ -193,7 +196,10 @@ void Protocol::internalRecvHeader(const uint8_t* buffer, const uint16_t size)
 {
     // read message size
     m_inputMessage->fillBuffer(buffer, size);
-    const uint16_t remainingSize = m_inputMessage->readSize() * 8 + 4;
+    const uint16_t remainingSize = m_inputMessage->readSize();
+    if (g_game.getClientVersion() >= 1405) {   
+        remainingSize = remainingSize * 8 + 4;
+    }
 
     // read remaining message data
     if (m_connection)
@@ -382,10 +388,13 @@ void Protocol::onProxyPacket(const std::shared_ptr<std::vector<uint8_t>>& packet
         int headerSize = 2; // 2 bytes for message size
         if (m_checksumEnabled)
             headerSize += 4; // 4 bytes for checksum
-        if (g_game.getClientVersion() >= 1405) {
-            headerSize += 1; // 1 bytes for padding size
-        } else if (m_xteaEncryptionEnabled) {
-            headerSize += 2; // 2 bytes for XTEA encrypted message size
+
+        if (m_xteaEncryptionEnabled) {
+            if (g_game.getClientVersion() >= 1405) {
+                headerSize += 1; // 1 bytes for padding size
+            } else {
+                headerSize += 2; // 2 bytes for XTEA encrypted message size
+            }
         }
         m_inputMessage->setHeaderSize(headerSize);
         m_inputMessage->fillBuffer(packet->data(), 2);
