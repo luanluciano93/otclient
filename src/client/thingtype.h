@@ -344,8 +344,8 @@ public:
     int getNumPatternY() { return m_numPatternY; }
     int getNumPatternZ() { return m_numPatternZ; }
     int getAnimationPhases() { return m_animator ? m_animator->getAnimationPhases() : m_animationPhases; }
-    Animator* getAnimator() const { return m_animator; }
-    Animator* getIdleAnimator() const { return m_idleAnimator; }
+    Animator* getAnimator() const { return m_animator.get(); }
+    Animator* getIdleAnimator() const { return m_idleAnimator.get(); }
 
     const Size& getSize() { return m_size; }
     const Point& getDisplacement() { return m_displacement; }
@@ -503,8 +503,8 @@ private:
     Size m_size;
     Point m_displacement;
 
-    Animator* m_animator{ nullptr };
-    Animator* m_idleAnimator{ nullptr };
+    std::unique_ptr<Animator> m_animator{ nullptr };
+    std::unique_ptr<Animator> m_idleAnimator{ nullptr };
 
     uint8_t m_animationPhases{ 0 };
     uint8_t m_realSize{ 0 };

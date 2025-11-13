@@ -74,13 +74,13 @@ void ThingType::unserializeAppearance(const uint16_t clientId, const ThingCatego
 
             // animations
             if (spritesPhases.size() > 1) {
-                auto* animator = new Animator;
+                auto animator = std::make_unique<Animator>();
                 animator->unserializeAppearance(animation);
 
                 if (frameGroupType == FrameGroupMoving)
-                    m_animator = animator;
+                    m_animator = std::move(animator);
                 else if (frameGroupType == FrameGroupIdle || frameGroupType == FrameGroupInitial)
-                    m_idleAnimator = animator;
+                    m_idleAnimator = std::move(animator);
             }
 
             const int totalSprites = m_layers * m_numPatternX * m_numPatternY * m_numPatternZ * std::max<int>(1, spritesPhases.size());
@@ -515,13 +515,13 @@ void ThingType::unserialize(const uint16_t clientId, const ThingCategory categor
         m_animationPhases += groupAnimationsPhases;
 
         if (groupAnimationsPhases > 1 && g_game.getFeature(Otc::GameEnhancedAnimations)) {
-            auto* animator = new Animator;
+            auto animator = std::make_unique<Animator>();
             animator->unserialize(groupAnimationsPhases, fin);
 
             if (frameGroupType == FrameGroupMoving)
-                m_animator = animator;
+                m_animator = std::move(animator);
             else if (frameGroupType == FrameGroupIdle)
-                m_idleAnimator = animator;
+                m_idleAnimator = std::move(animator);
         }
 
         const int totalSprites = m_size.area() * m_layers * m_numPatternX * m_numPatternY * m_numPatternZ * groupAnimationsPhases;
