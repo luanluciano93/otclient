@@ -141,25 +141,48 @@ void LightView::updatePixels()
     const auto invTileSize = 1.0f / m_tileSize;
 
     auto* pixelData = m_pixels[0].data();
+    const auto totalPixels = mapWidth * mapHeight;
 
-    for (int y = 0; y < mapHeight; ++y) {
-        for (int x = 0; x < mapWidth; ++x) {
-            const auto centerX = x * m_tileSize + tileCenterOffset;
-            const auto centerY = y * m_tileSize + tileCenterOffset;
-            const auto index = y * mapWidth + x;
+    // Initialize all pixels with global light color once
+    const auto globalR = m_globalLightColor.r();
+    const auto globalG = m_globalLightColor.g();
+    const auto globalB = m_globalLightColor.b();
 
-            auto r = m_globalLightColor.r();
-            auto g = m_globalLightColor.g();
-            auto b = m_globalLightColor.b();
+    for (int i = 0; i < totalPixels; ++i) {
+        const auto colorIndex = i * 4;
+        pixelData[colorIndex] = globalR;
+        pixelData[colorIndex + 1] = globalG;
+        pixelData[colorIndex + 2] = globalB;
+        pixelData[colorIndex + 3] = 255;
+    }
 
-            for (auto i = m_lightData.tiles[index]; i < lightSize; ++i) {
-                const auto& light = m_lightData.lights[i];
+    // Optimized: iterate over lights and update only affected tiles
+    for (const auto& light : m_lightData.lights) {
+        const auto lightRadius = light.intensity * m_tileSize;
+        const auto lightRadiusSq = lightRadius * lightRadius;
+
+        // Calculate bounding box of affected tiles
+        const auto minX = std::max(0, static_cast<int>((light.pos.x - lightRadius) / m_tileSize));
+        const auto maxX = std::min(mapWidth - 1, static_cast<int>((light.pos.x + lightRadius) / m_tileSize));
+        const auto minY = std::max(0, static_cast<int>((light.pos.y - lightRadius) / m_tileSize));
+        const auto maxY = std::min(mapHeight - 1, static_cast<int>((light.pos.y + lightRadius) / m_tileSize));
+
+        // Pre-calculate light color components
+        const auto lightColor8bit = Color::from8bit(light.color);
+        const auto lightR = lightColor8bit.r();
+        const auto lightG = lightColor8bit.g();
+        const auto lightB = lightColor8bit.b();
+
+        // Update only tiles within light radius
+        for (int y = minY; y <= maxY; ++y) {
+            for (int x = minX; x <= maxX; ++x) {
+                const auto centerX = x * m_tileSize + tileCenterOffset;
+                const auto centerY = y * m_tileSize + tileCenterOffset;
 
                 const auto dx = centerX - light.pos.x;
                 const auto dy = centerY - light.pos.y;
                 const auto distanceSq = dx * dx + dy * dy;
 
-                const auto lightRadiusSq = (light.intensity * m_tileSize) * (light.intensity * m_tileSize);
                 if (distanceSq > lightRadiusSq) continue;
 
                 const auto distanceNorm = std::sqrt(distanceSq) * invTileSize;
@@ -168,19 +191,14 @@ void LightView::updatePixels()
 
                 intensity = std::min<float>(intensity, 1.0f);
 
-                const auto& lightColor = Color::from8bit(light.color) * intensity;
+                const auto index = y * mapWidth + x;
+                const auto colorIndex = index * 4;
 
-                r = std::max<int>(r, lightColor.r());
-                g = std::max<int>(g, lightColor.g());
-                b = std::max<int>(b, lightColor.b());
+                // Apply light with max blending
+                pixelData[colorIndex] = std::max<uint8_t>(pixelData[colorIndex], static_cast<uint8_t>(lightR * intensity));
+                pixelData[colorIndex + 1] = std::max<uint8_t>(pixelData[colorIndex + 1], static_cast<uint8_t>(lightG * intensity));
+                pixelData[colorIndex + 2] = std::max<uint8_t>(pixelData[colorIndex + 2], static_cast<uint8_t>(lightB * intensity));
             }
-
-            const auto colorIndex = index * 4;
-
-            pixelData[colorIndex] = r;
-            pixelData[colorIndex + 1] = g;
-            pixelData[colorIndex + 2] = b;
-            pixelData[colorIndex + 3] = 255;
         }
     }
 }
