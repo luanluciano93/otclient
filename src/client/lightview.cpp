@@ -25,6 +25,7 @@
 
 #include <framework/core/asyncdispatcher.h>
 #include <framework/core/eventdispatcher.h>
+#include <framework/core/logger.h>
 #include <framework/graphics/drawpoolmanager.h>
 
 LightView::LightView(const Size& size) : m_pool(g_drawPool.get(DrawPoolType::LIGHT)) {
@@ -141,6 +142,7 @@ void LightView::updatePixels()
     const auto invTileSize = 1.0f / m_tileSize;
 
     auto* pixelData = m_pixels[0].data();
+    std::size_t interactions = 0;
 
     for (int y = 0; y < mapHeight; ++y) {
         for (int x = 0; x < mapWidth; ++x) {
@@ -153,6 +155,7 @@ void LightView::updatePixels()
             auto b = m_globalLightColor.b();
 
             for (auto i = m_lightData.tiles[index]; i < lightSize; ++i) {
+                ++interactions;
                 const auto& light = m_lightData.lights[i];
 
                 const auto dx = centerX - light.pos.x;
@@ -183,4 +186,6 @@ void LightView::updatePixels()
             pixelData[colorIndex + 3] = 255;
         }
     }
+
+    g_logger.info("LightView::updatePixels interactions: {}", interactions);
 }
