@@ -1,0 +1,57 @@
+diff --git a/src/client/animator.h b/src/client/animator.h
+index 1234567..abcdefg 100644
+--- a/src/client/animator.h
++++ b/src/client/animator.h
+@@ -47,6 +47,9 @@ enum AnimationDirection : uint8_t
+ class Animator : public std::enable_shared_from_this<Animator>
+ {
+ public:
++    Animator();   // Constructor com logging
++    ~Animator();  // Destructor com logging
++
+     void unserializeAppearance(const appearances::SpriteAnimation& animation);
+     void unserialize(int animationPhases, const FileStreamPtr& fin);
+     void serialize(const FileStreamPtr& fin) const;
+@@ -89,6 +92,10 @@ private:
+     uint8_t m_loopCount{ 0 };
+     uint8_t m_startPhase{ 0 };
+     bool m_async{ false };
++
++    // Memory leak detection
++    static std::atomic<int> s_instanceCount;
++    int m_instanceId;
+ };
+
+diff --git a/src/client/animator.cpp b/src/client/animator.cpp
+index 1234567..abcdefg 100644
+--- a/src/client/animator.cpp
++++ b/src/client/animator.cpp
+@@ -22,6 +22,30 @@
+
+ #include "animator.h"
+ #include <framework/core/eventdispatcher.h>
++#include <iostream>
++
++// Initialize static counter
++std::atomic<int> Animator::s_instanceCount{0};
++
++Animator::Animator()
++{
++    m_instanceId = ++s_instanceCount;
++
++    std::cout << "\033[1;32m[ANIMATOR]\033[0m Created #" << m_instanceId
++              << " | \033[1;33mTotal alive: " << s_instanceCount << "\033[0m"
++              << " | Address: " << (void*)this << std::endl;
++}
++
++Animator::~Animator()
++{
++    --s_instanceCount;
++
++    std::cout << "\033[1;31m[ANIMATOR]\033[0m Destroyed #" << m_instanceId
++              << " | \033[1;33mTotal alive: " << s_instanceCount << "\033[0m"
++              << " | Address: " << (void*)this << std::endl;
++}
+
+ void Animator::unserializeAppearance(const appearances::SpriteAnimation& animation)
+ {
