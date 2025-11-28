@@ -153,6 +153,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 case Proto::GameServerFloorDescription:
                     parseFloorDescription(msg);
                     break;
+                case Proto::GameServerWeaponProficiencyExperience:
+                    parseWeaponProficiencyExperience(msg);
+                    break;
                 case Proto::GameServerImbuementDurations:
                     parseImbuementDurations(msg);
                     break;
@@ -449,6 +452,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                     break;
                 case Proto::GameServerCyclopediaHouseAuctionMessage:
                     parseCyclopediaHouseAuctionMessage(msg);
+                    break;
+                case Proto::GameServerWeaponProficiencyInfo:
+                    parseWeaponProficiencyInfo(msg);
                     break;
                 case Proto::GameServerCyclopediaHousesInfo:
                     parseCyclopediaHousesInfo(msg);
@@ -5080,8 +5086,11 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             data.critChanceFlat = msg->getDouble(); 
             data.critChanceEquipament = msg->getDouble();
             data.critChanceImbuement = msg->getDouble();
-            data.critChanceWheel = msg->getDouble();
-            data.critChanceConcoction = msg->getDouble();
+            msg->getDouble(); //untest
+            if (g_game.getClientVersion() >= 1510) {
+                data.critChanceWheel = msg->getDouble();
+                data.critChanceConcoction = msg->getDouble();
+            }
 
             // Critical hit damage
             data.critDamageTotal = msg->getDouble();
@@ -5114,7 +5123,8 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             data.cleavePercent = msg->getDouble();
 
             // Perfect shot range
-            for (int i = 0; i < 7; i++) {
+            auto limit = (g_game.getClientVersion() >= 1510) ? 7 : 5;
+            for (int i = 0; std::cmp_less(i, limit); i++) {
                 data.perfectShotDamage.push_back(msg->getU16());
             }
 
@@ -5137,22 +5147,23 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
                 msg->getU8(); // range
                 data.weaponAccuracy.push_back(msg->getDouble());
             }
-
-            msg->getDouble(); // unused
-            msg->getU16(); // unused
-            msg->getU8(); // unused
-            msg->getDouble(); // unused
-            msg->getDouble(); // unused
-            msg->getU8(); // unused
-            msg->getDouble(); // unused
-            msg->getDouble(); // unused
-            msg->getU16(); // unused
-            msg->getU16(); // unused
-            msg->getU16(); // unused
-            msg->getU16(); // unused
-            msg->getU8(); // unused
-            msg->getU8(); // unused
-            msg->getU8(); // unused
+            if (g_game.getClientVersion() >= 1510) {
+                msg->getDouble(); // unused
+                msg->getU16(); // unused
+                msg->getU8(); // unused
+                msg->getDouble(); // unused
+                msg->getDouble(); // unused
+                msg->getU8(); // unused
+                msg->getDouble(); // unused
+                msg->getDouble(); // unused
+                msg->getU16(); // unused
+                msg->getU16(); // unused
+                msg->getU16(); // unused
+                msg->getU16(); // unused
+                msg->getU8(); // unused
+                msg->getU8(); // unused
+                msg->getU8(); // unused
+            }
 
             g_game.processCyclopediaCharacterOffenceStats(data);
             break;
@@ -5237,9 +5248,11 @@ void ProtocolGame::parseCyclopediaCharacterInfo(const InputMessagePtr& msg)
             }
 
             msg->getU8(); // unused
-            msg->getU8(); // unused
-            msg->getU8(); // unused
-            msg->getU8(); // unused
+            if (g_game.getClientVersion() >= 1510) {
+                msg->getU8(); // unused
+                msg->getU8(); // unused
+                msg->getU8(); // unused
+            }
 
             g_game.processCyclopediaCharacterMiscStats(data);
             break;
@@ -5570,13 +5583,32 @@ Imbuement ProtocolGame::getImbuementInfo(const InputMessagePtr& msg)
     imbuement.id = msg->getU32(); // imbuid
     imbuement.name = msg->getString(); // name
     imbuement.description = msg->getString(); // description
-    imbuement.group = msg->getString(); // subgroup
+
+    if (g_game.getClientVersion() >= 1510) {
+        imbuement.tier = msg->getU8(); // tier: 0 = Basic / 1 = Intricate / 2 = Powerful
+
+        static const std::array<std::string, 3> tierNames = { "Basic", "Intricate", "Powerful" };
+        if (imbuement.tier < tierNames.size()) {
+            imbuement.group = tierNames[imbuement.tier];
+        } else {
+            imbuement.group = "Unknown";
+        }
+    } else {
+        imbuement.group = msg->getString(); // subgroup
+        imbuement.tier = 0;
+    }
+
     imbuement.imageId = msg->getU16(); // iconId
     imbuement.duration = msg->getU32(); // duration
-    imbuement.premiumOnly = msg->getU8(); // is premium
 
-    const uint8_t itemsSize = msg->getU8(); // items size
-    for (auto i = 0; i < itemsSize; ++i) {
+    if (g_game.getClientVersion() < 1510) {
+        imbuement.premiumOnly = msg->getU8();
+    } else {
+        imbuement.premiumOnly = false;
+    }
+
+    const uint8_t itemsSize = msg->getU8();
+    for (auto i = 0; std::cmp_less(i, itemsSize); ++i) {
         const uint16_t id = msg->getU16(); // item client ID
         const auto& description = msg->getString(); // item name
         const uint16_t count = msg->getU16(); // count
@@ -5586,62 +5618,147 @@ Imbuement ProtocolGame::getImbuementInfo(const InputMessagePtr& msg)
     }
 
     imbuement.cost = msg->getU32(); // base price
-    imbuement.successRate = msg->getU8(); // base percent
-    imbuement.protectionCost = msg->getU32(); // base protection
+
+    if (g_game.getClientVersion() < 1510) {
+        imbuement.successRate = msg->getU8(); // base percent
+        imbuement.protectionCost = msg->getU32(); // base protection
+    } else {
+        imbuement.successRate = 100;
+        imbuement.protectionCost = 0;
+    }
 
     return imbuement;
 }
 
 void ProtocolGame::parseImbuementWindow(const InputMessagePtr& msg)
 {
-    const uint16_t itemId = msg->getU16(); // item client ID
-    const auto& item = Item::create(itemId);
+    if (g_game.getClientVersion() >= 1510) {
+        const uint8_t windowType = msg->getU8(); // 0 = Choice, 1 = Select Item, 2 = Scroll
+        const uint8_t unknownByte = msg->getU8(); // unknown byte
 
-    if (!item) {
-        throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
-    }
+        if (windowType == Otc::IMBUEMENT_WINDOW_CHOICE) { // IMBUEMENT_WINDOW_CHOICE TODO MOVE TO CONST
+            const uint16_t itemId = msg->getU16();
+            const uint32_t unknown = msg->getU32();
 
-    if (item->getId() == 0) {
-        throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
-    }
+            g_lua.callGlobalField("g_game", "onOpenImbuementWindow", itemId, unknown);
+            return;
 
-    if (item->getClassification() > 0) {
-        msg->getU8(); // upgradeClass
-    }
+        } else if (windowType == Otc::IMBUEMENT_WINDOW_SELECT_ITEM) { // IMBUEMENT_WINDOW_SELECT_ITEM
+            const uint16_t itemId = msg->getU16();
+            const auto& thing = g_things.getThingType(itemId, ThingCategoryItem);
 
-    const uint8_t slot = msg->getU8();
-    std::unordered_map<int, std::tuple<Imbuement, uint32_t, uint32_t>> activeSlots;
+            if (!thing) {
+                throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
+            }
+            if (thing->getId() == 0) {
+                throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
+            }
 
-    for (auto i = 0; i < slot; i++) {
-        const uint8_t firstByte = msg->getU8();
-        if (firstByte == 0x01) {
-            Imbuement imbuement = getImbuementInfo(msg);
-            const uint32_t duration = msg->getU32();
-            const uint32_t removalCost = msg->getU32();
-            activeSlots[i] = std::make_tuple(imbuement, duration, removalCost);
+            if (thing->getClassification() > 0) {
+                msg->getU8(); // tier/upgradeClass
+            }
+
+            const uint8_t slot = msg->getU8();
+            std::unordered_map<int, std::tuple<Imbuement, uint32_t, uint32_t>> activeSlots;
+
+            for (auto i = 0; std::cmp_less(i, slot); i++) {
+                const uint8_t firstByte = msg->getU8();
+                if (firstByte == 0x01) {
+                    Imbuement imbuement = getImbuementInfo(msg);
+                    const uint32_t duration = msg->getU32();
+                    const uint32_t removalCost = msg->getU32();
+                    activeSlots[i] = std::make_tuple(imbuement, duration, removalCost);
+                }
+            }
+
+            const uint16_t imbuementsSize = msg->getU16();
+            std::vector<Imbuement> imbuements;
+            for (auto i = 0; i < imbuementsSize; ++i) {
+                imbuements.push_back(getImbuementInfo(msg));
+            }
+
+            const uint32_t neededItemsListCount = msg->getU32();
+            std::vector<ItemPtr> neededItemsList;
+            neededItemsList.reserve(neededItemsListCount);
+            for (uint32_t i = 0; i < neededItemsListCount; ++i) {
+                const uint16_t needItemId = msg->getU16();
+                const uint16_t count = msg->getU16();
+                const auto& needItem = Item::create(needItemId);
+                needItem->setCount(count);
+                neededItemsList.push_back(needItem);
+            }
+
+            g_lua.callGlobalField("g_game", "onImbuementItem", itemId, slot, activeSlots, imbuements, neededItemsList);
+
+        } else if (windowType == Otc::IMBUEMENT_WINDOW_SCROLL) { // IMBUEMENT_WINDOW_SCROLL TODO MOVE TO CONST
+            msg->getU8(); // unknown byte
+            msg->getU8(); // unknown byte
+
+            const uint16_t imbuementsSize = msg->getU16();
+            std::vector<Imbuement> imbuements;
+            for (auto i = 0; i < imbuementsSize; ++i) {
+                imbuements.push_back(getImbuementInfo(msg));
+            }
+
+            const uint32_t neededItemsListCount = msg->getU32();
+            std::vector<ItemPtr> neededItemsList;
+            neededItemsList.reserve(neededItemsListCount);
+            for (uint32_t i = 0; i < neededItemsListCount; ++i) {
+                const uint16_t needItemId = msg->getU16();
+                const uint16_t count = msg->getU16();
+                const auto& needItem = Item::create(needItemId);
+                needItem->setCount(count);
+                neededItemsList.push_back(needItem);
+            }
+            g_lua.callGlobalField("g_game", "onImbuementScroll", imbuements, neededItemsList);
         }
+
+    } else {
+        const uint16_t itemId = msg->getU16();
+        const auto& item = Item::create(itemId);
+        if (!item) {
+            throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
+        }
+        if (item->getId() == 0) {
+            throw Exception("ProtocolGame::parseImbuementWindow: unable to create item with invalid id {}", itemId);
+        }
+
+        if (item->getClassification() > 0) {
+            msg->getU8(); // upgradeClass
+        }
+
+        const uint8_t slot = msg->getU8();
+        std::unordered_map<int, std::tuple<Imbuement, uint32_t, uint32_t>> activeSlots;
+
+        for (auto i = 0; i < slot; i++) {
+            const uint8_t firstByte = msg->getU8();
+            if (firstByte == 0x01) {
+                Imbuement imbuement = getImbuementInfo(msg);
+                const uint32_t duration = msg->getU32();
+                const uint32_t removalCost = msg->getU32();
+                activeSlots[i] = std::make_tuple(imbuement, duration, removalCost);
+            }
+        }
+
+        const uint16_t imbuementsSize = msg->getU16();
+        std::vector<Imbuement> imbuements;
+        for (auto i = 0; i < imbuementsSize; ++i) {
+            imbuements.push_back(getImbuementInfo(msg));
+        }
+
+        const uint32_t neededItemsListCount = msg->getU32();
+        std::vector<ItemPtr> neededItemsList;
+        neededItemsList.reserve(neededItemsListCount);
+        for (uint32_t i = 0; i < neededItemsListCount; ++i) {
+            const uint16_t needItemId = msg->getU16();
+            const uint16_t count = msg->getU16();
+            const auto& needItem = Item::create(needItemId);
+            needItem->setCount(count);
+            neededItemsList.push_back(needItem);
+        }
+
+        g_lua.callGlobalField("g_game", "onImbuementWindow", itemId, slot, activeSlots, imbuements, neededItemsList);
     }
-
-    const uint16_t imbuementsSize = msg->getU16();
-    std::vector<Imbuement> imbuements;
-
-    for (auto i = 0; i < imbuementsSize; ++i) {
-        imbuements.push_back(getImbuementInfo(msg));
-    }
-
-    const uint32_t neededItemsListCount = msg->getU32();
-    std::vector<ItemPtr> neededItemsList;
-    neededItemsList.reserve(neededItemsListCount);
-
-    for (uint32_t i = 0; i < neededItemsListCount; ++i) {
-        const uint16_t needItemId = msg->getU16();
-        const uint16_t count = msg->getU16();
-        const auto& needItem = Item::create(needItemId);
-        needItem->setCount(count);
-        neededItemsList.push_back(needItem);
-    }
-
-    g_lua.callGlobalField("g_game", "onImbuementWindow", itemId, slot, activeSlots, imbuements, neededItemsList);
 }
 
 void ProtocolGame::parseCloseImbuementWindow(const InputMessagePtr& /*msg*/)
@@ -6134,4 +6251,22 @@ void ProtocolGame::parseHighscores(const InputMessagePtr& msg)
     const uint32_t entriesTs = msg->getU32(); // last update
 
     g_game.processHighscore(serverName, world, worldType, battlEye, vocations, categories, page, totalPages, highscores, entriesTs);
+}
+
+void ProtocolGame::parseWeaponProficiencyExperience(const InputMessagePtr& msg)
+{
+    msg->getU16(); // itemId
+    msg->getU32(); // Experience
+    msg->getU8(); // 1
+}
+
+void ProtocolGame::parseWeaponProficiencyInfo(const InputMessagePtr& msg)
+{
+    msg->getU16(); // itemId
+    msg->getU32(); // experience
+    const uint8_t size = msg->getU8();
+    for (auto j = 0; j < size; ++j) {
+        msg->getU8(); // proficiencyLevel 
+        msg->getU8(); // perkPosition 
+    }
 }
