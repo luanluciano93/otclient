@@ -89,11 +89,12 @@ struct Imbuement
     std::string group;
     uint16_t imageId;
     uint32_t duration;
-    bool premiumOnly;
+    bool premiumOnly; // < 15.10
     std::vector<std::pair<ItemPtr, std::string>> sources;
     uint32_t cost;
-    uint8_t successRate;
-    uint32_t protectionCost;
+    uint8_t successRate; // < 15.10
+    uint32_t protectionCost; // < 15.10
+    uint8_t tier; // > v15.10+: 0=Basic, 1=Intricate, 2=Powerful
 };
 
 struct ImbuementSlot
