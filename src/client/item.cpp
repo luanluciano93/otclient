@@ -167,74 +167,32 @@ void Item::updatePatterns()
     } else if (isSplash() || isFluidContainer()) {
         int color = m_countOrSubType;
         if (g_game.getFeature(Otc::GameNewFluids)) {
-            switch (m_countOrSubType) {
-                case Otc::FluidNone:
-                    color = Otc::FluidTransparent;
-                    break;
-                case Otc::FluidWater:
-                    color = Otc::FluidBlue;
-                    break;
-                case Otc::FluidMana:
-                    color = Otc::FluidPurple;
-                    break;
-                case Otc::FluidBeer:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidOil:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidBlood:
-                    color = Otc::FluidRed;
-                    break;
-                case Otc::FluidSlime:
-                    color = Otc::FluidGreen;
-                    break;
-                case Otc::FluidMud:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidLemonade:
-                    color = Otc::FluidYellow;
-                    break;
-                case Otc::FluidMilk:
-                    color = Otc::FluidWhite;
-                    break;
-                case Otc::FluidWine:
-                    color = Otc::FluidPurple;
-                    break;
-                case Otc::FluidHealth:
-                    color = Otc::FluidRed;
-                    break;
-                case Otc::FluidUrine:
-                    color = Otc::FluidYellow;
-                    break;
-                case Otc::FluidRum:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidFruitJuice:
-                    color = Otc::FluidYellow;
-                    break;
-                case Otc::FluidCoconutMilk:
-                    color = Otc::FluidWhite;
-                    break;
-                case Otc::FluidTea:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidMead:
-                    color = Otc::FluidOrange;
-                    break;
-                case Otc::FluidInk:
-                    color = Otc::FluidBlack;
-                    break;
-                case Otc::FluidCandy:
-                    color = Otc::FluidPink;
-                    break;
-                case Otc::FluidChocolate:
-                    color = Otc::FluidBrown;
-                    break;
-                default:
-                    color = Otc::FluidTransparent;
-                    break;
-            }
+            static constexpr uint8_t fluidColors[] = {
+                Otc::FluidTransparent,  // FluidNone
+                Otc::FluidBlue,         // FluidWater
+                Otc::FluidPurple,       // FluidMana
+                Otc::FluidOrange,       // FluidBeer
+                Otc::FluidOrange,       // FluidOil
+                Otc::FluidRed,          // FluidBlood
+                Otc::FluidGreen,        // FluidSlime
+                Otc::FluidOrange,       // FluidMud
+                Otc::FluidYellow,       // FluidLemonade
+                Otc::FluidWhite,        // FluidMilk
+                Otc::FluidPurple,       // FluidWine
+                Otc::FluidRed,          // FluidHealth
+                Otc::FluidYellow,       // FluidUrine
+                Otc::FluidOrange,       // FluidRum
+                Otc::FluidYellow,       // FluidFruitJuice
+                Otc::FluidWhite,        // FluidCoconutMilk
+                Otc::FluidOrange,       // FluidTea
+                Otc::FluidOrange,       // FluidMead
+                Otc::FluidBlack,        // FluidInk
+                Otc::FluidPink,         // FluidCandy
+                Otc::FluidBrown         // FluidChocolate
+            };
+            color = (m_countOrSubType < std::size(fluidColors))
+                ? fluidColors[m_countOrSubType]
+                : Otc::FluidTransparent;
         }
 
         m_numPatternX = (color % 4) % numPatternX;
