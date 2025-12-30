@@ -32,9 +32,9 @@ public:
     DrawPool* get(const DrawPoolType type) const { return m_pools[static_cast<uint8_t>(type)]; }
 
     void select(DrawPoolType type);
-    void preDraw(const DrawPoolType type, const std::function<void()>& f, const bool alwaysDraw = false) { preDraw(type, f, nullptr, {}, {}, Color::alpha, alwaysDraw); }
-    void preDraw(const DrawPoolType type, const std::function<void()>& f, const Rect& dest, const Rect& src, const Color& colorClear = Color::alpha, const bool alwaysDraw = false) { preDraw(type, f, nullptr, dest, src, colorClear, alwaysDraw); }
-    void preDraw(DrawPoolType type, const std::function<void()>& f, const std::function<void()>& beforeRelease, const Rect& dest, const Rect& src, const Color& colorClear = Color::alpha, bool alwaysDraw = false);
+    void preDraw(const DrawPoolType type, const std::function<void()>& f) { preDraw(type, f, nullptr, {}, {}, Color::alpha); }
+    void preDraw(const DrawPoolType type, const std::function<void()>& f, const Rect& dest, const Rect& src, const Color& colorClear = Color::alpha) { preDraw(type, f, nullptr, dest, src, colorClear); }
+    void preDraw(DrawPoolType type, const std::function<void()>& f, const std::function<void()>& beforeRelease, const Rect& dest, const Rect& src, const Color& colorClear = Color::alpha);
 
     void addTexturedPoint(const TexturePtr& texture, const Point& point, const Color& color = Color::white) const
     { addTexturedRect(Rect(point, texture->getSize()), texture, color); }
@@ -124,13 +124,9 @@ private:
     void drawPool(DrawPoolType type);
     void drawObjects(DrawPool* pool);
 
-    inline bool isDrawing() const {
-        for (auto pool : m_pools) {
-            if (pool->isEnabled() && pool->shouldRepaint())
-                return true;
-        }
-
-        return false;
+    inline bool isDrawing(const DrawPoolType type) const {
+        auto pool = get(type);
+        return pool->isEnabled() && pool->shouldRepaint();
     }
 
     std::array<DrawPool*, static_cast<uint8_t>(DrawPoolType::LAST)> m_pools{};

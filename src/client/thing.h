@@ -24,9 +24,8 @@
 
 #include "attachableobject.h"
 #include "staticdata.h"
-#include <framework/core/timer.h>
 
-// @bindclass
+ // @bindclass
 #pragma pack(push,1) // disable memory alignment
 class Thing : public AttachableObject
 {
@@ -149,6 +148,7 @@ public:
     bool hasLensHelp() const;
     bool hasDisplacement() const;
     bool hasElevation() const;
+    bool hasFloorChange() const;
     bool hasAction() const;
     bool hasWearOut() const;
     bool hasClockExpire() const;
