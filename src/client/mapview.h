@@ -276,7 +276,7 @@ private:
     std::vector<FloorData> m_floors;
     std::vector<std::vector<FloorData>> m_floorThreads;
 
-    std::vector<TilePtr> m_foregroundTiles;
+    std::unordered_set<TilePtr> m_foregroundTiles;
 
     PainterShaderProgramPtr m_shader;
     PainterShaderProgramPtr m_nextShader;

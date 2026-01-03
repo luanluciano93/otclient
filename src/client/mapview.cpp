@@ -968,13 +968,9 @@ void MapView::destroyHighlightTile() {
 }
 
 void MapView::addForegroundTile(const TilePtr& tile) {
-    if (std::ranges::find(m_foregroundTiles, tile) == m_foregroundTiles.end())
-        m_foregroundTiles.emplace_back(tile);
+    m_foregroundTiles.insert(tile); // O(1) average with unordered_set
 }
-void MapView::removeForegroundTile(const TilePtr& tile) {
-    const auto it = std::ranges::find(m_foregroundTiles, tile);
-    if (it == m_foregroundTiles.end())
-        return;
 
-    m_foregroundTiles.erase(it);
+void MapView::removeForegroundTile(const TilePtr& tile) {
+    m_foregroundTiles.erase(tile); // O(1) average with unordered_set
 }
