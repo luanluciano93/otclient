@@ -308,7 +308,8 @@ void CreatureManager::loadCreatureBuffer(const std::string& buffer)
 
 void CreatureManager::internalLoadCreatureBuffer(const pugi::xml_node attrib, const CreatureTypePtr& m)
 {
-    if (std::find(m_creatures.begin(), m_creatures.end(), m) != m_creatures.end())
+    // O(1) lookup instead of O(n) std::find
+    if (m_creaturesByName.contains(m->getName()))
         return;
 
     Outfit out;
@@ -332,6 +333,7 @@ void CreatureManager::internalLoadCreatureBuffer(const pugi::xml_node attrib, co
 
     m->setOutfit(out);
     m_creatures.push_back(m);
+    m_creaturesByName.emplace(m->getName(), m); // Add to hash map for O(1) lookup
 }
 
 const CreatureTypePtr& CreatureManager::getCreatureByName(std::string name)
@@ -339,10 +341,10 @@ const CreatureTypePtr& CreatureManager::getCreatureByName(std::string name)
     stdext::tolower(name);
     stdext::trim(name);
     stdext::ucwords(name);
-    const auto it = std::find_if(m_creatures.begin(), m_creatures.end(),
-                                 [=](const CreatureTypePtr& m) -> bool { return m->getName() == name; });
-    if (it != m_creatures.end())
-        return *it;
+    // O(1) hash map lookup instead of O(n) std::find_if
+    const auto it = m_creaturesByName.find(name);
+    if (it != m_creaturesByName.end())
+        return it->second;
     g_logger.warning("could not find creature with name: {}", name);
     return m_nullCreature;
 }
