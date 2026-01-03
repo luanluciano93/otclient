@@ -100,7 +100,7 @@ class CreatureManager
 {
 public:
     CreatureManager();
-    void clear() { m_creatures.clear(); m_creaturesByName.clear(); }
+    void clear() { m_creatures.clear(); }
     void clearSpawns();
     void terminate();
 
@@ -130,7 +130,6 @@ protected:
 
 private:
     std::vector<CreatureTypePtr> m_creatures;
-    std::unordered_map<std::string, CreatureTypePtr> m_creaturesByName; // O(1) lookup by name
     std::unordered_map<Position, SpawnPtr, Position::Hasher> m_spawns;
     bool m_loaded{ false };
     bool m_spawnLoaded{ false };
