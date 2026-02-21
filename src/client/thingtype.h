@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2025 OTClient <https://github.com/edubart/otclient>
+ * Copyright (c) 2010-2026 OTClient <https://github.com/edubart/otclient>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,14 @@ using namespace otclient::protobuf;
 class ThingType final : public LuaObject
 {
 public:
+    struct SkillWheelGem
+    {
+        uint32_t gem_quality_id = 0;
+        uint32_t vocation_id = 0;
+
+        uint32_t getGemQualityId() { return gem_quality_id; }
+        uint32_t getVocationId() { return vocation_id; }
+    };
     void unserializeAppearance(uint16_t clientId, ThingCategory category, const appearances::Appearance& appearance);
     void unserialize(uint16_t clientId, ThingCategory category, const FileStreamPtr& fin);
     void unserializeOtml(const OTMLNodePtr& node);
@@ -53,7 +61,7 @@ public:
 
     uint16_t getId() { return m_id; }
     ThingCategory getCategory() { return m_category; }
-    bool isNull() { return m_null; }
+    bool isNull() const { return m_null; }
     bool hasAttr(const ThingAttr attr) { return (m_flags & thingAttrToThingFlagAttr(attr)); }
 
     int getWidth() { return m_size.width(); }
@@ -64,7 +72,7 @@ public:
     int getNumPatternX() { return m_numPatternX; }
     int getNumPatternY() { return m_numPatternY; }
     int getNumPatternZ() { return m_numPatternZ; }
-    int getAnimationPhases();
+    int getAnimationPhases() const;
     Animator* getAnimator() const { return m_animator; }
     Animator* getIdleAnimator() const { return m_idleAnimator; }
 
@@ -140,9 +148,16 @@ public:
     bool isTopEffect() { return (m_flags & ThingFlagAttrTopEffect); }
     bool hasAction() { return (m_flags & ThingFlagAttrDefaultAction); }
     bool isOpaque() { return m_opaque == 1; }
+
+    uint32_t getSkillWheelGemQualityId() { return m_skillWheelGem.gem_quality_id; }
+    uint32_t getSkillWheelGemVocationId() { return m_skillWheelGem.vocation_id; }
+
     bool isDecoKit() { return (m_flags & ThingFlagAttrDecoKit); }
     bool isLoading() const { return m_loading.load(std::memory_order_acquire); }
     bool isAmmo() { return (m_flags & ThingFlagAttrAmmo); }
+    bool isDualWield() { return (m_flags & ThingFlagAttrDualWield); }
+    bool hasSkillWheelGem() { return (m_flags & ThingFlagAttrSkillWheelGem); }
+    SkillWheelGem getSkillWheelGem() { return m_skillWheelGem; }
 
     bool isItem() const { return m_category == ThingCategoryItem; }
     bool isEffect() const { return m_category == ThingCategoryEffect; }
@@ -244,4 +259,5 @@ private:
 
     std::string m_name;
     std::string m_description;
+    SkillWheelGem m_skillWheelGem;
 };

@@ -152,8 +152,10 @@ return {
             end, 50)
         end
     },
+    returnDisablesChat                = false,
     smartWalk                         = false,
     autoChaseOverride                 = true,
+    talkOnRightClick                  = false,
     moveStack                         = false,
     showStatusMessagesInConsole       = true,
     showEventMessagesInConsole        = true,
@@ -164,6 +166,17 @@ return {
     showOthersStatusMessagesInConsole = false,
     showPrivateMessagesOnScreen       = true,
     showLootMessagesOnScreen          = true,
+    showHighlightedUnderline          = {
+        value = false,
+        action = function(value, options, controller, panels, extraWidgets)
+            local settings = g_settings.getNode('game_console') or {}
+            settings.showHighlightedUnderline = value
+            g_settings.setNode('game_console', settings)
+            if modules and modules.game_console and modules.game_console.setShowHighlightedUnderline then
+                modules.game_console.setShowHighlightedUnderline(value)
+            end
+        end
+    },
     showOutfitsOnList                 = {
         value = true,
         action = function(value, options, controller, panels, extraWidgets)
@@ -271,6 +284,12 @@ return {
             if g_gameConfig.isDrawingInformationByWidget() then
                 modules.game_creatureinformation.toggleInformation()
             end
+        end
+    },
+    displayHarmony                     = {
+        value = true,
+        action = function(value, options, controller, panels, extraWidgets)
+            panels.gameMapPanel:setDrawHarmony(value)
         end
     },
     displayText                       = {
