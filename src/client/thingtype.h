@@ -45,6 +45,8 @@ public:
         uint32_t getGemQualityId() { return gem_quality_id; }
         uint32_t getVocationId() { return vocation_id; }
     };
+    ~ThingType() override { delete m_animator; delete m_idleAnimator; }
+
     void unserializeAppearance(uint16_t clientId, ThingCategory category, const appearances::Appearance& appearance);
     void unserialize(uint16_t clientId, ThingCategory category, const FileStreamPtr& fin);
     void unserializeOtml(const OTMLNodePtr& node);

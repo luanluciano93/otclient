@@ -112,7 +112,7 @@ void AndroidManager::unZipAssetData() {
     unzipper::extract(dataContent, dataFileLength, destFolder);
 
     AAsset_close(dataAsset);
-    delete [] dataContent;
+    free(dataContent);
 }
 
 std::string AndroidManager::getAppBaseDir() {
