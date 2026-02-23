@@ -133,7 +133,7 @@ int Http::download(const std::string& url, const std::string& path, int timeout)
         result->operationId = operationId;
         m_operations[operationId] = result;
         const auto& session = std::make_shared<HttpSession>(m_ios, url, m_userAgent, m_enable_time_out_on_read_write, m_custom_header, timeout,
-                                                     false, true, result, [&, path](HttpResult_ptr result) {
+                                                     false, true, result, [this, path, operationId](HttpResult_ptr result) {
             if (!result->finished) {
                 g_dispatcher.addEvent([result] {
                     g_lua.callGlobalField("g_http", "onDownloadProgress", result->operationId, result->url, result->progress, result->speed);

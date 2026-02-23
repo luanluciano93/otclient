@@ -202,7 +202,7 @@ void Protocol::internalRecvHeader(const uint8_t* buffer, const uint16_t size)
 {
     // read message size
     m_inputMessage->fillBuffer(buffer, size);
-    uint16_t remainingSize = m_inputMessage->readSize();
+    uint32_t remainingSize = m_inputMessage->readSize();
     if (g_game.getClientVersion() >= 1405) {
         remainingSize = remainingSize * 8 + 4;
     }
@@ -334,6 +334,10 @@ bool Protocol::xteaDecrypt(const InputMessagePtr& inputMessage) const
     uint16_t decryptedSize;
     if (g_game.getClientVersion() >= 1405) {
         const uint8_t paddingSize = inputMessage->getU8();
+        if (paddingSize >= encryptedSize) {
+            g_logger.traceError("invalid padding size in decrypted network message");
+            return false;
+        }
         inputMessage->setPaddingSize(paddingSize);
         decryptedSize = encryptedSize - paddingSize - 1;
         inputMessage->setMessageSize(inputMessage->getHeaderSize() + decryptedSize);
@@ -391,7 +395,7 @@ void Protocol::onProxyPacket(const std::shared_ptr<std::vector<uint8_t>>& packet
     if (m_disconnected)
         return;
     auto self(asProtocol());
-    post(g_ioService, [&, packet] {
+    post(g_ioService, [this, self, packet] {
         if (m_disconnected)
             return;
         m_inputMessage->reset();
@@ -418,7 +422,7 @@ void Protocol::onLocalDisconnected(std::error_code ec)
         return;
     auto self(asProtocol());
 #ifndef __EMSCRIPTEN__
-    post(g_ioService, [&, ec] {
+    post(g_ioService, [this, self, ec] {
         if (m_disconnected)
             return;
         m_disconnected = true;
@@ -433,7 +437,7 @@ void Protocol::onPlayerPacket(const std::shared_ptr<std::vector<uint8_t>>& packe
         return;
     auto self(asProtocol());
 #ifndef __EMSCRIPTEN__
-    post(g_ioService, [&, packet] {
+    post(g_ioService, [this, self, packet] {
         if (m_disconnected)
             return;
         m_inputMessage->reset();

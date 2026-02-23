@@ -347,7 +347,7 @@ void Session::terminate(std::error_code ec)
 #endif
 
     auto self(shared_from_this());
-    post(m_io, [&, ec] {
+    post(m_io, [this, self, ec] {
         g_sessions.erase(m_id);
         if (m_useSocket) {
             std::error_code ecc;
@@ -548,7 +548,7 @@ void Session::onPacket(const ProxyPacketPtr& packet)
     }
 
     auto self(shared_from_this());
-    post(m_io, [&, packet] {
+    post(m_io, [this, self, packet] {
         const uint32_t packetId = m_outputPacketId++;
         const auto newPacket = std::make_shared<ProxyPacket>(packet->size() + 14);
 
